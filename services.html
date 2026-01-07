@@ -1,128 +1,66 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services - ⛩️ Amateur De Fantaisie ⛩️</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — Amateur De Fantaisie</title>
+
+<style>
+body{margin:0;background:#0a0a0f;color:#e1e1e1;font-family:Poppins,Arial}
+header{text-align:center;padding:45px 18px}
+h1{color:#dcdcff;margin:0}
+nav{display:flex;justify-content:center;gap:10px;margin-top:18px}
+nav a{color:#a3a3ff;text-decoration:none;padding:8px 14px;border-radius:6px}
+nav a:hover{background:#3d3cff;color:#fff}
+.services{max-width:1100px;margin:25px auto;display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));padding:0 16px}
+.card{background:#10101c;border:1px solid #222;border-radius:12px;padding:18px}
+.card h3{color:#c6baff}
+.btn{background:#7b3cff;color:#fff;border-radius:6px;padding:10px 18px;text-decoration:none;display:inline-block;margin-top:10px}
+.btn:hover{background:#5f29d4}
+footer{text-align:center;margin:40px 0;opacity:.6}
+</style>
 </head>
+
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <a href="index.html">⛩️ <span>Amateur De Fantaisie</span> ⛩️</a>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="services.html" class="active">Services</a></li>
-                <li><a href="chatbot.html">Chatbots</a></li>
-                <li><a href="about.html">À Propos</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-    </nav>
 
-    <!-- HERO PAGE -->
-    <section class="page-hero">
-        <div class="container">
-            <h1>Tous Nos Services</h1>
-            <p>Solutions technologiques complètes et personnalisées</p>
-            <a href="contact.html" class="btn btn-primary">Demander un Devis Gratuit</a>
-        </div>
-    </section>
+<header>
+  <h1>Nos services</h1>
 
-    <!-- SERVICES DÉTAILLÉS -->
-    <section class="services-full section-padding">
-        <div class="container">
-            <div class="services-grid">
-                <div class="service-detail">
-                    <div class="service-icon-large">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h2>🤖 Chatbots Intelligents</h2>
-                    <p>Assistants virtuels 24/7 pour vos clients</p>
-                    <ul>
-                        <li>✅ WhatsApp Business API</li>
-                        <li>✅ Telegram Bots avancés</li>
-                        <li>✅ Discord Slash Commands</li>
-                        <li>✅ Sites web intégrés</li>
-                    </ul>
-                    <a href="chatbot.html" class="btn btn-primary">Voir Chatbots</a>
-                </div>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="about.html">À propos</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
 
-                <div class="service-detail">
-                    <div class="service-icon-large">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h2>🧠 Intelligence Artificielle</h2>
-                    <p>Automatisez vos processus métier</p>
-                    <ul>
-                        <li>✅ IA conversationnelle</li>
-                        <li>✅ Traitement automatique</li>
-                        <li>✅ Analyse prédictive</li>
-                        <li>✅ Personnalisation avancée</li>
-                    </ul>
-                    <a href="contact.html" class="btn btn-primary">Demander Démo</a>
-                </div>
+<section class="services">
 
-                <div class="service-detail">
-                    <div class="service-icon-large">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h2>💻 Développement Web</h2>
-                    <p>Sites et apps modernes ultra-rapides</p>
-                    <ul>
-                        <li>✅ React/Vue/Next.js</li>
-                        <li>✅ SEO optimisé</li>
-                        <li>✅ Mobile-first</li>
-                        <li>✅ Hébergement performant</li>
-                    </ul>
-                    <a href="contact.html" class="btn btn-primary">Lancer Projet</a>
-                </div>
+  <div class="card">
+    <h3>Création de Chatbots</h3>
+    <p>WhatsApp — Telegram — Discord — Messenger — Instagram.</p>
+    <a class="btn" href="chatbot.html">Détails</a>
+  </div>
 
-                <div class="service-detail">
-                    <div class="service-icon-large">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h2>🎨 Design UI/UX</h2>
-                    <p>Interfaces exceptionnelles et intuitives</p>
-                    <ul>
-                        <li>✅ Design système complet</li>
-                        <li>✅ Figma/Adobe XD</li>
-                        <li>✅ Animations fluides</li>
-                        <li>✅ Accessibilité WCAG</li>
-                    </ul>
-                    <a href="contact.html" class="btn btn-primary">Voir Portfolio</a>
-                </div>
+  <div class="card">
+    <h3>Intelligence Artificielle</h3>
+    <p>Automatisation — assistants IA — intégrations personnalisées.</p>
+  </div>
 
-                <div class="service-detail">
-                    <div class="service-icon-large">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <h2>🔧 Maintenance Informatique</h2>
-                    <p>Support technique 24/7</p>
-                    <ul>
-                        <li>✅ Surveillance proactive</li>
-                        <li>✅ Sauvegardes automatiques</li>
-                        <li>✅ Mises à jour sécurité</li>
-                        <li>✅ Intervention rapide</li>
-                    </ul>
-                    <a href="contact.html" class="btn btn-primary">Souscrire</a>
-                </div>
-            </div>
-        </div>
-    </section>
+  <div class="card">
+    <h3>Développement Web</h3>
+    <p>Sites vitrines rapides, modernes et responsives.</p>
+  </div>
 
-    <footer class="footer">
-        <!-- Même footer que index -->
-    </footer>
+  <div class="card">
+    <h3>Design & Branding</h3>
+    <p>Logos, visuels, interfaces épurées et professionnelles.</p>
+  </div>
 
-    <script src="assets/js/main.js"></script>
+</section>
+
+<footer>
+  © 2026 — Amateur De Fantaisie
+</footer>
+
 </body>
 </html>

@@ -1,143 +1,51 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - ⛩️ Amateur De Fantaisie ⛩️</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Amateur De Fantaisie</title>
+
+<style>
+body{margin:0;background:#0a0a0f;color:#e1e1e1;font-family:Poppins,Arial}
+header{text-align:center;padding:45px 18px}
+h1{color:#dcdcff;margin:0}
+nav{display:flex;justify-content:center;gap:10px;margin-top:18px}
+nav a{color:#a3a3ff;text-decoration:none;padding:8px 14px;border-radius:6px}
+nav a:hover{background:#3d3cff;color:#fff}
+.section{max-width:800px;margin:25px auto;padding:0 16px}
+.card{background:#10101c;border:1px solid #222;border-radius:12px;padding:18px;margin-top:14px}
+footer{text-align:center;margin:40px 0;opacity:.6}
+a.link{color:#9c8aff}
+</style>
 </head>
+
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <a href="index.html">⛩️ <span>Amateur De Fantaisie</span> ⛩️</a>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="chatbot.html">Chatbots</a></li>
-                <li><a href="about.html">À Propos</a></li>
-                <li><a href="contact.html" class="active">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
 
-    <!-- HERO CONTACT -->
-    <section class="page-hero">
-        <div class="container">
-            <h1>📱 Contact Direct</h1>
-            <p style="font-size: 1.3rem; color: var(--text-muted);">Réponse garantie sous <strong>2 heures</strong> !</p>
-            <a href="#contacts" class="btn btn-primary" style="margin-top: 2rem;">
-                <i class="fas fa-message"></i> Contacter Maintenant
-            </a>
-        </div>
-    </section>
+<header>
+  <h1>Contact & Réseaux</h1>
 
-    <!-- CONTACTS MESSAGERIES -->
-    <section id="contacts" class="contact-section section-padding">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 4rem;">Vos Messageries Préférées</h2>
-            
-            <div class="contact-grid">
-                <a href="https://wa.me/message/43Y5OXIGOFQQK1" class="contact-card whatsapp" target="_blank">
-                    <div class="contact-icon">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>WhatsApp</h3>
-                        <p>Réponse immédiate 24/7</p>
-                        <span class="contact-label">Cliquez pour ouvrir</span>
-                    </div>
-                </a>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="about.html">À propos</a>
+    <a href="services.html">Services</a>
+  </nav>
+</header>
 
-                <a href="https://www.facebook.com/profile.php?id=61585121305403&locale=fr_FR" class="contact-card facebook" target="_blank">
-                    <div class="contact-icon">
-                        <i class="fab fa-facebook-messenger"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Facebook Messenger</h3>
-                        <p>Messages privés rapides</p>
-                        <span class="contact-label">Ouvrir Messenger</span>
-                    </div>
-                </a>
+<div class="section">
 
-                <a href="https://www.instagram.com/monkeydluffychat" class="contact-card instagram" target="_blank">
-                    <div class="contact-icon">
-                        <i class="fab fa-instagram"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Instagram</h3>
-                        <p>@monkeydluffychat</p>
-                        <span class="contact-label">DM Instagram</span>
-                    </div>
-                </a>
+  <div class="card">
+    <p>WhatsApp : <a class="link" href="https://wa.me/message/43Y5OXIGOFQQK1">Cliquer ici</a></p>
+    <p>Facebook : <a class="link" href="https://www.facebook.com/profile.php?id=61585121305403">Profil</a></p>
+    <p>Instagram : <a class="link" href="https://www.instagram.com/monkeydluffychat">Profil</a></p>
+    <p>Telegram : <a class="link" href="https://t.me/aliceiaofficiel">Canal</a></p>
+    <p>Discord : <a class="link" href="#">Serveur</a></p>
+  </div>
 
-                <a href="https://t.me/aliceiaofficiel" class="contact-card telegram" target="_blank">
-                    <div class="contact-icon">
-                        <i class="fab fa-telegram-plane"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Telegram</h3>
-                        <p>@aliceiaofficiel</p>
-                        <span class="contact-label">Ouvrir Telegram</span>
-                    </div>
-                </a>
+</div>
 
-                <a href="https://discord.com/channels/1454637105350443011/1454637106302287884" class="contact-card discord" target="_blank">
-                    <div class="contact-icon">
-                        <i class="fab fa-discord"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Discord</h3>
-                        <p>Canal Support Officiel</p>
-                        <span class="contact-label">Rejoindre Discord</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
+<footer>
+  © 2026 — Amateur De Fantaisie ¬¬¬ Harry Undersand
+</footer>
 
-    <!-- CTA FINAL -->
-    <section class="cta-final section-padding" style="background: rgba(139,92,246,0.05);">
-        <div class="container" style="text-align: center;">
-            <h2>🚀 Prêt pour votre projet ?</h2>
-            <p>Nous répondons à <strong>toutes</strong> vos questions technique et commerciale</p>
-            <div style="margin-top: 2rem;">
-                <a href="https://wa.me/message/43Y5OXIGOFQQK1" class="btn btn-primary" target="_blank" style="font-size: 1.2rem; padding: 1.2rem 3rem;">
-                    <i class="fab fa-whatsapp"></i> WhatsApp Maintenant
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>⛩️ Amateur De Fantaisie ⛩️</h3>
-                    <p>Votre partenaire technologique 24/7</p>
-                </div>
-                <div class="footer-links">
-                    <a href="https://wa.me/message/43Y5OXIGOFQQK1" target="_blank">WhatsApp</a>
-                    <a href="https://t.me/aliceiaofficiel" target="_blank">Telegram</a>
-                    <a href="https://discord.com/channels/1454637105350443011/1454637106302287884" target="_blank">Discord</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Amateur De Fantaisie. Tous droits réservés.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -1,120 +1,389 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⛩️ Amateur De Fantaisie ⛩️ - Solutions Tech</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⛩️ Amateur De Fantaisie ⛩️ - Solutions Tech</title>
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-/* … ton CSS — inchangé … */
-</style>
+    <style>
+        /* TOUT LE CSS ICI - THÈME NOIR + VIOLET */
+        * {margin:0;padding:0;box-sizing:border-box;}
+
+        :root {
+            --bg-primary:#0a0a0a;
+            --bg-secondary:#1a1a1a;
+            --card-bg:#1f1f1f;
+            --border:rgba(139,92,246,0.3);
+            --violet:#8b5cf6;
+            --violet-dark:#7c3aed;
+            --blue:#3b82f6;
+            --text-primary:#ffffff;
+            --text-secondary:#b4b4b4;
+            --text-muted:#6b7280;
+        }
+
+        body{
+            font-family:'Inter',sans-serif;
+            background:var(--bg-primary);
+            color:var(--text-primary);
+            line-height:1.6;
+            overflow-x:hidden;
+        }
+
+        .container{max-width:1200px;margin:0 auto;padding:0 20px;}
+
+        /* NAVBAR */
+        nav{
+            background:rgba(10,10,10,0.95);
+            backdrop-filter:blur(20px);
+            position:fixed;
+            top:0;
+            width:100%;
+            z-index:1000;
+            border-bottom:1px solid var(--border);
+            padding:1rem 0;
+        }
+
+        .nav-container{
+            max-width:1200px;
+            margin:0 auto;
+            padding:0 20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .logo a{
+            font-size:1.5rem;
+            font-weight:800;
+            color:var(--violet);
+            text-decoration:none;
+            display:flex;
+            align-items:center;
+            gap:0.5rem;
+        }
+
+        .nav-menu{
+            display:flex;
+            list-style:none;
+            gap:2rem;
+        }
+
+        .nav-menu a{
+            color:var(--text-secondary);
+            text-decoration:none;
+            font-weight:500;
+            transition:color 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active{
+            color:var(--violet)!important;
+        }
+
+        /* HERO */
+        .hero{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding:140px 20px 60px;
+            background:linear-gradient(135deg,var(--bg-secondary),var(--bg-primary));
+        }
+
+        .hero h1{
+            font-size:clamp(2.5rem,6vw,4.5rem);
+            font-weight:800;
+            margin-bottom:1.5rem;
+            background:linear-gradient(135deg,var(--violet),var(--blue));
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+        }
+
+        .hero p{
+            font-size:1.3rem;
+            color:var(--text-secondary);
+            max-width:600px;
+            margin-bottom:3rem;
+        }
+
+        /* BOUTONS */
+        .btn{
+            display:inline-flex;
+            align-items:center;
+            gap:0.75rem;
+            padding:1.2rem 3rem;
+            border-radius:50px;
+            text-decoration:none;
+            font-weight:600;
+            font-size:1.1rem;
+            transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+            border:none;
+            cursor:pointer;
+            margin:0.5rem;
+        }
+
+        .btn-primary{
+            background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+            color:white;
+            box-shadow:0 15px 35px rgba(139,92,246,0.4);
+        }
+
+        .btn-primary:hover{
+            transform:translateY(-4px);
+            box-shadow:0 25px 50px rgba(139,92,246,0.6);
+        }
+
+        .btn-secondary{
+            background:transparent;
+            color:var(--violet);
+            border:2px solid var(--violet);
+        }
+
+        .btn-secondary:hover{
+            background:var(--violet);
+            color:white;
+            transform:translateY(-2px);
+        }
+
+        /* SERVICES */
+        .services-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+            gap:2rem;
+            margin:5rem 0;
+        }
+
+        .service-card{
+            background:var(--card-bg);
+            padding:3rem 2rem;
+            border-radius:24px;
+            border:1px solid var(--border);
+            text-align:center;
+            transition:all 0.4s ease;
+            height:100%;
+        }
+
+        .service-card:hover{
+            transform:translateY(-12px);
+            border-color:var(--violet);
+            box-shadow:0 30px 60px rgba(139,92,246,0.25);
+        }
+
+        .service-card i{
+            font-size:4rem;
+            background:linear-gradient(135deg,var(--violet),var(--blue));
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            margin-bottom:1.5rem;
+            display:block;
+        }
+
+        .service-card h3{
+            font-size:1.5rem;
+            margin-bottom:1rem;
+            color:var(--text-primary);
+        }
+
+        /* CTA */
+        .cta-section{
+            background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+            text-align:center;
+            padding:120px 20px;
+            margin:5rem 0;
+        }
+
+        .cta-section h2{
+            font-size:clamp(2.5rem,6vw,4rem);
+            margin-bottom:1rem;
+            color:white;
+        }
+
+        /* FOOTER */
+        footer{
+            background:var(--bg-secondary);
+            padding:4rem 0 2rem;
+            border-top:1px solid var(--border);
+            text-align:center;
+        }
+
+        .footer-content{
+            max-width:1200px;
+            margin:0 auto;
+            padding:0 20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            gap:2rem;
+            margin-bottom:2rem;
+        }
+
+        .footer-brand h3{
+            color:var(--violet);
+            margin-bottom:0.5rem;
+        }
+
+        .footer-links{
+            display:flex;
+            gap:2rem;
+            list-style:none;
+        }
+
+        .footer-links a{
+            color:var(--text-secondary);
+            text-decoration:none;
+            transition:color 0.3s;
+        }
+
+        .footer-links a:hover{
+            color:var(--violet);
+        }
+
+        /* MOBILE */
+        @media(max-width:768px){
+            .nav-menu{display:none;}
+            .hero{padding:140px 20px 40px;}
+            .services-grid{grid-template-columns:1fr;gap:1.5rem;}
+            .footer-content{flex-direction:column;text-align:center;}
+            .footer-links{flex-wrap:wrap;justify-content:center;}
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav>
-    <div class="nav-container">
-        <div class="logo">
-            <a href="/">⛩️ Amateur De Fantaisie ⛩️</a>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <a href="/">⛩️ Amateur De Fantaisie ⛩️</a>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/services.html">Services</a></li>
+                <li><a href="/chatbot.html">Chatbots</a></li>
+                <li><a href="/about.html">À Propos</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1>Solutions Technologiques Sur Mesure</h1>
+            <p>Chatbots intelligents • IA • Web • Design • Support 24/7</p>
+
+            <div>
+                <a href="/contact.html" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i> Commencer Maintenant
+                </a>
+
+                <a href="/services.html" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Nos Services
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section">
+        <div class="container">
+
+            <div class="services-grid">
+
+                <div class="service-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>Chatbots IA</h3>
+                    <p>WhatsApp, Telegram, Discord - Réponse instantanée 24/7</p>
+                    <a href="/chatbot.html" class="btn btn-primary">Découvrir →</a>
+                </div>
+
+                <div class="service-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Intelligence Artificielle</h3>
+                    <p>Automatisation sur mesure pour votre business</p>
+                    <a href="/services.html" class="btn btn-primary">Découvrir →</a>
+                </div>
+
+                <div class="service-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Développement Web</h3>
+                    <p>Sites rapides & modernes - Optimisés mobile</p>
+                    <a href="/services.html" class="btn btn-primary">Découvrir →</a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>🚀 Prêt à commencer ?</h2>
+            <p>Réponse garantie sous 2h sur vos messageries</p>
+
+            <a href="/contact.html" class="btn btn-primary">
+                <i class="fab fa-whatsapp"></i> Contacter Maintenant
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>⛩️ Amateur De Fantaisie ⛩️</h3>
+                <p>Votre partenaire technologique</p>
+            </div>
+
+            <ul class="footer-links">
+                <li><a href="/contact.html">WhatsApp</a></li>
+                <li><a href="/contact.html">Telegram</a></li>
+                <li><a href="/contact.html">Discord</a></li>
+            </ul>
         </div>
 
-        <ul class="nav-menu">
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/services.html">Services</a></li>
-            <li><a href="/chatbot.html">Chatbots</a></li>
-            <li><a href="/about.html">À Propos</a></li>
-            <li><a href="/contact.html">Contact</a></li>
-        </ul>
+        <p style="color:var(--text-muted);">© 2026 Amateur De Fantaisie. Tous droits réservés.</p>
+    </footer>
 
-        <!-- 🔐 AUTH BUTTONS -->
-        <div id="auth-buttons">
-            <button id="login" class="btn btn-secondary">Connexion</button>
-            <button id="logout" class="btn btn-primary" style="display:none;">Déconnexion</button>
-        </div>
-    </div>
-</nav>
+    <!-- ========================= -->
+    <!-- AUTH0 (NE TOUCHE PAS AU CSS) -->
+    <!-- ========================= -->
 
-<!-- 🔽 le reste est IDENTIQUE -->
-<section class="hero"> … </section>
-<section class="section"> … </section>
-<section class="cta-section"> … </section>
-<footer> … </footer>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js"></script>
 
+    <script>
+        // ⚠️ Remplace par TES valeurs Auth0
+        const auth0ClientPromise = createAuth0Client({
+            domain: "dev-c0ipa5dqok6e1kj2.eu.auth0.com",
+            clientId: "sWwtyJCcj3JmJ95kCQFfAJVyfKgvTnd7",
+            authorizationParams: {
+                redirect_uri: window.location.origin
+            }
+        });
 
-<!-- 🔐 AUTH0 SPA -->
-<script src="https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js"></script>
+        // Exemple (facultatif) — login / logout plus tard
+        async function login() {
+            const auth0Client = await auth0ClientPromise;
+            await auth0Client.loginWithRedirect();
+        }
 
-<script>
-/**
- * CONFIG — REMPLACE ICI
- */
-const auth0Config = {
-    domain: "dev-ujab2ssb7yhm138u.eu.auth0.com",
-    clientId: "yCSeyeHUlh2mEGaJNgP7LhnzB5VuSKMI",
-    authorizationParams: {
-        redirect_uri: window.location.origin
-    }
-};
-
-let auth0Client = null;
-
-/**
- * INITIALISATION
- */
-async function initAuth() {
-    auth0Client = await auth0.createAuth0Client(auth0Config);
-
-    // si retour de connexion
-    if (window.location.search.includes("code=") &&
-        window.location.search.includes("state=")) {
-        await auth0Client.handleRedirectCallback();
-        window.history.replaceState({}, document.title, "/");
-    }
-
-    updateUI();
-}
-
-/**
- * UI LOGIN / LOGOUT
- */
-async function updateUI() {
-    const isAuthenticated = await auth0Client.isAuthenticated();
-
-    const loginBtn = document.getElementById("login");
-    const logoutBtn = document.getElementById("logout");
-
-    if (isAuthenticated) {
-        loginBtn.style.display = "none";
-        logoutBtn.style.display = "inline-flex";
-
-        const user = await auth0Client.getUser();
-        console.log("Connecté :", user);
-    } else {
-        loginBtn.style.display = "inline-flex";
-        logoutBtn.style.display = "none";
-    }
-}
-
-/**
- * BOUTONS
- */
-document.getElementById("login").addEventListener("click", () => {
-    auth0Client.loginWithRedirect();
-});
-
-document.getElementById("logout").addEventListener("click", () => {
-    auth0Client.logout({
-        logoutParams: { returnTo: window.location.origin }
-    });
-});
-
-// LANCER
-initAuth();
-</script>
+        async function logout() {
+            const auth0Client = await auth0ClientPromise;
+            auth0Client.logout({ logoutParams: { returnTo: window.location.origin }});
+        }
+    </script>
 
 </body>
 </html>

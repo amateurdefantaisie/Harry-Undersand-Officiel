@@ -115,51 +115,87 @@ font-weight:600;
 <!-- ===================== -->
 
 <script type="module">
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import {
+  getAuth,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
 const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand",
-storageBucket: "harry-undersand.firebasestorage.app",
-messagingSenderId: "1008823909561",
-appId: "1:1008823909561:web:9a8b4b46cab592972f6f68",
-measurementId: "G-N696WFVZ8G"
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand",
+  storageBucket: "harry-undersand.firebasestorage.app",
+  messagingSenderId: "1008823909561",
+  appId: "1:1008823909561:web:9a8b4b46cab592972f6f68",
+  measurementId: "G-N696WFVZ8G"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Providers
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
+// Fonctions globales
 window.loginGoogle = () => signInWithPopup(auth, googleProvider);
 window.loginGithub = () => signInWithPopup(auth, githubProvider);
 window.loginFacebook = () => signInWithPopup(auth, facebookProvider);
 window.logout = () => signOut(auth);
 
-onAuthStateChanged(auth, (user) => {
-const authArea = document.getElementById("auth-area");
-if(user){
-authArea.innerHTML = `
-<span class="user-name">${user.displayName}</span>
-<button class="auth-btn" onclick="logout()">Déconnexion</button>
-`;
-}else{
-authArea.innerHTML = `
-<button class="auth-btn" onclick="loginGoogle()">Connexion</button>
-`;
+// Sauvegarde utilisateur
+async function saveUser(user) {
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    name: user.displayName,
+    email: user.email,
+    photo: user.photoURL,
+    provider: user.providerData[0].providerId,
+    lastLogin: serverTimestamp()
+  }, { merge: true });
 }
+
+// UI
+onAuthStateChanged(auth, async (user) => {
+  const authArea = document.getElementById("auth-area");
+
+  if (user) {
+    await saveUser(user);
+
+    authArea.innerHTML = `
+      <img src="${user.photoURL}" style="width:32px;height:32px;border-radius:50%">
+      <span class="user-name">${user.displayName}</span>
+      <button class="auth-btn" onclick="logout()">Déconnexion</button>
+    `;
+  } else {
+    authArea.innerHTML = `
+      <button class="auth-btn" onclick="loginGoogle()">Google</button>
+      <button class="auth-btn" onclick="loginGithub()">GitHub</button>
+      <button class="auth-btn" onclick="loginFacebook()">Facebook</button>
+    `;
+  }
 });
 </script>
+
 
 </body>
 </html>

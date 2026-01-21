@@ -115,13 +115,12 @@ footer{text-align:center;padding:3rem;color:#6b7280}
 <div class="burger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
 
 <nav class="nav-links" id="menu">
-<a href="/">Accueil</a>
-<a href="#services">Services</a>
-<a href="#chatbots">Chatbots</a>
-<a href="#hosting">Hébergement</a>
-<a href="#contact">Contact</a>
-<a href="#Streaming">Streaming</a>
-<a href="#Premium">Premium</a>
+<a href="services.html">Services</a>
+<a href="chatbot.html">Chatbots</a>
+<a href="hosting.html">Hébergement</a>
+<a href="contact.html">Contact</a>
+<a href="streaming.html">Streaming</a>
+<a href="premium.html">Premium</a>
 
 <div class="auth" id="auth-area">
 <button class="auth-btn" onclick="toggleAuth()">Connexion</button>
@@ -141,40 +140,71 @@ footer{text-align:center;padding:3rem;color:#6b7280}
 <h1>Solutions IA & Service Streaming Gratuit</h1>
 <p>Chatbots • Automatisation • Streaming • Déploiement multicanal</p>
 <div class="hero-buttons">
-<button class="btn btn-primary">Découvrir nos services</button>
+<a href="services.html" class="btn btn-primary">Découvrir nos services</a>
 <button class="btn btn-outline" onclick="loginWhatsApp()">Accès WhatsApp sécurisé</button>
 </div>
 </section>
 
 <!-- SERVICES -->
-<section id="services" class="container reveal">
+<section class="container reveal">
 <h2>Nos expertises</h2>
+
 <div class="grid">
-<div class="card"><i class="fas fa-robot"></i><h3>Chatbots IA</h3><p>Support automatisé, WhatsApp, Web, IA conversationnelle.</p></div>
-<div class="card"><i class="fas fa-film"></i><h3>Streaming</h3><p>Diffusion VOD, TV, plateformes sécurisées.</p></div>
-<div class="card"><i class="fas fa-cloud"></i><h3>Hébergement</h3><p>Cloud sécurisé, scalable et performant.</p></div>
-<div class="card"><i class="fas fa-video"></i><h3>Netflix</h3><p>Abonnement Netflix, Standard, HD, FullHD,sur tout type d'écran</p></div>
-<div class="card"><i class="fas fa-tv"></i><h3>My Canal</h3><p>Abonnement canal+ Afrique, Standard, HD, FullHD,sur tout type d'écran</p></div>
+
+<a href="chatbot.html" class="card">
+  <i class="fas fa-robot"></i>
+  <h3>Chatbots IA</h3>
+  <p>Support automatisé, WhatsApp, Instagram, Messenger, Discord, Web.</p>
+</a>
+
+<a href="streaming.html" class="card">
+  <i class="fas fa-film"></i>
+  <h3>Streaming</h3>
+  <p>PrimeVideo, IPTV, MovieBox, Crunchyroll, Wakanim, AnimeUltra, FrAnime, AdulteFree, XvXMovie, VOD.</p>
+</a>
+
+<a href="hosting.html" class="card">
+  <i class="fas fa-cloud"></i>
+  <h3>Hébergement</h3>
+  <p>Cloud sécurisé et scalable, Hostinger, Heroku, Katabump, Bot-Hosting, Netlify, Vercel.</p>
+</a>
+
+<a href="streaming.html#netflix" class="card">
+  <i class="fas fa-video"></i>
+  <h3>Netflix</h3>
+  <p>Standard, HD, FullHD, Multi-écrans.</p>
+</a>
+
+<a href="streaming.html#mycanal" class="card">
+  <i class="fas fa-tv"></i>
+  <h3>My Canal</h3>
+  <p>Canal+ Afrique. Standard, HD, FullHD, Multi-écrans.</p>
+</a>
+
 </div>
 </section>
+
 
 <section id="chatbots" class="container reveal">
 <h2>Automatisation intelligente</h2>
 <p>Nos solutions IA améliorent la communication et réduisent les coûts opérationnels.</p>
 </section>
 
-<section id="hosting" class="container reveal">
+<section class="container reveal">
 <h2>Déploiement & plateformes</h2>
+
 <div class="grid">
-<div class="card"><i class="fab fa-satellite-dish"></i><p>Netlify / Vercel</p></div>
-<div class="card"><i class="fab fa-whatsapp"></i><p>WhatsApp Business</p></div>
-<div class="card"><i class="fab fa-facebook"></i><p>Facebook</p></div>
-<div class="card"><i class="fab fa-discord"></i><p>Discord</p></div>
-<div class="card"><i class="fab fa-instagram"></i><p>Instagram</p></div>
+
+<a href="hosting.html" class="card"><i class="fab fa-cloud"></i><p>Netlify / Vercel</p></a>
+<a href="contact.html" class="card"><i class="fab fa-whatsapp"></i><p>WhatsApp Business</p></a>
+<a href="contact.html" class="card"><i class="fab fa-facebook"></i><p>Facebook</p></a>
+<a href="contact.html" class="card"><i class="fab fa-discord"></i><p>Discord</p></a>
+<a href="contact.html" class="card"><i class="fab fa-instagram"></i><p>Instagram</p></a>
+
 </div>
 </section>
 
-<footer>© 2026 Amateur De Fantaisie</footer>
+<footer>© 2026 Amateur De Fantaisie by Harry Undersand</footer>
 
 <!-- ================= FIREBASE AUTH ================= -->
 <script type="module">

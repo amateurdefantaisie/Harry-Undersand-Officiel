@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡 — IA, Cloud & Automatisation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* ================= GLOBAL THEME ================= */
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+font-family:Inter,system-ui;
+color:#fff;
+background:
+linear-gradient(rgba(10,10,10,.92),rgba(10,10,10,.92)),
+url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...") center/cover fixed;
+}
+
+/* VARIABLES */
+:root{
+--violet:#8b5cf6;
+--violet-dark:#7c3aed;
+--card:#141414;
+--border:rgba(139,92,246,.35);
+--muted:#b8b8b8;
+}
+
+section{padding:6rem 1.5rem}
+.container{max-width:1200px;margin:auto}
+h1,h2,h3{font-weight:800}
+p{color:var(--muted);line-height:1.75}
+
+/* ================= NAV ================= */
+header{
+position:fixed;top:0;width:100%;z-index:1000;
+background:rgba(8,8,8,.85);
+backdrop-filter:blur(18px);
+border-bottom:1px solid var(--border);
+}
+.navbar{
+max-width:1200px;margin:auto;
+padding:16px 24px;
+display:flex;justify-content:space-between;align-items:center
+}
+.logo{color:var(--violet);font-weight:800;text-decoration:none}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:#fff}
+
+/* ================= HERO ================= */
+.hero{
+padding-top:160px;
+text-align:center
+}
+.hero h1{font-size:3.2rem}
+.hero p{max-width:760px;margin:20px auto;font-size:1.05rem}
+
+/* ================= GRID / CARDS ================= */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:28px;margin-top:40px
+}
+.card{
+background:rgba(20,20,20,.85);
+border:1px solid var(--border);
+border-radius:18px;
+padding:30px;
+box-shadow:0 10px 40px rgba(0,0,0,.35)
+}
+.card i{
+font-size:2.2rem;
+color:var(--violet);
+margin-bottom:16px
+}
+
+/* ================= ANIMATIONS ================= */
+.reveal{
+opacity:0;
+transform:translateY(40px);
+transition:all .8s ease
+}
+.reveal.active{
+opacity:1;
+transform:none
+}
+
+/* ================= FOOTER ================= */
+footer{
+text-align:center;
+padding:4rem 1rem;
+color:#6b7280;
+font-size:.9rem
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="navbar">
+<a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
+<nav class="nav-links">
+<a href="#expertises">Expertises</a>
+<a href="#automation">Automatisation</a>
+<a href="#platforms">Plateformes</a>
+</nav>
+</div>
+</header>
+
+<!-- HERO -->
+<section class="hero reveal">
+<h1>Solutions IA & Cloud de Nouvelle Génération</h1>
+<p>
+Nous accompagnons les entreprises, créateurs et organisations dans la
+mise en place de solutions intelligentes, automatisées et évolutives.
+Notre approche combine technologie avancée, design professionnel et
+expérience utilisateur optimisée.
+</p>
+</section>
+
+<!-- EXPERTISES -->
+<section id="expertises" class="container reveal">
+<h2>Nos expertises</h2>
+<p>
+« Nous concevons des solutions pensées pour durer, évoluer et s’adapter
+aux réalités du marché moderne. Chaque projet est construit avec une
+vision long terme, orientée performance, sécurité et simplicité. »
+</p>
+
+<div class="grid">
+<div class="card">
+<i class="fas fa-robot"></i>
+<h3>Chatbots & IA conversationnelle</h3>
+<p>
+Nos chatbots intelligents ne se contentent pas de répondre : ils
+analysent, comprennent et accompagnent les utilisateurs à chaque étape.
+Intégrés sur WhatsApp, web ou plateformes sociales, ils améliorent la
+relation client, réduisent la charge humaine et offrent une disponibilité
+24/7 avec un langage naturel et professionnel.
+</p>
+</div>
+
+<div class="card">
+<i class="fas fa-film"></i>
+<h3>Streaming & contenus numériques</h3>
+<p>
+Nous développons et déployons des plateformes de streaming modernes,
+sécurisées et performantes. Qu’il s’agisse de VOD, de diffusion privée ou
+de contenu premium, nous assurons une expérience fluide, rapide et
+optimisée pour tous les appareils.
+</p>
+</div>
+
+<div class="card">
+<i class="fas fa-cloud"></i>
+<h3>Hébergement & Cloud</h3>
+<p>
+Nos solutions cloud sont conçues pour offrir stabilité, rapidité et
+scalabilité. Grâce à des infrastructures modernes, vos applications
+restent accessibles, protégées et prêtes à évoluer selon vos besoins
+réels.
+</p>
+</div>
+</div>
+</section>
+
+<!-- AUTOMATION -->
+<section id="automation" class="container reveal">
+<h2>Automatisation intelligente</h2>
+<p>
+« Automatiser, ce n’est pas remplacer l’humain, c’est lui permettre de se
+concentrer sur l’essentiel. »
+</p>
+<p>
+Nous mettons en place des systèmes d’automatisation avancés reliant
+WhatsApp, Firebase, IA et services cloud. Ces mécanismes permettent
+d’optimiser les processus, d’accélérer les échanges et d’offrir une
+expérience utilisateur cohérente, fluide et sécurisée.
+Chaque automatisation est pensée pour être transparente, fiable et
+facilement maintenable.
+</p>
+</section>
+
+<!-- PLATFORMS -->
+<section id="platforms" class="container reveal">
+<h2>Déploiement & plateformes</h2>
+<p>
+« Une bonne technologie n’a de valeur que si elle est correctement
+déployée, maintenue et comprise. »
+</p>
+
+<div class="grid">
+<div class="card"><i class="fab fa-netlify"></i><p>Netlify & Vercel — déploiement rapide, sécurisé et optimisé.</p></div>
+<div class="card"><i class="fab fa-whatsapp"></i><p>WhatsApp Business — automatisation, validation et support client.</p></div>
+<div class="card"><i class="fab fa-facebook"></i><p>Facebook — intégration sociale et authentification.</p></div>
+<div class="card"><i class="fab fa-discord"></i><p>Discord — communautés, bots et automatisation.</p></div>
+<div class="card"><i class="fab fa-instagram"></i><p>Instagram — présence digitale et interaction.</p></div>
+</div>
+</section>
+
+<footer>
+© 2026 彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡 — Solutions IA & Cloud professionnelles by Harry Undersand
+</footer>
+
+<script>
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(e=>{
+if(e.isIntersecting)e.target.classList.add("active");
+});
+},{threshold:0.15});
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+</script>
+
+</body>
+</html>

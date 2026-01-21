@@ -4,109 +4,167 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞』彡 – Solutions IA & Services Streaming</title>
+<title>Harry Undersand — Développeur & Solutions IA</title>
 
-<!-- FAVICON ⛩️ -->
 <link rel="icon" type="image/svg+xml"
 href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---bg:#0a0a0a;
---card:#141414;
---border:rgba(139,92,246,.3);
+--bg:#0b141a;
+--card:#111b21;
+--border:rgba(139,92,246,.35);
 --violet:#8b5cf6;
 --violet-dark:#7c3aed;
---text:#fff;
---muted:#b4b4b4;
+--text:#e9edef;
+--muted:#8696a0;
 }
-body{font-family:Inter;background:var(--bg);color:var(--text)}
+
+body{
+font-family:Inter,Arial;
+color:var(--text);
+background-color:var(--bg);
+background-image:
+radial-gradient(circle at 1px 1px, rgba(255,255,255,.03) 1px, transparent 0);
+background-size:24px 24px;
+}
+
+/* GLOBAL */
 section{padding:6rem 1.5rem}
-h1,h2,h3{font-weight:800}
-p{color:var(--muted)}
 .container{max-width:1200px;margin:auto}
+h1,h2,h3{font-weight:800}
+p{color:var(--muted);line-height:1.7}
 
 /* NAV */
 header{
 position:fixed;top:0;width:100%;z-index:1000;
-background:rgba(10,10,10,.9);
+background:rgba(11,20,26,.85);
 backdrop-filter:blur(20px);
 border-bottom:1px solid var(--border);
 }
 .navbar{
-max-width:1200px;margin:auto;padding:16px 24px;
+max-width:1200px;margin:auto;
+padding:16px 24px;
 display:flex;justify-content:space-between;align-items:center
 }
-.logo{color:var(--violet);font-weight:800;text-decoration:none;font-size:1.3rem}
-.nav-links{display:flex;gap:28px;align-items:center}
+.logo{
+color:var(--violet);
+font-weight:800;
+text-decoration:none;
+font-size:1.25rem
+}
+.nav-links{display:flex;gap:26px;align-items:center}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
 .burger{display:none;font-size:1.6rem;cursor:pointer}
 
-/* AUTH */
-.auth{position:relative}
-.auth-btn{
-background:linear-gradient(135deg,var(--violet),var(--violet-dark));
-border:none;color:#fff;padding:10px 18px;border-radius:25px;
-cursor:pointer;font-weight:600
-}
-.auth-menu{
-display:none;position:absolute;right:0;top:45px;
-background:var(--card);border:1px solid var(--border);
-border-radius:12px;min-width:180px;overflow:hidden
-}
-.auth-menu button{
-width:100%;padding:12px;border:none;background:none;
-color:white;text-align:left;cursor:pointer
-}
-.auth-menu button:hover{background:#1f1f1f}
-.auth-menu i{margin-right:8px;color:var(--violet)}
-
 /* HERO */
-.hero{padding-top:160px;text-align:center}
-.hero h1{font-size:3rem}
-.hero-buttons{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-.btn{padding:14px 26px;border-radius:30px;border:none;cursor:pointer;font-weight:600}
-.btn-primary{background:linear-gradient(135deg,var(--violet),var(--violet-dark));color:white}
-.btn-outline{background:none;border:1px solid var(--border);color:white}
+.hero{
+padding-top:180px;
+text-align:center;
+}
+.hero h1{
+font-size:3.1rem;
+max-width:900px;
+margin:auto;
+}
+.hero span{color:var(--violet)}
+.hero p{
+margin:22px auto;
+max-width:780px;
+font-size:1.05rem;
+}
+.hero-buttons{
+margin-top:36px;
+display:flex;
+justify-content:center;
+gap:16px;
+flex-wrap:wrap;
+}
+.btn{
+padding:14px 26px;
+border-radius:30px;
+border:none;
+cursor:pointer;
+font-weight:600;
+text-decoration:none;
+}
+.btn-primary{
+background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+color:white;
+}
+.btn-outline{
+background:none;
+border:1px solid var(--border);
+color:white;
+}
 
-/* GRID */
+/* GRID / CARDS */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:28px;margin-top:40px
+gap:28px;
+margin-top:40px;
 }
 .card{
 background:var(--card);
 border:1px solid var(--border);
-border-radius:18px;padding:28px
+border-radius:20px;
+padding:28px;
+transition:.35s;
+text-decoration:none;
+color:inherit;
 }
-.card{
-  text-decoration:none;
-  color:inherit;
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 0 30px rgba(139,92,246,.35);
 }
-.card i{font-size:2rem;color:var(--violet);margin-bottom:16px}
+.card i{
+font-size:2.2rem;
+color:var(--violet);
+margin-bottom:14px;
+}
 
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(40px);transition:.8s}
-.reveal.active{opacity:1;transform:none}
+/* TRUST */
+.trust{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+margin-top:50px;
+text-align:center;
+}
+.trust div{
+background:var(--card);
+border:1px solid var(--border);
+padding:30px;
+border-radius:18px;
+}
 
 /* MOBILE */
 @media(max-width:900px){
 .nav-links{
-position:absolute;top:70px;left:0;width:100%;
-background:#0a0a0a;flex-direction:column;
-padding:20px;display:none
+position:absolute;
+top:70px;
+left:0;
+width:100%;
+background:#0b141a;
+flex-direction:column;
+padding:20px;
+display:none;
 }
 .nav-links.show{display:flex}
 .burger{display:block}
 }
 
-footer{text-align:center;padding:3rem;color:#6b7280}
+footer{
+text-align:center;
+padding:4rem 1.5rem;
+color:#6b7280;
+}
 </style>
 </head>
 
@@ -114,161 +172,95 @@ footer{text-align:center;padding:3rem;color:#6b7280}
 
 <header>
 <div class="navbar">
-<a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞』彡</a>
-
+<a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
 <div class="burger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
 
 <nav class="nav-links" id="menu">
 <a href="services.html">Services</a>
 <a href="chatbot.html">Chatbots</a>
 <a href="hosting.html">Hébergement</a>
-<a href="contact.html">Contact</a>
 <a href="streaming.html">Streaming</a>
 <a href="premium.html">Premium</a>
-
-<div class="auth" id="auth-area">
-<button class="auth-btn" onclick="toggleAuth()">Connexion</button>
-<div class="auth-menu" id="auth-menu">
-<button onclick="loginGoogle()"><i class="fab fa-google"></i> Google</button>
-<button onclick="loginGithub()"><i class="fab fa-github"></i> GitHub</button>
-<button onclick="loginFacebook()"><i class="fab fa-facebook"></i> Facebook</button>
-<button onclick="loginWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-</div>
-</div>
+<a href="contact.html">Contact</a>
 </nav>
 </div>
 </header>
 
 <!-- HERO -->
-<section class="hero reveal">
-<h1>Solutions IA & Service Streaming Gratuit</h1>
-<p>Chatbots • Automatisation • Streaming • Déploiement multicanal</p>
+<section class="hero">
+<h1>Harry Undersand  
+<br><span>Développeur & Architecte IA</span></h1>
+
+<p>
+Création de solutions numériques modernes : chatbots intelligents,
+services streaming premium, hébergement sécurisé et automatisation
+WhatsApp pour particuliers et entreprises.
+</p>
+
 <div class="hero-buttons">
-<a href="services.html" class="btn btn-primary">Découvrir nos services</a>
-<button class="btn btn-outline" onclick="loginWhatsApp()">Accès WhatsApp sécurisé</button>
+<a href="services.html" class="btn btn-primary">Découvrir les services</a>
+<a href="https://wa.me/242066973413" class="btn btn-outline">Contact WhatsApp</a>
 </div>
 </section>
 
 <!-- SERVICES -->
-<section class="container reveal">
-<h2>Nos expertises</h2>
+<section class="container">
+<h2>Nos services principaux</h2>
 
 <div class="grid">
-
 <a href="chatbot.html" class="card">
-  <i class="fas fa-robot"></i>
-  <h3>Chatbots IA</h3>
-  <p>Support automatisé, WhatsApp, Instagram, Messenger, Discord, Web.</p>
+<i class="fas fa-robot"></i>
+<h3>Chatbots IA</h3>
+<p>Automatisation WhatsApp, Instagram, Messenger, Discord & Web.</p>
 </a>
 
 <a href="streaming.html" class="card">
-  <i class="fas fa-film"></i>
-  <h3>Streaming</h3>
-  <p>PrimeVideo, IPTV, MovieBox, Crunchyroll, Wakanim, AnimeUltra, FrAnime, AdulteFree, XvXMovie, VOD.</p>
+<i class="fas fa-film"></i>
+<h3>Streaming Premium</h3>
+<p>Netflix, Prime Video, Crunchyroll, Wakanim, myCANAL.</p>
 </a>
 
 <a href="hosting.html" class="card">
-  <i class="fas fa-cloud"></i>
-  <h3>Hébergement</h3>
-  <p>Cloud sécurisé et scalable, Hostinger, Heroku, Katabump, Bot-Hosting, Netlify, Vercel.</p>
+<i class="fas fa-cloud"></i>
+<h3>Hébergement & Déploiement</h3>
+<p>Netlify, Vercel, Hostinger, Cloud sécurisé et rapide.</p>
 </a>
-
-<a href="streaming.html#netflix" class="card">
-  <i class="fas fa-video"></i>
-  <h3>Netflix</h3>
-  <p>Standard, HD, FullHD, Multi-écrans.</p>
-</a>
-
-<a href="streaming.html#mycanal" class="card">
-  <i class="fas fa-tv"></i>
-  <h3>My Canal</h3>
-  <p>Canal+ Afrique. Standard, HD, FullHD, Multi-écrans.</p>
-</a>
-
 </div>
 </section>
 
+<!-- TRUST -->
+<section class="container">
+<h2>Pourquoi nous faire confiance ?</h2>
 
-<section id="chatbots" class="container reveal">
-<h2>Automatisation intelligente</h2>
-<p>Nos solutions IA améliorent la communication et réduisent les coûts opérationnels.</p>
-</section>
-
-<section class="container reveal">
-<h2>Déploiement & plateformes</h2>
-
-<div class="grid">
-
-<a href="hosting.html" class="card"><i class="fab fa-cloud"></i><p>Netlify / Vercel</p></a>
-<a href="contact.html" class="card"><i class="fab fa-whatsapp"></i><p>WhatsApp Business</p></a>
-<a href="contact.html" class="card"><i class="fab fa-facebook"></i><p>Facebook</p></a>
-<a href="contact.html" class="card"><i class="fab fa-discord"></i><p>Discord</p></a>
-<a href="contact.html" class="card"><i class="fab fa-instagram"></i><p>Instagram</p></a>
-
+<div class="trust">
+<div>
+<h3>🔒 Sécurité</h3>
+<p>Services fiables, accès sécurisés et accompagnement humain.</p>
+</div>
+<div>
+<h3>⚡ Rapidité</h3>
+<p>Mise en place rapide, support WhatsApp direct.</p>
+</div>
+<div>
+<h3>🎯 Transparence</h3>
+<p>Explications claires, aucun engagement caché.</p>
+</div>
+<div>
+<h3>💬 Support humain</h3>
+<p>Contact direct, réponses rapides et personnalisées.</p>
+</div>
 </div>
 </section>
 
-<footer>© 2026 Amateur De Fantaisie by Harry Undersand</footer>
+<footer>
+© 2026 — Amateur De Fantaisie  by Harry Undersand
+<br>Développé par <strong>Harry Undersand</strong>
+</footer>
 
-<!-- ================= FIREBASE AUTH ================= -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import {
-getAuth,GoogleAuthProvider,GithubAuthProvider,FacebookAuthProvider,
-signInWithPopup,signOut,onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import { getFirestore,doc,setDoc,serverTimestamp } from
-"https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-
-const app = initializeApp({
-apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain:"harry-undersand.firebaseapp.com",
-projectId:"harry-undersand"
-});
-
-const auth=getAuth(app);
-const db=getFirestore(app);
-
-const google=new GoogleAuthProvider();
-const github=new GithubAuthProvider();
-const facebook=new FacebookAuthProvider();
-
-window.loginGoogle=()=>signInWithPopup(auth,google);
-window.loginGithub=()=>signInWithPopup(auth,github);
-window.loginFacebook=()=>signInWithPopup(auth,facebook);
-window.logout=()=>signOut(auth);
-
-window.loginWhatsApp = async ()=>{
-const code="WA-"+Date.now();
-window.location.href=`https://wa.me/242066973413?text=CODE:${code}`;
-await setDoc(doc(db,"whatsapp_requests",code),{
-code,status:"pending",createdAt:serverTimestamp()
-});
-};
-
-onAuthStateChanged(auth,user=>{
-if(user){
-document.getElementById("auth-area").innerHTML=`
-<img src="${user.photoURL}" style="width:32px;border-radius:50%">
-<span>${user.displayName}</span>
-<button class="auth-btn" onclick="logout()">Déconnexion</button>`;
-}
-});
-</script>
-
-<!-- UI / ANIMATIONS -->
 <script>
 function toggleMenu(){
 document.getElementById("menu").classList.toggle("show");
 }
-function toggleAuth(){
-const m=document.getElementById("auth-menu");
-m.style.display=m.style.display==="block"?"none":"block";
-}
-const observer=new IntersectionObserver(e=>e.forEach(x=>{
-if(x.isIntersecting)x.target.classList.add("active");
-}),{threshold:0.15});
-document.querySelectorAll(".reveal").forEach(r=>observer.observe(r));
 </script>
 
 </body>

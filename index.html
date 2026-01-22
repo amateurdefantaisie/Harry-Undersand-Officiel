@@ -176,7 +176,7 @@ color:#6b7280;
 /* AUTH GATE */
 #auth-screen {
 min-height:100vh;
-display:flex;
+display:none; /* 🔴 caché par défaut */
 align-items:center;
 justify-content:center;
 text-align:center;
@@ -223,6 +223,17 @@ margin-top:60px;
 </head>
 
 <body>
+
+<div id="loading-screen" style="
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:1.2rem;
+color:#8b5cf6;
+">
+⏳ Vérification de la session…
+</div>
 
 <!-- 🔐 ÉCRAN DE CONNEXION -->
 <div id="auth-screen">
@@ -412,18 +423,18 @@ document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
-  getAuth,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  FacebookAuthProvider,
-  signInWithPopup
+getAuth,
+onAuthStateChanged,
+GoogleAuthProvider,
+GithubAuthProvider,
+FacebookAuthProvider,
+signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 const app = initializeApp({
-  apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain:"harry-undersand.firebaseapp.com",
-  projectId:"harry-undersand"
+apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+authDomain:"harry-undersand.firebaseapp.com",
+projectId:"harry-undersand"
 });
 
 const auth = getAuth(app);
@@ -439,13 +450,13 @@ window.loginFacebook = () => signInWithPopup(auth, facebookProvider);
 
 /* PROTECTION DU SITE */
 onAuthStateChanged(auth, user => {
-  if(user){
-    document.getElementById("auth-screen").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
-  } else {
-    document.getElementById("auth-screen").style.display = "flex";
-    document.getElementById("site-content").style.display = "none";
-  }
+if(user){
+document.getElementById("auth-screen").style.display = "none";
+document.getElementById("site-content").style.display = "block";
+} else {
+document.getElementById("auth-screen").style.display = "flex";
+document.getElementById("site-content").style.display = "none";
+}
 });
 </script>
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Client</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+body{margin:0;font-family:Inter;background:#0a0a0f;color:white}
+.container{max-width:1200px;margin:auto;padding:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.card{
+background:#141421;
+border:1px solid rgba(139,92,246,.3);
+border-radius:18px;
+padding:24px
+}
+.card i{font-size:2rem;color:#8b5cf6}
+.btn{
+display:inline-block;
+margin-top:12px;
+padding:10px 18px;
+border-radius:24px;
+background:#8b5cf6;
+color:white;
+text-decoration:none
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>📊 Mon tableau de bord</h1>
+
+<div class="grid">
+
+<div class="card">
+<i class="fas fa-box"></i>
+<h3>Mes commandes</h3>
+<p>Voir l’état de vos services</p>
+<a class="btn" href="commande.html">Commander</a>
+</div>
+
+<div class="card">
+<i class="fas fa-tv"></i>
+<h3>Streaming</h3>
+<p>Netflix, Prime, Canal+</p>
+<a class="btn" href="streaming.html">Voir</a>
+</div>
+
+<div class="card">
+<i class="fas fa-robot"></i>
+<h3>Chatbots</h3>
+<p>WhatsApp, IA</p>
+<a class="btn" href="chatbot.html">Voir</a>
+</div>
+
+<div class="card">
+<i class="fas fa-cloud"></i>
+<h3>Hébergement</h3>
+<p>Web & Cloud</p>
+<a class="btn" href="hosting.html">Voir</a>
+</div>
+
+<div class="card">
+<i class="fas fa-headset"></i>
+<h3>Support</h3>
+<p>Contact WhatsApp</p>
+<a class="btn" href="https://wa.me/242066973413">Contacter</a>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

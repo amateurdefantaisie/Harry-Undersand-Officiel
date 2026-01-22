@@ -172,11 +172,84 @@ text-align:center;
 padding:4rem 1.5rem;
 color:#6b7280;
 }
+
+/* AUTH GATE */
+#auth-screen {
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+}
+
+.auth-box{
+background:var(--card);
+border:1px solid var(--border);
+padding:40px;
+border-radius:22px;
+max-width:420px;
+width:100%;
+}
+
+.auth-box h2{
+margin-bottom:10px;
+}
+
+.auth-buttons{
+margin-top:24px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+
+.auth-buttons button{
+width:100%;
+}
+
+/* CACHE LE SITE TANT QUE PAS CONNECTÉ */
+#site-content{
+display:none;
+}
+
+/* SERVICES AÉRÉS */
+.services-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:40px;
+margin-top:60px;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- 🔐 ÉCRAN DE CONNEXION -->
+<div id="auth-screen">
+<div class="auth-box">
+<h2>Connexion requise</h2>
+<p>Veuillez vous connecter pour accéder aux services.</p>
+
+<div class="auth-buttons">
+<button class="btn btn-primary" onclick="loginGoogle()">
+<i class="fab fa-google"></i> Continuer avec Google
+</button>
+
+<button class="btn btn-outline" onclick="loginGithub()">
+<i class="fab fa-github"></i> Continuer avec GitHub
+</button>
+
+<button class="btn btn-outline" onclick="loginFacebook()">
+<i class="fab fa-facebook"></i> Continuer avec Facebook
+</button>
+</div>
+</div>
+</div>
+
+<!-- 🔓 CONTENU DU SITE (CACHÉ PAR DÉFAUT) -->
+<div id="site-content">
+
+<!-- 🔝 HEADER -->
 <header>
 <div class="navbar">
 <a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
@@ -191,8 +264,51 @@ color:#6b7280;
 <a href="pack-streaming.html">Premium+</a>
 <a href="commande.html">Commande & Devis</a>
 <a href="contact.html">Contact</a>
-<a href="about.html">A Propos</a>
+<a href="about.html">À propos</a>
 </nav>
+ </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+<h1>Harry Undersand<br><span>Développeur & Architecte IA</span></h1>
+
+<p>
+Solutions numériques modernes : chatbots intelligents,
+streaming premium, hébergement sécurisé et automatisation WhatsApp.
+</p>
+
+<div class="hero-buttons">
+<a href="services.html" class="btn btn-primary">Découvrir les services</a>
+<a href="dashboard.html" class="btn btn-outline">Mon espace client</a>
+</div>
+</section>
+
+<!-- SERVICES (PLUS AÉRÉS) -->
+<section class="container">
+<h2>Nos services principaux</h2>
+
+<div class="services-grid">
+
+<a href="chatbot.html" class="card">
+<i class="fas fa-robot"></i>
+<h3>Chatbots IA</h3>
+<p>Automatisation WhatsApp, Instagram, Messenger, Discord & Web.</p>
+</a>
+
+<a href="streaming.html" class="card">
+<i class="fas fa-film"></i>
+<h3>Streaming Premium</h3>
+<p>Netflix, Prime Video, Crunchyroll, Wakanim, myCANAL.</p>
+</a>
+
+<a href="hosting.html" class="card">
+<i class="fas fa-cloud"></i>
+<h3>Hébergement Cloud</h3>
+<p>Netlify, Vercel, Hostinger, Heroku, Bot Hosting.</p>
+</a>
+
+</div>
 </div>
 </header>
 
@@ -337,51 +453,42 @@ document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { 
-getAuth, 
-onAuthStateChanged 
+import {
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import { 
-getFirestore, 
-collection, 
-addDoc, 
-serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 const app = initializeApp({
-apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain:"harry-undersand.firebaseapp.com",
-projectId:"harry-undersand"
+  apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain:"harry-undersand.firebaseapp.com",
+  projectId:"harry-undersand"
 });
 
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-let currentUser = null;
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 
+/* CONNEXIONS */
+window.loginGoogle = () => signInWithPopup(auth, googleProvider);
+window.loginGithub = () => signInWithPopup(auth, githubProvider);
+window.loginFacebook = () => signInWithPopup(auth, facebookProvider);
+
+/* PROTECTION DU SITE */
 onAuthStateChanged(auth, user => {
-if(!user){
-window.location.href = "login.html";
-} else {
-currentUser = user;
-}
+  if(user){
+    document.getElementById("auth-screen").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+  } else {
+    document.getElementById("auth-screen").style.display = "flex";
+    document.getElementById("site-content").style.display = "none";
+  }
 });
-
-window.createOrder = async (service, pack, price) => {
-if(!currentUser) return;
-
-await addDoc(collection(db,"orders"),{
-userId: currentUser.uid,
-service: service,
-pack: pack,
-price: price,
-status: "En attente",
-createdAt: serverTimestamp()
-});
-
-alert("✅ Commande envoyée avec succès !");
-window.location.href = "dashboard.html";
-};
 </script>
 
 </body>

@@ -200,75 +200,33 @@ footer{
   © 2026 Amateur De Fantaisie — Harry Undersand
 </footer>
 
-<!-- ================= FIREBASE ================= -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { 
-  getAuth, 
-  onAuthStateChanged, 
-  signOut 
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import { 
-  getFirestore, 
-  collection, 
-  query, 
-  where, 
-  getDocs 
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+<form id="commandeForm" onsubmit="event.preventDefault(); envoyerCommande();">
 
-const app = initializeApp({
-  apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain:"harry-undersand.firebaseapp.com",
-  projectId:"harry-undersand"
-});
+  <input id="nom" type="text" placeholder="Nom complet" required>
 
-const auth = getAuth(app);
-const db = getFirestore(app);
+  <input id="email" type="email" placeholder="Email" required>
 
-onAuthStateChanged(auth, async (user) => {
-  if(!user){
-    window.location.href = "login.html";
-    return;
-  }
+  <select id="service" required>
+    <option value="">Choisir un service</option>
+    <option value="Streaming">Streaming</option>
+    <option value="Chatbot">Chatbot</option>
+    <option value="Hébergement">Hébergement</option>
+    <option value="IA">Intelligence Artificielle</option>
+  </select>
 
-  /* User area */
-  document.getElementById("user-area").innerHTML = `
-    <img src="${user.photoURL || ''}">
-    <span>${user.displayName || user.email}</span>
-    <button class="logout" onclick="logout()">Déconnexion</button>
-  `;
+  <select id="pack" required>
+    <option value="">Choisir un pack</option>
+    <option value="Starter">Starter</option>
+    <option value="Business">Business</option>
+    <option value="Premium">Premium</option>
+  </select>
 
-  /* Orders */
-  const ordersBox = document.getElementById("orders");
-  ordersBox.innerHTML = "";
+  <textarea id="message" placeholder="Détails de la commande"></textarea>
 
-  const q = query(
-    collection(db,"orders"),
-    where("userId","==",user.uid)
-  );
+  <button type="submit">🚀 Envoyer la commande</button>
 
-  const snap = await getDocs(q);
+</form>
 
-  if(snap.empty){
-    ordersBox.innerHTML = "<p>Aucune commande pour le moment.</p>";
-    return;
-  }
-
-  snap.forEach(doc=>{
-    const o = doc.data();
-    ordersBox.innerHTML += `
-      <div class="order">
-        <strong>${o.service}</strong><br>
-        Pack : ${o.pack}<br>
-        Prix : ${o.price}<br>
-        Statut : <span class="status">${o.status}</span>
-      </div>
-    `;
-  });
-});
-
-window.logout = () => signOut(auth);
-</script>
 
 </body>
 </html>

@@ -221,5 +221,62 @@ window.open(`https://wa.me/242066973413?text=${text}`,"_blank");
 }
 </script>
 
+<script>
+const observer=new IntersectionObserver(e=>{
+e.forEach(el=>{
+if(el.isIntersecting)el.target.classList.add("active");
+});
+},{threshold:0.15});
+document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { 
+getAuth, 
+onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import { 
+getFirestore, 
+collection, 
+addDoc, 
+serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+const app = initializeApp({
+apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+authDomain:"harry-undersand.firebaseapp.com",
+projectId:"harry-undersand"
+});
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth, user => {
+if(!user){
+window.location.href = "login.html";
+} else {
+currentUser = user;
+}
+});
+
+window.createOrder = async (service, pack, price) => {
+if(!currentUser) return;
+
+await addDoc(collection(db,"orders"),{
+userId: currentUser.uid,
+service: service,
+pack: pack,
+price: price,
+status: "En attente",
+createdAt: serverTimestamp()
+});
+
+alert("✅ Commande envoyée avec succès !");
+window.location.href = "dashboard.html";
+};
+</script>
+
 </body>
 </html>

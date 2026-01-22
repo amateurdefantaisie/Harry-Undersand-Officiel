@@ -12,19 +12,114 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
-body{margin:0;background:#0a0a0f;color:#e1e1e1;font-family:Poppins,Arial}
-header{text-align:center;padding:45px 18px}
-h1{color:#dcdcff;margin:0}
-nav{display:flex;justify-content:center;gap:10px;margin-top:18px}
-nav a{color:#a3a3ff;text-decoration:none;padding:8px 14px;border-radius:6px}
-nav a:hover{background:#3d3cff;color:#fff}
-.section{max-width:800px;margin:25px auto;padding:0 16px}
-.card{background:#10101c;border:1px solid #222;border-radius:12px;padding:18px;margin-top:14px}
-footer{text-align:center;margin:40px 0;opacity:.6}
-a.link{color:#9c8aff}
-.card{
+body{
+  margin:0;
+  background:#0a0a0f;
+  color:#e1e1e1;
+  font-family:Inter,Arial;
+}
+
+header{
+  text-align:center;
+  padding:45px 18px;
+}
+
+h1{
+  color:#dcdcff;
+  margin:0;
+}
+
+nav{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+nav a{
+  color:#a3a3ff;
   text-decoration:none;
-  color:inherit;
+  padding:8px 14px;
+  border-radius:6px;
+}
+
+nav a:hover{
+  background:#3d3cff;
+  color:#fff;
+}
+
+.section{
+  max-width:850px;
+  margin:30px auto;
+  padding:0 16px;
+}
+
+.intro{
+  text-align:center;
+  opacity:.85;
+  margin-bottom:30px;
+  line-height:1.6;
+}
+
+/* Cards */
+.card{
+  background:#10101c;
+  border:1px solid #222;
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:18px;
+}
+
+/* Contact buttons */
+.contact-btn{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:16px;
+  margin-bottom:14px;
+  background:#151528;
+  border:1px solid #2a2a44;
+  border-radius:12px;
+  text-decoration:none;
+  color:#e1e1e1;
+  transition:.3s;
+}
+
+.contact-btn i{
+  font-size:1.6rem;
+  min-width:28px;
+}
+
+.contact-btn span{
+  font-weight:600;
+}
+
+.contact-btn small{
+  display:block;
+  font-size:.85rem;
+  opacity:.7;
+}
+
+.contact-btn:hover{
+  background:#7b3cff;
+  border-color:#7b3cff;
+  transform:translateY(-2px);
+}
+
+/* Platform colors */
+.whatsapp{color:#25D366}
+.facebook{color:#1877F2}
+.instagram{color:#E1306C}
+.telegram{color:#2AABEE}
+.discord{color:#7289DA}
+
+/* Footer */
+footer{
+  text-align:center;
+  margin:45px 0;
+  opacity:.6;
+  font-size:.9rem;
 }
 </style>
 </head>
@@ -41,20 +136,67 @@ a.link{color:#9c8aff}
   </nav>
 </header>
 
-<div class="section">
+<section class="section">
 
+  <p class="intro">
+    Une question, un projet ou une commande ?  
+    Contactez-nous directement via la plateforme de votre choix.
+  </p>
+
+  <!-- CONTACT DIRECT -->
   <div class="card">
-    <p>WhatsApp : <a class="link" href="https://wa.me/message/MEKLQKZMEJ6EF1">Nous Écrire✍️</a></p>
-    <p>Facebook : <a class="link" href="https://www.facebook.com/profile.php?id=61585121305403">👤 Profil</a></p>
-    <p>Instagram : <a class="link" href="https://www.instagram.com/monkeydluffychat">👤 Profil</a></p>
-    <p>Telegram : <a class="link" href="https://t.me/aliceiaofficiel">Nous Écrire✍️</a></p>
-    <p>Discord : <a class="link" href="#">📥 Serveur</a></p>
+    <h3>📞 Contact rapide</h3>
+
+    <a class="contact-btn" href="https://wa.me/message/MEKLQKZMEJ6EF1">
+      <i class="fab fa-whatsapp whatsapp"></i>
+      <div>
+        <span>WhatsApp</span>
+        <small>Réponse rapide • Commandes & support</small>
+      </div>
+    </a>
+
+    <a class="contact-btn" href="https://t.me/aliceiaofficiel">
+      <i class="fab fa-telegram telegram"></i>
+      <div>
+        <span>Telegram</span>
+        <small>Discussion directe • Projets techniques</small>
+      </div>
+    </a>
   </div>
 
-</div>
+  <!-- RÉSEAUX SOCIAUX -->
+  <div class="card">
+    <h3>🌐 Réseaux sociaux</h3>
+
+    <a class="contact-btn" href="https://www.facebook.com/profile.php?id=61585121305403">
+      <i class="fab fa-facebook facebook"></i>
+      <div>
+        <span>Facebook</span>
+        <small>Actualités & présence officielle</small>
+      </div>
+    </a>
+
+    <a class="contact-btn" href="https://www.instagram.com/monkeydluffychat">
+      <i class="fab fa-instagram instagram"></i>
+      <div>
+        <span>Instagram</span>
+        <small>Visuels • projets • communauté</small>
+      </div>
+    </a>
+
+    <a class="contact-btn" href="#">
+      <i class="fab fa-discord discord"></i>
+      <div>
+        <span>Discord</span>
+        <small>Serveur communautaire (bientôt)</small>
+      </div>
+    </a>
+  </div>
+
+</section>
 
 <footer>
-  © 2026  Amateur De Fantaisie by Harry Undersand
+  © 2026 — Amateur De Fantaisie by Harry Undersand
 </footer>
 
 </body>

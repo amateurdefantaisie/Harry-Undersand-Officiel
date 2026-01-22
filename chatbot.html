@@ -236,6 +236,33 @@ Demander un devis
 </a>
 </section>
 
+<h2>Passer une commande</h2>
+
+<input id="nom" placeholder="Votre nom">
+<input id="email" placeholder="Votre email">
+<textarea id="message" placeholder="Détails supplémentaires"></textarea>
+
+<h3>Streaming</h3>
+<button onclick="envoyerCommande('Netflix','Premium')">
+Netflix Premium
+</button>
+
+<button onclick="envoyerCommande('Crunchyroll','Standard')">
+Crunchyroll
+</button>
+
+<h3>Chatbot</h3>
+<button onclick="envoyerCommande('Chatbot WhatsApp','Business')">
+Chatbot WhatsApp
+</button>
+
+<h3>Hébergement</h3>
+<button onclick="envoyerCommande('Hébergement','Starter')">
+Starter
+</button>
+
+<script src="js/sheets.js"></script>
+
 <footer>
 © 2026 Amateur De Fantaisie — Chatbots by Harry Undersand
 </footer>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commande & Devis — Amateur De Fantaisie</title>
+
+<link rel="icon" type="image/svg+xml"
+href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Inter,Arial;
+  background:#0a0a0f;
+  color:#e5e7eb;
+}
+:root{
+  --violet:#8b5cf6;
+  --violet-dark:#7c3aed;
+  --card:#111122;
+  --border:rgba(139,92,246,.25);
+}
+
+section{padding:5rem 1.5rem}
+.container{max-width:1200px;margin:auto}
+h1,h2,h3{font-weight:800}
+p{color:#c7c7d1;line-height:1.8}
+h2{margin-bottom:1rem}
+
+/* HERO */
+.hero{text-align:center;padding-top:6rem}
+.hero h1{font-size:2.8rem;color:#fff}
+.hero p{max-width:750px;margin:1.2rem auto}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:26px;
+  margin-top:3rem;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:26px;
+  transition:.3s;
+}
+.card:hover{transform:translateY(-6px);border-color:var(--violet)}
+.card i{font-size:2.2rem;color:var(--violet);margin-bottom:14px}
+
+/* BUTTONS */
+.btn{
+  display:inline-block;
+  margin-top:16px;
+  padding:14px 26px;
+  border-radius:30px;
+  background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+.btn-outline{
+  background:none;
+  border:1px solid var(--border);
+}
+.btn:hover{opacity:.9}
+
+/* FORM */
+form{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:32px;
+  margin-top:3rem;
+}
+label{display:block;margin-top:18px;font-weight:600}
+input,select,textarea{
+  width:100%;
+  margin-top:6px;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #2a2a44;
+  background:#0a0a15;
+  color:#fff;
+}
+textarea{min-height:120px;resize:vertical}
+
+/* TRUST */
+.trust p{margin-bottom:2.5rem}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem;color:#777}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Commande & Demande de Devis</h1>
+  <p>
+    Passez commande facilement pour vos abonnements Streaming ou
+    demandez un devis personnalisé pour vos projets IA, Chatbots,
+    Hébergement et Solutions Digitales avancées.
+  </p>
+</section>
+
+<!-- COMMANDE RAPIDE -->
+<section class="container">
+<h2>🚀 Commande rapide — Streaming & Premium</h2>
+<p>Cliquez sur un service pour commander immédiatement via WhatsApp.</p>
+
+<div class="grid">
+
+<div class="card">
+<i class="fas fa-film"></i>
+<h3>Netflix</h3>
+<p>Abonnements HD, Full HD, 4K, multi-écrans.</p>
+<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20Netflix." target="_blank">Commander</a>
+</div>
+
+<div class="card">
+<i class="fas fa-tv"></i>
+<h3>Prime Video</h3>
+<p>Films, séries et contenus exclusifs Amazon.</p>
+<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20Prime%20Video." target="_blank">Commander</a>
+</div>
+
+<div class="card">
+<i class="fas fa-dragon"></i>
+<h3>Crunchyroll / Wakanim</h3>
+<p>Animes premium, HD, accès complet.</p>
+<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20Anime%20(Crunchyroll/Wakanim)." target="_blank">Commander</a>
+</div>
+
+<div class="card">
+<i class="fas fa-video"></i>
+<h3>MyCanal</h3>
+<p>Canal+ Afrique, sport, films et séries.</p>
+<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20MyCanal." target="_blank">Commander</a>
+</div>
+
+</div>
+</section>
+
+<!-- DEVIS -->
+<section class="container">
+<h2>📄 Demande de devis personnalisé</h2>
+<p>
+Expliquez-nous votre besoin. Nous analyserons votre projet et
+vous proposerons la meilleure solution adaptée à votre budget.
+</p>
+
+<form onsubmit="sendDevis();return false;">
+
+<label>Type de service</label>
+<select id="service">
+<option>Chatbot IA</option>
+<option>Intelligence Artificielle</option>
+<option>Hébergement Cloud</option>
+<option>Développement Web</option>
+<option>Automatisation WhatsApp</option>
+<option>Autre</option>
+</select>
+
+<label>Plateforme souhaitée</label>
+<select id="platform">
+<option>WhatsApp</option>
+<option>Instagram</option>
+<option>Facebook</option>
+<option>Telegram</option>
+<option>Site Web</option>
+<option>Multi-plateformes</option>
+</select>
+
+<label>Budget estimé (optionnel)</label>
+<input id="budget" placeholder="Ex: 50 000 FCFA / 100€">
+
+<label>Description détaillée</label>
+<textarea id="message" placeholder="Expliquez précisément votre besoin, vos objectifs et délais."></textarea>
+
+<button class="btn" type="submit">Envoyer la demande sur WhatsApp</button>
+
+</form>
+</section>
+
+<!-- TRUST -->
+<section class="container trust">
+<h2>🤝 Pourquoi nous faire confiance ?</h2>
+<p>
+Nous accompagnons particuliers, créateurs et entreprises dans leur transformation digitale
+grâce à des solutions fiables, sécurisées et évolutives.
+</p>
+<p>
+Notre approche repose sur la transparence, la performance, la sécurité
+et un support humain constant avant, pendant et après la livraison.
+</p>
+</section>
+
+<footer>© 2026 Amateur De Fantaisie — Harry Undersand</footer>
+
+<script>
+function sendDevis(){
+const s=document.getElementById("service").value;
+const p=document.getElementById("platform").value;
+const b=document.getElementById("budget").value;
+const m=document.getElementById("message").value;
+
+const text=`Bonjour ! Je souhaite un devis personnalisé.%0A
+Service : ${s}%0A
+Plateforme : ${p}%0A
+Budget : ${b}%0A
+Détails : ${m}`;
+
+window.open(`https://wa.me/242066973413?text=${text}`,"_blank");
+}
+</script>
+
+</body>
+</html>

@@ -2,80 +2,273 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard Client</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard Client — Amateur De Fantaisie</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml"
+href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
+
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
-body{margin:0;font-family:Inter;background:#0a0a0f;color:white}
-.container{max-width:1200px;margin:auto;padding:40px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
-.card{
-background:#141421;
-border:1px solid rgba(139,92,246,.3);
-border-radius:18px;
-padding:24px
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Inter;
+  background:#0a0a0f;
+  color:#ffffff;
 }
-.card i{font-size:2rem;color:#8b5cf6}
+
+/* Layout */
+header{
+  background:rgba(10,10,15,.9);
+  border-bottom:1px solid rgba(139,92,246,.3);
+  padding:18px 24px;
+}
+header .top{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  color:#8b5cf6;
+  font-weight:800;
+  text-decoration:none;
+  font-size:1.2rem;
+}
+.user{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.user img{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+}
+.logout{
+  background:none;
+  border:1px solid rgba(139,92,246,.4);
+  color:white;
+  padding:6px 14px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+/* Content */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:40px 20px;
+}
+h1{
+  font-size:2rem;
+  margin-bottom:12px;
+}
+.subtitle{
+  color:#b4b4b4;
+  margin-bottom:30px;
+}
+
+/* Grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+}
+.card{
+  background:#141421;
+  border:1px solid rgba(139,92,246,.3);
+  border-radius:18px;
+  padding:24px;
+}
+.card i{
+  font-size:2rem;
+  color:#8b5cf6;
+  margin-bottom:10px;
+}
+.card h3{
+  margin-bottom:6px;
+}
+.card p{
+  color:#b4b4b4;
+  font-size:.95rem;
+}
+
+/* Buttons */
 .btn{
-display:inline-block;
-margin-top:12px;
-padding:10px 18px;
-border-radius:24px;
-background:#8b5cf6;
-color:white;
-text-decoration:none
+  display:inline-block;
+  margin-top:14px;
+  padding:10px 18px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+  color:white;
+  text-decoration:none;
+  font-weight:600;
+  font-size:.9rem;
+}
+
+/* Orders */
+.order{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid rgba(139,92,246,.3);
+  border-radius:12px;
+  font-size:.9rem;
+}
+.status{
+  font-weight:700;
+  color:#8b5cf6;
+}
+
+/* Footer */
+footer{
+  text-align:center;
+  padding:30px;
+  color:#6b7280;
 }
 </style>
 </head>
 
 <body>
 
+<header>
+  <div class="top">
+    <a href="index.html" class="logo">⛩️ Amateur De Fantaisie</a>
+    <div class="user" id="user-area">
+      <span>Chargement...</span>
+    </div>
+  </div>
+</header>
+
 <div class="container">
-<h1>📊 Mon tableau de bord</h1>
+  <h1>📊 Tableau de bord</h1>
+  <p class="subtitle">Gérez vos commandes, services et abonnements</p>
 
-<div class="grid">
+  <div class="grid">
 
-<div class="card">
-<i class="fas fa-box"></i>
-<h3>Mes commandes</h3>
-<div id="orders">
-<p>Chargement de vos commandes...</p>
-</div>
+    <!-- Commandes -->
+    <div class="card">
+      <i class="fas fa-box"></i>
+      <h3>Mes commandes</h3>
+      <div id="orders">
+        <p>Chargement de vos commandes...</p>
+      </div>
+      <a href="commande.html" class="btn">Nouvelle commande</a>
+    </div>
+
+    <!-- Streaming -->
+    <div class="card">
+      <i class="fas fa-tv"></i>
+      <h3>Streaming</h3>
+      <p>Netflix, Prime Video, Canal+, Crunchyroll…</p>
+      <a href="streaming.html" class="btn">Voir les offres</a>
+    </div>
+
+    <!-- Chatbots -->
+    <div class="card">
+      <i class="fas fa-robot"></i>
+      <h3>Chatbots & IA</h3>
+      <p>WhatsApp, Instagram, Web, automatisation</p>
+      <a href="chatbot.html" class="btn">Découvrir</a>
+    </div>
+
+    <!-- Hébergement -->
+    <div class="card">
+      <i class="fas fa-cloud"></i>
+      <h3>Hébergement</h3>
+      <p>Starter, Business, Premium</p>
+      <a href="hosting.html" class="btn">Voir les packs</a>
+    </div>
+
+    <!-- Support -->
+    <div class="card">
+      <i class="fas fa-headset"></i>
+      <h3>Support</h3>
+      <p>Besoin d’aide ? Contactez-nous directement</p>
+      <a href="https://wa.me/242066973413" class="btn">WhatsApp</a>
+    </div>
+
+  </div>
 </div>
 
-<div class="card">
-<i class="fas fa-tv"></i>
-<h3>Streaming</h3>
-<p>Netflix, Prime, Canal+</p>
-<a class="btn" href="streaming.html">Voir</a>
-</div>
+<footer>
+  © 2026 Amateur De Fantaisie — Harry Undersand
+</footer>
 
-<div class="card">
-<i class="fas fa-robot"></i>
-<h3>Chatbots</h3>
-<p>WhatsApp, IA</p>
-<a class="btn" href="chatbot.html">Voir</a>
-</div>
+<!-- ================= FIREBASE ================= -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signOut 
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  query, 
+  where, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-<div class="card">
-<i class="fas fa-cloud"></i>
-<h3>Hébergement</h3>
-<p>Web & Cloud</p>
-<a class="btn" href="hosting.html">Voir</a>
-</div>
+const app = initializeApp({
+  apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain:"harry-undersand.firebaseapp.com",
+  projectId:"harry-undersand"
+});
 
-<div class="card">
-<i class="fas fa-headset"></i>
-<h3>Support</h3>
-<p>Contact WhatsApp</p>
-<a class="btn" href="https://wa.me/242066973413">Contacter</a>
-</div>
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-</div>
-</div>
+onAuthStateChanged(auth, async (user) => {
+  if(!user){
+    window.location.href = "login.html";
+    return;
+  }
+
+  /* User area */
+  document.getElementById("user-area").innerHTML = `
+    <img src="${user.photoURL || ''}">
+    <span>${user.displayName || user.email}</span>
+    <button class="logout" onclick="logout()">Déconnexion</button>
+  `;
+
+  /* Orders */
+  const ordersBox = document.getElementById("orders");
+  ordersBox.innerHTML = "";
+
+  const q = query(
+    collection(db,"orders"),
+    where("userId","==",user.uid)
+  );
+
+  const snap = await getDocs(q);
+
+  if(snap.empty){
+    ordersBox.innerHTML = "<p>Aucune commande pour le moment.</p>";
+    return;
+  }
+
+  snap.forEach(doc=>{
+    const o = doc.data();
+    ordersBox.innerHTML += `
+      <div class="order">
+        <strong>${o.service}</strong><br>
+        Pack : ${o.pack}<br>
+        Prix : ${o.price}<br>
+        Statut : <span class="status">${o.status}</span>
+      </div>
+    `;
+  });
+});
+
+window.logout = () => signOut(auth);
+</script>
 
 </body>
 </html>

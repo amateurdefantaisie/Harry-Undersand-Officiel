@@ -235,11 +235,11 @@ margin-top:60px;
 <i class="fab fa-google"></i> Continuer avec Google
 </button>
 
-<button class="btn btn-outline" onclick="loginGithub()">
+<button class="btn btn-outline" id="githubBtn">
 <i class="fab fa-github"></i> Continuer avec GitHub
 </button>
 
-<button class="btn btn-outline" onclick="loginFacebook()">
+<button class="btn btn-outline" id="facebookBtn">
 <i class="fab fa-facebook"></i> Continuer avec Facebook
 </button>
 </div>
@@ -410,43 +410,57 @@ if(el.isIntersecting)el.target.classList.add("active");
 document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
 </script>
 <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
-getAuth,
-onAuthStateChanged,
-GoogleAuthProvider,
-GithubAuthProvider,
-FacebookAuthProvider,
-signInWithPopup
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-const app = initializeApp({
-apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain:"harry-undersand.firebaseapp.com",
-projectId:"harry-undersand"
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
+};
 
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
-/* CONNEXIONS */
-window.loginGoogle = async () => {
+/* ✅ BOUTONS */
+document.getElementById("googleBtn").addEventListener("click", async () => {
+try {
 await signInWithPopup(auth, googleProvider);
-};
+} catch (e) {
+alert(e.message);
+}
+});
 
-window.loginGithub = async () => {
+document.getElementById("githubBtn").addEventListener("click", async () => {
+try {
 await signInWithPopup(auth, githubProvider);
-};
+} catch (e) {
+alert(e.message);
+}
+});
 
-window.loginFacebook = async () => {
+document.getElementById("facebookBtn").addEventListener("click", async () => {
+try {
 await signInWithPopup(auth, facebookProvider);
-};
+} catch (e) {
+alert(e.message);
+}
+});
 
-/* PROTECTION DU SITE */
+/* 🔐 PROTECTION */
 onAuthStateChanged(auth, user => {
-if(user){
+if (user) {
 document.getElementById("auth-screen").style.display = "none";
 document.getElementById("site-content").style.display = "block";
 } else {
@@ -454,7 +468,6 @@ document.getElementById("auth-screen").style.display = "flex";
 document.getElementById("site-content").style.display = "none";
 }
 });
-</script>
 
 </body>
 </html>

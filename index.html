@@ -416,8 +416,7 @@ onAuthStateChanged,
 GoogleAuthProvider,
 GithubAuthProvider,
 FacebookAuthProvider,
-signInWithRedirect,
-getRedirectResult
+signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 const app = initializeApp({
@@ -433,9 +432,17 @@ const githubProvider = new GithubAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
 /* CONNEXIONS */
-window.loginGoogle = () => signInWithRedirect(auth, googleProvider);
-window.loginGithub = () => signInWithRedirect(auth, githubProvider);
-window.loginFacebook = () => signInWithRedirect(auth, facebookProvider);
+window.loginGoogle = async () => {
+await signInWithPopup(auth, googleProvider);
+};
+
+window.loginGithub = async () => {
+await signInWithPopup(auth, githubProvider);
+};
+
+window.loginFacebook = async () => {
+await signInWithPopup(auth, facebookProvider);
+};
 
 getRedirectResult(auth)
 .then((result) => {

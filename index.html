@@ -462,6 +462,13 @@ const googleBtn = document.getElementById("googleBtn");
 const githubBtn = document.getElementById("githubBtn");
 const facebookBtn = document.getElementById("facebookBtn");
 
+const profileBox = document.getElementById("user-profile");
+const userPhoto = document.getElementById("userPhoto");
+const userName = document.getElementById("userName");
+const userEmail = document.getElementById("userEmail");
+const userProvider = document.getElementById("userProvider");
+const logoutBtn = document.getElementById("logoutBtn");
+
 /* EVENTS */
 googleBtn.addEventListener("click", () => {
 signInWithPopup(auth, googleProvider)
@@ -478,14 +485,34 @@ signInWithPopup(auth, facebookProvider)
 .catch(err => alert(err.message));
 });
 
+logoutBtn.addEventListener("click", async () => {
+try {
+await signOut(auth);
+} catch (e) {
+alert(e.message);
+}
+});
+
 /* 🔐 PROTECTION */
 onAuthStateChanged(auth, user => {
 if (user) {
+// Affichage site
 document.getElementById("auth-screen").style.display = "none";
 document.getElementById("site-content").style.display = "block";
+profileBox.style.display = "block";
+
+// Données utilisateur
+userPhoto.src = user.photoURL || "";
+userName.textContent = user.displayName || "Utilisateur";
+userEmail.textContent = user.email || "";
+
+const providerId = user.providerData[0]?.providerId;
+userProvider.textContent = "Connecté via : " + providerId.replace(".com", "");
+
 } else {
 document.getElementById("auth-screen").style.display = "flex";
 document.getElementById("site-content").style.display = "none";
+profileBox.style.display = "none";
 }
 });
 </script>

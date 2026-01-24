@@ -452,8 +452,6 @@ setDoc,
 serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-const db = getFirestore(app);
-
 /* 🔧 CONFIG FIREBASE */
 const firebaseConfig = {
 apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
@@ -464,13 +462,14 @@ projectId: "harry-undersand"
 /* 🔥 INIT */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 /* PROVIDERS */
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
-/* BOUTONS */
+/* UI ELEMENTS */
 const googleBtn = document.getElementById("googleBtn");
 const githubBtn = document.getElementById("githubBtn");
 const facebookBtn = document.getElementById("facebookBtn");
@@ -487,56 +486,31 @@ const navUserPhoto = document.getElementById("navUserPhoto");
 const navUserName = document.getElementById("navUserName");
 const navLogoutBtn = document.getElementById("navLogoutBtn");
 
-onAuthStateChanged(auth, user => {
-if (user) {
-navProfile.style.display = "flex";
-navUserPhoto.src = user.photoURL || "";
-navUserName.textContent = user.displayName || "Utilisateur";
-} else {
-navProfile.style.display = "none";
-}
-});
+/* LOGIN */
+googleBtn.addEventListener("click", () =>
+signInWithPopup(auth, googleProvider).catch(e => alert(e.message))
+);
+githubBtn.addEventListener("click", () =>
+signInWithPopup(auth, githubProvider).catch(e => alert(e.message))
+);
+facebookBtn.addEventListener("click", () =>
+signInWithPopup(auth, facebookProvider).catch(e => alert(e.message))
+);
 
-navLogoutBtn.addEventListener("click", async () => {
-try {
+/* LOGOUT */
+logoutBtn.addEventListener("click", async () => {
 await signOut(auth);
 window.location.href = "/";
-} catch (e) {
-alert(e.message);
-}
 });
-
-/* EVENTS */
-googleBtn.addEventListener("click", () => {
-signInWithPopup(auth, googleProvider)
-.catch(err => alert(err.message));
-});
-
-githubBtn.addEventListener("click", () => {
-signInWithPopup(auth, githubProvider)
-.catch(err => alert(err.message));
-});
-
-facebookBtn.addEventListener("click", () => {
-signInWithPopup(auth, facebookProvider)
-.catch(err => alert(err.message));
-});
-
-logoutBtn.addEventListener("click", async () => {
-try {
+navLogoutBtn.addEventListener("click", async () => {
 await signOut(auth);
-} catch (e) {
-alert(e.message);
-}
+window.location.href = "/";
 });
 
-/* 🔐 PROTECTION */
-onAuthStateChanged(auth, user => {
-if (user) {
+/* 🔐 AUTH STATE (UNIQUE) */
 onAuthStateChanged(auth, async user => {
 if (user) {
-// Enregistrement utilisateur dans Firestore
-try {
+/* FIRESTORE SAVE */
 await setDoc(doc(db, "users", user.uid), {
 uid: user.uid,
 name: user.displayName || "Utilisateur",
@@ -544,33 +518,32 @@ email: user.email || "",
 photoURL: user.photoURL || "",
 provider: user.providerData[0]?.providerId,
 lastLogin: serverTimestamp()
-}, { merge: true }); // merge = ne pas écraser si existant
-} catch (e) {
-console.error("Erreur Firestore:", e);
-}
+}, { merge: true });
 
-// Redirection vers dashboard
-window.location.href = "dashboard.html";
-}
-});
-
-// Affichage site
+/* UI */
 document.getElementById("auth-screen").style.display = "none";
 document.getElementById("site-content").style.display = "block";
 profileBox.style.display = "block";
+navProfile.style.display = "flex";
 
-// Données utilisateur
 userPhoto.src = user.photoURL || "";
 userName.textContent = user.displayName || "Utilisateur";
 userEmail.textContent = user.email || "";
+userProvider.textContent = "Connecté via : " + user.providerData[0]?.providerId.replace(".com","");
 
-const providerId = user.providerData[0]?.providerId;
-userProvider.textContent = "Connecté via : " + providerId.replace(".com", "");
+navUserPhoto.src = user.photoURL || "";
+navUserName.textContent = user.displayName || "Utilisateur";
+
+/* REDIRECTION */
+if (!window.location.pathname.includes("dashboard")) {
+window.location.href = "dashboard.html";
+}
 
 } else {
 document.getElementById("auth-screen").style.display = "flex";
 document.getElementById("site-content").style.display = "none";
 profileBox.style.display = "none";
+navProfile.style.display = "none";
 }
 });
 </script>

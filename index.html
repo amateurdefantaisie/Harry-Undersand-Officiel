@@ -287,6 +287,12 @@ Se déconnecter
 <a href="about.html">À propos</a>
 </nav>
  </div>
+
+<div class="nav-profile" id="navProfile" style="display:none; margin-left:20px;">
+<img id="navUserPhoto" src="" alt="Photo" style="width:32px;height:32px;border-radius:50%;">
+<span id="navUserName" style="margin-left:6px;color:#fff;"></span>
+<button id="navLogoutBtn" class="btn btn-outline" style="margin-left:10px;padding:4px 10px;">Déconnexion</button>
+</div>
 </header>
 
 <!-- HERO -->
@@ -439,7 +445,14 @@ FacebookAuthProvider,
 signInWithPopup,
 signOut
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import {
+getFirestore,
+doc,
+setDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
+const db = getFirestore(app);
 
 /* 🔧 CONFIG FIREBASE */
 const firebaseConfig = {
@@ -469,6 +482,30 @@ const userEmail = document.getElementById("userEmail");
 const userProvider = document.getElementById("userProvider");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const navProfile = document.getElementById("navProfile");
+const navUserPhoto = document.getElementById("navUserPhoto");
+const navUserName = document.getElementById("navUserName");
+const navLogoutBtn = document.getElementById("navLogoutBtn");
+
+onAuthStateChanged(auth, user => {
+if (user) {
+navProfile.style.display = "flex";
+navUserPhoto.src = user.photoURL || "";
+navUserName.textContent = user.displayName || "Utilisateur";
+} else {
+navProfile.style.display = "none";
+}
+});
+
+navLogoutBtn.addEventListener("click", async () => {
+try {
+await signOut(auth);
+window.location.href = "/";
+} catch (e) {
+alert(e.message);
+}
+});
+
 /* EVENTS */
 googleBtn.addEventListener("click", () => {
 signInWithPopup(auth, googleProvider)
@@ -496,6 +533,27 @@ alert(e.message);
 /* 🔐 PROTECTION */
 onAuthStateChanged(auth, user => {
 if (user) {
+onAuthStateChanged(auth, async user => {
+if (user) {
+// Enregistrement utilisateur dans Firestore
+try {
+await setDoc(doc(db, "users", user.uid), {
+uid: user.uid,
+name: user.displayName || "Utilisateur",
+email: user.email || "",
+photoURL: user.photoURL || "",
+provider: user.providerData[0]?.providerId,
+lastLogin: serverTimestamp()
+}, { merge: true }); // merge = ne pas écraser si existant
+} catch (e) {
+console.error("Erreur Firestore:", e);
+}
+
+// Redirection vers dashboard
+window.location.href = "dashboard.html";
+}
+});
+
 // Affichage site
 document.getElementById("auth-screen").style.display = "none";
 document.getElementById("site-content").style.display = "block";

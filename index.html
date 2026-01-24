@@ -224,30 +224,32 @@ margin-top:60px;
 
 <body>
 
-<!-- 🔐 ÉCRAN DE CONNEXION -->
+<!-- 🔐 AUTH SCREEN -->
 <div id="auth-screen">
 <div class="auth-box">
 <h2>Connexion requise</h2>
-<p>Veuillez vous connecter pour accéder aux services.</p>
+<p>Veuillez vous connecter pour accéder au site.</p>
 
 <div class="auth-buttons">
-<button class="btn btn-primary" id="googleBtn">
+<button id="googleBtn" class="btn btn-primary">
 <i class="fab fa-google"></i> Continuer avec Google
 </button>
 
-<button class="btn btn-outline" id="githubBtn">
+<button id="githubBtn" class="btn btn-outline">
 <i class="fab fa-github"></i> Continuer avec GitHub
 </button>
 
-<button class="btn btn-outline" id="facebookBtn">
+<button id="facebookBtn" class="btn btn-outline">
 <i class="fab fa-facebook"></i> Continuer avec Facebook
 </button>
 </div>
 </div>
 </div>
 
-<!-- 🔓 CONTENU DU SITE (CACHÉ PAR DÉFAUT) -->
-<div id="site-content">
+<!-- 🔓 SITE CONTENT -->
+<div id="site-content" style="display:none;">
+  <!-- TOUT TON SITE ICI -->
+</div>
 
 <!-- 🔝 HEADER -->
 <header>
@@ -412,50 +414,49 @@ document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
-  getAuth,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  FacebookAuthProvider,
-  signInWithPopup
+getAuth,
+onAuthStateChanged,
+GoogleAuthProvider,
+GithubAuthProvider,
+FacebookAuthProvider,
+signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
+/* 🔧 CONFIG FIREBASE */
 const firebaseConfig = {
-  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain: "harry-undersand.firebaseapp.com",
-  projectId: "harry-undersand"
+apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+authDomain: "harry-undersand.firebaseapp.com",
+projectId: "harry-undersand"
 };
 
+/* 🔥 INIT */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+/* PROVIDERS */
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
-/* ✅ BOUTONS */
-document.getElementById("googleBtn").addEventListener("click", async () => {
-try {
-await signInWithPopup(auth, googleProvider);
-} catch (e) {
-alert(e.message);
-}
+/* BOUTONS */
+const googleBtn = document.getElementById("googleBtn");
+const githubBtn = document.getElementById("githubBtn");
+const facebookBtn = document.getElementById("facebookBtn");
+
+/* EVENTS */
+googleBtn.addEventListener("click", () => {
+signInWithPopup(auth, googleProvider)
+.catch(err => alert(err.message));
 });
 
-document.getElementById("githubBtn").addEventListener("click", async () => {
-try {
-await signInWithPopup(auth, githubProvider);
-} catch (e) {
-alert(e.message);
-}
+githubBtn.addEventListener("click", () => {
+signInWithPopup(auth, githubProvider)
+.catch(err => alert(err.message));
 });
 
-document.getElementById("facebookBtn").addEventListener("click", async () => {
-try {
-await signInWithPopup(auth, facebookProvider);
-} catch (e) {
-alert(e.message);
-}
+facebookBtn.addEventListener("click", () => {
+signInWithPopup(auth, facebookProvider)
+.catch(err => alert(err.message));
 });
 
 /* 🔐 PROTECTION */
@@ -468,6 +469,7 @@ document.getElementById("auth-screen").style.display = "flex";
 document.getElementById("site-content").style.display = "none";
 }
 });
+</script>
 
 </body>
 </html>

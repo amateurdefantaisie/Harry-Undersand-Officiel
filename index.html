@@ -3,93 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Harry Undersand — Développeur & Solutions IA</title>
 
-<link rel="icon" type="image/svg+xml"
-href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
---bg:#0b141a;--card:#111b21;--border:rgba(139,92,246,.35);
---violet:#8b5cf6;--violet-dark:#7c3aed;
---text:#e9edef;--muted:#8696a0;
-}
-body{
-font-family:Inter;background:var(--bg);color:var(--text);
-background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.03) 1px, transparent 0);
-background-size:24px 24px;
-}
-section{padding:6rem 1.5rem}
-.container{max-width:1200px;margin:auto}
-h1,h2,h3{font-weight:800}
-p{color:var(--muted);line-height:1.7}
-
-/* HEADER */
-header{
-position:fixed;top:0;width:100%;z-index:1000;
-background:rgba(11,20,26,.85);
-backdrop-filter:blur(20px);
-border-bottom:1px solid var(--border);
-}
-.navbar{
-max-width:1200px;margin:auto;
-padding:16px 24px;
-display:flex;justify-content:space-between;align-items:center;
-}
-.logo{color:var(--violet);font-weight:800;text-decoration:none}
-.nav-links{display:flex;gap:24px}
-.nav-links a{color:var(--muted);text-decoration:none}
-.nav-links a:hover{color:var(--violet)}
-
+body{font-family:Inter;background:#0b141a;color:#e9edef}
+header{position:fixed;top:0;width:100%;background:rgba(11,20,26,.9);
+backdrop-filter:blur(15px);border-bottom:1px solid rgba(139,92,246,.35)}
+.navbar{max-width:1200px;margin:auto;padding:16px 24px;
+display:flex;justify-content:space-between;align-items:center}
+.logo{color:#8b5cf6;font-weight:800;text-decoration:none}
 .auth-actions{display:flex;gap:10px;align-items:center}
 .auth-actions img{width:32px;height:32px;border-radius:50%}
-
-.burger{display:none;font-size:1.6rem;cursor:pointer}
-
-/* HERO */
-.hero{padding-top:180px;text-align:center}
-.hero h1{font-size:3rem}
-.hero span{color:var(--violet)}
-.hero p{margin:22px auto;max-width:780px}
-
-.btn{
-padding:14px 26px;border-radius:30px;border:none;
-cursor:pointer;font-weight:600;text-decoration:none;
-}
-.btn-primary{background:linear-gradient(135deg,var(--violet),var(--violet-dark));color:white}
-.btn-outline{background:none;border:1px solid var(--border);color:white}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:28px;margin-top:40px;
-}
-.card{
-background:var(--card);border:1px solid var(--border);
-border-radius:20px;padding:28px;
-transition:.35s;text-decoration:none;color:inherit;
-}
-.card:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(139,92,246,.35)}
-.card i{font-size:2.2rem;color:var(--violet);margin-bottom:14px}
-
-/* MOBILE */
-@media(max-width:900px){
-.nav-links{
-position:absolute;top:70px;left:0;width:100%;
-background:#0b141a;flex-direction:column;
-padding:20px;display:none;
-}
-.nav-links.show{display:flex}
-.burger{display:block}
-}
-
-footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
+.btn{padding:10px 20px;border-radius:25px;border:none;
+cursor:pointer;font-weight:600}
+.btn-primary{background:#8b5cf6;color:#fff}
+.btn-outline{background:none;border:1px solid rgba(139,92,246,.35);color:#fff}
+.hero{padding-top:160px;text-align:center}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);
+display:none;align-items:center;justify-content:center;z-index:2000}
+.modal{background:#111b21;border:1px solid rgba(139,92,246,.35);
+padding:30px;border-radius:18px;width:100%;max-width:420px}
+.modal input,.modal textarea{width:100%;margin:8px 0;padding:10px;border-radius:10px;border:none}
 </style>
 </head>
 
@@ -97,27 +34,14 @@ footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
 
 <header>
 <div class="navbar">
-<a class="logo" href="/">彡『 Amateur De Fantaisie 』彡</a>
+<a class="logo" href="/">Amateur De Fantaisie</a>
 
-<div class="burger" onclick="toggleMenu()">
-<i class="fas fa-bars"></i>
-</div>
-
-<nav class="nav-links" id="menu">
-<a href="services.html">Services</a>
-<a href="chatbot.html">Chatbots</a>
-<a href="hosting.html">Hébergement</a>
-<a href="streaming.html">Streaming</a>
-<a href="dashboard.html">Tableau de bord</a>
-<a href="contact.html">Contact</a>
-</nav>
-
-<div class="auth-actions" id="authActions">
+<div class="auth-actions" id="authGuest">
 <button class="btn btn-outline" id="loginBtn">Connexion</button>
 <button class="btn btn-primary" id="registerBtn">Créer un compte</button>
 </div>
 
-<div class="auth-actions" id="userActions" style="display:none">
+<div class="auth-actions" id="authUser" style="display:none">
 <img id="userPhoto">
 <span id="userName"></span>
 <button class="btn btn-outline" id="logoutBtn">Déconnexion</button>
@@ -126,58 +50,147 @@ footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
 </header>
 
 <section class="hero">
-<h1>Harry Undersand<br><span>Développeur & Architecte IA</span></h1>
-<p>Solutions IA, automatisation WhatsApp, streaming premium et cloud sécurisé.</p>
+<h1>Harry Undersand</h1>
+<p>IA • Cloud • Automatisation</p>
 </section>
 
-<footer>
-© 2026 — Amateur De Fantaisie
-</footer>
+<!-- LOGIN -->
+<div class="modal-bg" id="loginModal">
+<div class="modal">
+<h3>Connexion</h3>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Mot de passe">
+<button class="btn btn-primary" id="doLogin">Connexion</button>
+<hr>
+<button class="btn btn-outline" id="googleLogin">Google</button>
+<button class="btn btn-outline" id="githubLogin">GitHub</button>
+</div>
+</div>
 
-<script>
-function toggleMenu(){
-document.getElementById("menu").classList.toggle("show");
-}
-</script>
+<!-- REGISTER -->
+<div class="modal-bg" id="registerModal">
+<div class="modal">
+<h3>Créer un compte</h3>
+<input id="registerEmail" placeholder="Email">
+<input id="registerPassword" type="password" placeholder="Mot de passe">
+<button class="btn btn-primary" id="doRegister">Créer</button>
+</div>
+</div>
 
-<!-- FIREBASE AUTH -->
+<!-- COMMANDE -->
+<div class="modal-bg" id="orderModal">
+<div class="modal">
+<h3>Nouvelle commande</h3>
+<input id="orderService" placeholder="Service">
+<textarea id="orderMessage" placeholder="Détails"></textarea>
+<button class="btn btn-primary" id="sendOrder">Envoyer</button>
+</div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
-getAuth,
-onAuthStateChanged,
-signOut
+  getAuth,onAuthStateChanged,signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider, GithubAuthProvider,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import {
+  getFirestore, doc, setDoc,
+  collection, addDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand"
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-const authActions = document.getElementById("authActions");
-const userActions = document.getElementById("userActions");
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
 
-onAuthStateChanged(auth, user => {
-if (!user) {
-authActions.style.display = "flex";
-userActions.style.display = "none";
-return;
+/* UI */
+loginBtn.onclick = ()=>loginModal.style.display="flex";
+registerBtn.onclick = ()=>registerModal.style.display="flex";
+loginModal.onclick = e=>e.target===loginModal&&(loginModal.style.display="none");
+registerModal.onclick = e=>e.target===registerModal&&(registerModal.style.display="none");
+
+/* EMAIL LOGIN */
+doLogin.onclick = async()=>{
+  await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+  loginModal.style.display="none";
+};
+
+/* REGISTER */
+doRegister.onclick = async()=>{
+  const cred = await createUserWithEmailAndPassword(
+    auth, registerEmail.value, registerPassword.value
+  );
+  await createUserProfile(cred.user);
+  registerModal.style.display="none";
+};
+
+/* GOOGLE */
+googleLogin.onclick = async()=>{
+  const cred = await signInWithPopup(auth, googleProvider);
+  await createUserProfile(cred.user);
+  loginModal.style.display="none";
+};
+
+/* GITHUB */
+githubLogin.onclick = async()=>{
+  const cred = await signInWithPopup(auth, githubProvider);
+  await createUserProfile(cred.user);
+  loginModal.style.display="none";
+};
+
+/* PROFILE FIRESTORE */
+async function createUserProfile(user){
+  await setDoc(doc(db,"users",user.uid),{
+    uid:user.uid,
+    email:user.email,
+    name:user.displayName||"",
+    photo:user.photoURL||"",
+    provider:user.providerData[0].providerId,
+    createdAt:serverTimestamp()
+  },{merge:true});
 }
 
-authActions.style.display = "none";
-userActions.style.display = "flex";
-document.getElementById("userName").textContent = user.displayName || user.email;
-document.getElementById("userPhoto").src =
-user.photoURL || "https://i.imgur.com/6VBx3io.png";
+/* COMMANDES */
+sendOrder.onclick = async()=>{
+  await addDoc(collection(db,"orders"),{
+    uid:auth.currentUser.uid,
+    service:orderService.value,
+    message:orderMessage.value,
+    status:"en attente",
+    createdAt:serverTimestamp()
+  });
+  alert("Commande envoyée");
+  orderModal.style.display="none";
+};
+
+/* AUTH STATE */
+onAuthStateChanged(auth, user=>{
+  if(!user){
+    authGuest.style.display="flex";
+    authUser.style.display="none";
+    return;
+  }
+  authGuest.style.display="none";
+  authUser.style.display="flex";
+  userName.textContent = user.displayName||user.email;
+  userPhoto.src = user.photoURL||"https://i.imgur.com/6VBx3io.png";
 });
 
-document.getElementById("logoutBtn").onclick = async () => {
-await signOut(auth);
-window.location.reload();
+/* LOGOUT */
+logoutBtn.onclick = async()=>{
+  await signOut(auth);
+  location.reload();
 };
 </script>
 

@@ -1,28 +1,3 @@
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-onAuthStateChanged(auth, user => {
-if (!user) {
-// Pas connecté → redirection vers page login
-window.location.href = "/";
-}
-});
-</script>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -30,255 +5,122 @@ window.location.href = "/";
 <title>Dashboard Client — Amateur De Fantaisie</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Favicon -->
 <link rel="icon" type="image/svg+xml"
 href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
 
-<!-- Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:Inter;
-  background:#0a0a0f;
-  color:#ffffff;
-}
+body{font-family:Inter;background:#0a0a0f;color:#fff}
 
-/* Layout */
-header{
-  background:rgba(10,10,15,.9);
-  border-bottom:1px solid rgba(139,92,246,.3);
-  padding:18px 24px;
-}
-header .top{
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.logo{
-  color:#8b5cf6;
-  font-weight:800;
-  text-decoration:none;
-  font-size:1.2rem;
-}
-.user{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.user img{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-}
-.logout{
-  background:none;
-  border:1px solid rgba(139,92,246,.4);
-  color:white;
-  padding:6px 14px;
-  border-radius:20px;
-  cursor:pointer;
-}
+header{border-bottom:1px solid rgba(139,92,246,.3);padding:18px 24px}
+.logo{color:#8b5cf6;font-weight:800;text-decoration:none}
 
-/* Content */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:40px 20px;
-}
-h1{
-  font-size:2rem;
-  margin-bottom:12px;
-}
-.subtitle{
-  color:#b4b4b4;
-  margin-bottom:30px;
-}
+.container{max-width:1200px;margin:auto;padding:40px 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
 
-/* Grid */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:24px;
-}
-.card{
-  background:#141421;
-  border:1px solid rgba(139,92,246,.3);
-  border-radius:18px;
-  padding:24px;
-}
-.card i{
-  font-size:2rem;
-  color:#8b5cf6;
-  margin-bottom:10px;
-}
-.card h3{
-  margin-bottom:6px;
-}
-.card p{
-  color:#b4b4b4;
-  font-size:.95rem;
-}
+.card{background:#141421;border:1px solid rgba(139,92,246,.3);border-radius:18px;padding:24px}
+.card i{font-size:2rem;color:#8b5cf6}
 
-/* Buttons */
-.btn{
-  display:inline-block;
-  margin-top:14px;
-  padding:10px 18px;
-  border-radius:24px;
-  background:linear-gradient(135deg,#8b5cf6,#7c3aed);
-  color:white;
-  text-decoration:none;
-  font-weight:600;
-  font-size:.9rem;
-}
+.btn{display:inline-block;margin-top:14px;padding:10px 18px;border-radius:24px;
+background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;text-decoration:none;font-weight:600}
 
-/* Orders */
-.order{
-  margin-top:12px;
-  padding:12px;
-  border:1px solid rgba(139,92,246,.3);
-  border-radius:12px;
-  font-size:.9rem;
-}
-.status{
-  font-weight:700;
-  color:#8b5cf6;
-}
-
-/* Footer */
-footer{
-  text-align:center;
-  padding:30px;
-  color:#6b7280;
-}
+#user-profile{text-align:center;display:none;margin-bottom:30px}
+#user-profile img{width:80px;height:80px;border-radius:50%}
+footer{text-align:center;padding:30px;color:#6b7280}
 </style>
 </head>
 
 <body>
 
 <header>
-<!-- 👤 USER PROFILE -->
-<div id="user-profile" style="display:none; padding:1.5rem; text-align:center;">
-  <img id="userPhoto"
-       src=""
-       alt="Photo profil"
-       style="width:80px;height:80px;border-radius:50%;margin-bottom:10px">
-
-  <h3 id="userName"></h3>
-  <p id="userEmail" style="color:#8696a0;"></p>
-  <p id="userProvider" style="font-size:0.85rem;"></p>
-
-  <button id="logoutBtn" class="btn btn-outline" style="margin-top:14px;">
-    Se déconnecter
-  </button>
-</div>
-
-<div class="navbar">
-<a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
-<div class="burger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-
-<nav class="nav-links" id="menu">
-<a href="services.html">Services</a>
-<a href="chatbot.html">Chatbots</a>
-<a href="hosting.html">Hébergement</a>
-<a href="streaming.html">Streaming</a>
-<a href="premium.html">Premium</a>
-<a href="pack-streaming.html">Premium+</a>
-<a href="commande.html">Commande & Devis</a>
-<a href="dashboard.html">Tableau de bord</a>
-<a href="contact.html">Contact</a>
-<a href="about.html">À propos</a>
-</nav>
- </div>
+  <a class="logo" href="/">彡『 Amateur De Fantaisie 』彡</a>
 </header>
 
 <div class="container">
+
+  <!-- USER PROFILE -->
+  <div id="user-profile">
+    <img id="userPhoto" alt="Photo utilisateur">
+    <h3 id="userName"></h3>
+    <p id="userEmail" style="color:#8696a0"></p>
+    <p id="userProvider" style="font-size:.85rem"></p>
+    <button id="logoutBtn" class="btn">Se déconnecter</button>
+  </div>
+
   <h1>📊 Tableau de bord</h1>
-  <p class="subtitle">Gérez vos commandes, services et abonnements</p>
+  <p style="color:#b4b4b4;margin-bottom:30px">
+    Gérez vos services et abonnements
+  </p>
 
   <div class="grid">
 
-    <!-- Commandes -->
     <div class="card">
       <i class="fas fa-box"></i>
       <h3>Mes commandes</h3>
-      <div id="orders">
-        <p>Chargement de vos commandes...</p>
-      </div>
+      <div id="orders">Chargement...</div>
       <a href="commande.html" class="btn">Nouvelle commande</a>
     </div>
 
-    <!-- Streaming -->
-    <div class="card">
-      <i class="fas fa-tv"></i>
-      <h3>Streaming</h3>
-      <p>Netflix, Prime Video, Canal+, Crunchyroll…</p>
-      <a href="streaming.html" class="btn">Voir les offres</a>
-    </div>
-
-    <!-- Chatbots -->
     <div class="card">
       <i class="fas fa-robot"></i>
       <h3>Chatbots & IA</h3>
-      <p>WhatsApp, Instagram, Web, automatisation</p>
+      <p>Automatisation WhatsApp, Web & Instagram</p>
       <a href="chatbot.html" class="btn">Découvrir</a>
     </div>
 
-    <!-- Hébergement -->
     <div class="card">
-      <i class="fas fa-cloud"></i>
-      <h3>Hébergement</h3>
-      <p>Starter, Business, Premium</p>
-      <a href="hosting.html" class="btn">Voir les packs</a>
-    </div>
-
-    <!-- Support -->
-    <div class="card">
-      <i class="fas fa-headset"></i>
-      <h3>Support</h3>
-      <p>Besoin d’aide ? Contactez-nous directement</p>
-      <a href="https://wa.me/242066973413" class="btn">WhatsApp</a>
+      <i class="fas fa-tv"></i>
+      <h3>Streaming</h3>
+      <p>Netflix, Prime Video, Crunchyroll</p>
+      <a href="streaming.html" class="btn">Voir</a>
     </div>
 
   </div>
 </div>
 
 <footer>
-  © 2026 Amateur De Fantaisie — Harry Undersand
+© 2026 Amateur De Fantaisie — Harry Undersand
 </footer>
 
-<form id="commandeForm" onsubmit="event.preventDefault(); envoyerCommande();">
+<!-- FIREBASE AUTH -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-  <input id="nom" type="text" placeholder="Nom complet" required>
+const firebaseConfig = {
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
+};
 
-  <input id="email" type="email" placeholder="Email" required>
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-  <select id="service" required>
-    <option value="">Choisir un service</option>
-    <option value="Streaming">Streaming</option>
-    <option value="Chatbot">Chatbot</option>
-    <option value="Hébergement">Hébergement</option>
-    <option value="IA">Intelligence Artificielle</option>
-  </select>
+const profile = document.getElementById("user-profile");
+const logoutBtn = document.getElementById("logoutBtn");
 
-  <select id="pack" required>
-    <option value="">Choisir un pack</option>
-    <option value="Starter">Starter</option>
-    <option value="Business">Business</option>
-    <option value="Premium">Premium</option>
-  </select>
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.replace("/");
+    return;
+  }
 
-  <textarea id="message" placeholder="Détails de la commande"></textarea>
+  profile.style.display = "block";
+  document.getElementById("userName").textContent = user.displayName || "Client";
+  document.getElementById("userEmail").textContent = user.email;
+  document.getElementById("userPhoto").src = user.photoURL || "https://i.imgur.com/6VBx3io.png";
+  document.getElementById("userProvider").textContent =
+    `Connexion via ${user.providerData[0].providerId}`;
+});
 
-  <button type="submit">🚀 Envoyer la commande</button>
-
-</form>
-
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "/";
+});
+</script>
 
 </body>
 </html>

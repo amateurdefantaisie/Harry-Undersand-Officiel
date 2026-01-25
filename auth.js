@@ -20,7 +20,7 @@ import {
 
 /* 🔧 CONFIG */
 const firebaseConfig = {
-  apiKey: "TON_API_KEY",
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
   authDomain: "harry-undersand.firebaseapp.com",
   projectId: "harry-undersand"
 };

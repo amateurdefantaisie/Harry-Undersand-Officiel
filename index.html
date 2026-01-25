@@ -226,6 +226,16 @@ margin-top:60px;
 
 <!-- 🔝 HEADER -->
 <header>
+<div id="nav-auth">
+<button class="btn btn-outline" onclick="openLogin()">Connexion</button>
+<button class="btn btn-primary" onclick="openRegister()">Créer un compte</button>
+</div>
+
+<div id="nav-profile" style="display:none;align-items:center;gap:10px">
+<img id="navUserPhoto" style="width:32px;height:32px;border-radius:50%">
+<span id="navUserName"></span>
+<button class="btn btn-outline" onclick="logout()">Déconnexion</button>
+</div>
 
 <div class="navbar">
 <a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
@@ -480,8 +490,41 @@ navLogoutBtn.addEventListener("click", async () => {
 await signOut(auth);
 window.location.href = "/";
 });
-
 </script>
+
+<div id="loginModal" class="auth-box" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2000">
+<h3>Connexion</h3>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Mot de passe">
+<button class="btn btn-primary" onclick="loginEmail()">Se connecter</button>
+<hr>
+<button onclick="loginGoogle()">Google</button>
+<button onclick="loginGithub()">GitHub</button>
+<button onclick="loginFacebook()">Facebook</button>
+</div>
+
+<div id="registerModal" class="auth-box" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2000">
+<h3>Créer un compte</h3>
+<input id="registerEmail" placeholder="Email">
+<input id="registerPassword" type="password">
+<button class="btn btn-primary" onclick="registerEmail()">Créer le compte</button>
+</div>
 
 </body>
 </html>
+
+<script type="module">
+import "./auth.js";
+
+window.openLogin = () => loginModal.style.display = "block";
+window.openRegister = () => registerModal.style.display = "block";
+
+authGuard(user => {
+if (user) {
+navAuth.style.display = "none";
+navProfile.style.display = "flex";
+navUserPhoto.src = user.photoURL || "";
+navUserName.textContent = user.displayName || user.email;
+}
+});
+</script>

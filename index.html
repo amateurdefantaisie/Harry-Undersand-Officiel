@@ -224,51 +224,8 @@ margin-top:60px;
 
 <body>
 
-<!-- 🔐 AUTH SCREEN -->
-<div id="auth-screen">
-<div class="auth-box">
-<h2>Connexion requise</h2>
-<p>Veuillez vous connecter pour accéder au site.</p>
-
-<div class="auth-buttons">
-<button id="googleBtn" class="btn btn-primary">
-<i class="fab fa-google"></i> Continuer avec Google
-</button>
-
-<button id="githubBtn" class="btn btn-outline">
-<i class="fab fa-github"></i> Continuer avec GitHub
-</button>
-
-<button id="facebookBtn" class="btn btn-outline">
-<i class="fab fa-facebook"></i> Continuer avec Facebook
-</button>
-</div>
-</div>
-</div>
-
-<!-- 🔓 SITE CONTENT -->
-<div id="site-content" style="display:none;">
-  <!-- TOUT TON SITE ICI -->
-</div>
-
 <!-- 🔝 HEADER -->
 <header>
-
-<!-- 👤 USER PROFILE -->
-<div id="user-profile" style="display:none; padding:1.5rem; text-align:center;">
-<img id="userPhoto"
-src=""
-alt="Photo profil"
-style="width:80px;height:80px;border-radius:50%;margin-bottom:10px">
-
-<h3 id="userName"></h3>
-<p id="userEmail" style="color:#8696a0;"></p>
-<p id="userProvider" style="font-size:0.85rem;"></p>
-
-<button id="logoutBtn" class="btn btn-outline" style="margin-top:14px;">
-Se déconnecter
-</button>
-</div>
 
 <div class="navbar">
 <a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
@@ -524,40 +481,6 @@ await signOut(auth);
 window.location.href = "/";
 });
 
-/* 🔐 AUTH STATE (UNIQUE) */
-onAuthStateChanged(auth, async user => {
-if (user) {
-/* FIRESTORE SAVE */
-await setDoc(doc(db, "users", user.uid), {
-uid: user.uid,
-name: user.displayName || "Utilisateur",
-email: user.email || "",
-photoURL: user.photoURL || "",
-provider: user.providerData[0]?.providerId,
-lastLogin: serverTimestamp()
-}, { merge: true });
-
-/* UI */
-document.getElementById("auth-screen").style.display = "none";
-document.getElementById("site-content").style.display = "block";
-profileBox.style.display = "block";
-navProfile.style.display = "flex";
-
-userPhoto.src = user.photoURL || "";
-userName.textContent = user.displayName || "Utilisateur";
-userEmail.textContent = user.email || "";
-userProvider.textContent = "Connecté via : " + user.providerData[0]?.providerId.replace(".com","");
-
-navUserPhoto.src = user.photoURL || "";
-navUserName.textContent = user.displayName || "Utilisateur";
-
-} else {
-document.getElementById("auth-screen").style.display = "flex";
-document.getElementById("site-content").style.display = "none";
-profileBox.style.display = "none";
-navProfile.style.display = "none";
-}
-});
 </script>
 
 </body>

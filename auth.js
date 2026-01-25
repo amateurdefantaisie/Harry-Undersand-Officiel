@@ -1,29 +1,30 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
-getAuth,
-onAuthStateChanged,
-GoogleAuthProvider,
-GithubAuthProvider,
-FacebookAuthProvider,
-signInWithPopup,
-signOut
+  getAuth,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  FacebookAuthProvider,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 import {
-getFirestore,
-doc,
-setDoc,
-serverTimestamp
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-/* 🔧 CONFIG FIREBASE */
+/* 🔧 CONFIG */
 const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand"
+  apiKey: "TON_API_KEY",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
 };
 
-/* 🔥 INIT */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -33,58 +34,61 @@ const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
-/* UI ELEMENTS */
-const googleBtn = document.getElementById("googleBtn");
-const githubBtn = document.getElementById("githubBtn");
-const facebookBtn = document.getElementById("facebookBtn");
+/* ===== ACTIONS ===== */
+window.loginGoogle = async () => {
+  const res = await signInWithPopup(auth, googleProvider);
+  await saveUser(res.user);
+  window.location.href = "dashboard.html";
+};
 
-const profileBox = document.getElementById("user-profile");
-const userPhoto = document.getElementById("userPhoto");
-const userName = document.getElementById("userName");
-const userEmail = document.getElementById("userEmail");
-const userProvider = document.getElementById("userProvider");
-const logoutBtn = document.getElementById("logoutBtn");
+window.loginGithub = async () => {
+  const res = await signInWithPopup(auth, githubProvider);
+  await saveUser(res.user);
+  window.location.href = "dashboard.html";
+};
 
-const navProfile = document.getElementById("navProfile");
-const navUserPhoto = document.getElementById("navUserPhoto");
-const navUserName = document.getElementById("navUserName");
-const navLogoutBtn = document.getElementById("navLogoutBtn");
+window.loginFacebook = async () => {
+  const res = await signInWithPopup(auth, facebookProvider);
+  await saveUser(res.user);
+  window.location.href = "dashboard.html";
+};
 
-/* LOGIN */
-googleBtn.addEventListener("click", async () => {
-try {
-await signInWithPopup(auth, googleProvider);
-window.location.href = "dashboard.html";
-} catch (e) {
-alert(e.message);
+window.loginEmail = async () => {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+  const res = await signInWithEmailAndPassword(auth, email, password);
+  await saveUser(res.user);
+  window.location.href = "dashboard.html";
+};
+
+window.registerEmail = async () => {
+  const email = document.getElementById("registerEmail").value;
+  const password = document.getElementById("registerPassword").value;
+  const res = await createUserWithEmailAndPassword(auth, email, password);
+  await saveUser(res.user);
+  window.location.href = "dashboard.html";
+};
+
+window.logout = async () => {
+  await signOut(auth);
+  window.location.href = "/";
+};
+
+/* ===== FIRESTORE ===== */
+async function saveUser(user) {
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    name: user.displayName || "",
+    email: user.email,
+    photo: user.photoURL || "",
+    provider: user.providerData[0].providerId,
+    lastLogin: serverTimestamp()
+  }, { merge: true });
 }
-});
 
-githubBtn.addEventListener("click", async () => {
-try {
-await signInWithPopup(auth, githubProvider);
-window.location.href = "dashboard.html";
-} catch (e) {
-alert(e.message);
-}
-});
-
-facebookBtn.addEventListener("click", async () => {
-try {
-await signInWithPopup(auth, facebookProvider);
-window.location.href = "dashboard.html";
-} catch (e) {
-alert(e.message);
-}
-});
-
-/* LOGOUT */
-logoutBtn.addEventListener("click", async () => {
-await signOut(auth);
-window.location.href = "/";
-});
-navLogoutBtn.addEventListener("click", async () => {
-await signOut(auth);
-window.location.href = "/";
-});
+/* ===== GUARD ===== */
+window.authGuard = (callback) => {
+  onAuthStateChanged(auth, callback);
+};
 </script>
+

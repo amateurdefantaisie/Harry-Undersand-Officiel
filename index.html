@@ -6,6 +6,7 @@
 <title>Harry Undersand — Développeur & Solutions IA</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -27,6 +28,7 @@ display:none;align-items:center;justify-content:center;z-index:2000}
 .modal{background:#111b21;border:1px solid rgba(139,92,246,.35);
 padding:30px;border-radius:18px;width:100%;max-width:420px}
 .modal input,.modal textarea{width:100%;margin:8px 0;padding:10px;border-radius:10px;border:none}
+footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
 </style>
 </head>
 
@@ -52,9 +54,14 @@ padding:30px;border-radius:18px;width:100%;max-width:420px}
 <section class="hero">
 <h1>Harry Undersand</h1>
 <p>IA • Cloud • Automatisation</p>
+<button class="btn btn-primary" id="newOrderBtn">Nouvelle Commande / Paiement</button>
 </section>
 
-<!-- LOGIN -->
+<footer>
+© 2026 — Amateur De Fantaisie
+</footer>
+
+<!-- LOGIN MODAL -->
 <div class="modal-bg" id="loginModal">
 <div class="modal">
 <h3>Connexion</h3>
@@ -67,7 +74,7 @@ padding:30px;border-radius:18px;width:100%;max-width:420px}
 </div>
 </div>
 
-<!-- REGISTER -->
+<!-- REGISTER MODAL -->
 <div class="modal-bg" id="registerModal">
 <div class="modal">
 <h3>Créer un compte</h3>
@@ -77,13 +84,18 @@ padding:30px;border-radius:18px;width:100%;max-width:420px}
 </div>
 </div>
 
-<!-- COMMANDE -->
+<!-- COMMANDE & PAIEMENT MODAL -->
 <div class="modal-bg" id="orderModal">
 <div class="modal">
-<h3>Nouvelle commande</h3>
+<h3>Nouvelle commande & Paiement</h3>
 <input id="orderService" placeholder="Service">
 <textarea id="orderMessage" placeholder="Détails"></textarea>
-<button class="btn btn-primary" id="sendOrder">Envoyer</button>
+<h4>Paiement Carte</h4>
+<div id="card-element"></div>
+<button class="btn btn-primary" id="sendOrder">Envoyer & Payer</button>
+<hr>
+<h4>Mobile Money / Airtel Money</h4>
+<button class="btn btn-outline" id="mobileMoneyBtn">Payer Mobile Money / Airtel</button>
 </div>
 </div>
 
@@ -101,55 +113,62 @@ import {
   collection, addDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
+/* Firebase config */
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
   authDomain: "harry-undersand.firebaseapp.com",
   projectId: "harry-undersand"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+/* Providers */
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
-/* UI */
-loginBtn.onclick = ()=>loginModal.style.display="flex";
-registerBtn.onclick = ()=>registerModal.style.display="flex";
-loginModal.onclick = e=>e.target===loginModal&&(loginModal.style.display="none");
-registerModal.onclick = e=>e.target===registerModal&&(registerModal.style.display="none");
+/* UI Elements */
+const authGuest=document.getElementById("authGuest");
+const authUser=document.getElementById("authUser");
+const loginModal=document.getElementById("loginModal");
+const registerModal=document.getElementById("registerModal");
+const orderModal=document.getElementById("orderModal");
+const newOrderBtn=document.getElementById("newOrderBtn");
 
-/* EMAIL LOGIN */
-doLogin.onclick = async()=>{
-  await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
-  loginModal.style.display="none";
-};
+/* OPEN MODALS */
+document.getElementById("loginBtn").onclick=()=>loginModal.style.display="flex";
+document.getElementById("registerBtn").onclick=()=>registerModal.style.display="flex";
+newOrderBtn.onclick=()=>orderModal.style.display="flex";
+loginModal.onclick=e=>e.target===loginModal&&(loginModal.style.display="none");
+registerModal.onclick=e=>e.target===registerModal&&(registerModal.style.display="none");
+orderModal.onclick=e=>e.target===orderModal&&(orderModal.style.display="none");
 
-/* REGISTER */
-doRegister.onclick = async()=>{
-  const cred = await createUserWithEmailAndPassword(
-    auth, registerEmail.value, registerPassword.value
-  );
+/* LOGIN/REGISTER */
+document.getElementById("doLogin").onclick=async()=>{await signInWithEmailAndPassword(auth,loginEmail.value,loginPassword.value);loginModal.style.display="none";};
+document.getElementById("doRegister").onclick=async()=>{
+  const cred=await createUserWithEmailAndPassword(auth,registerEmail.value,registerPassword.value);
   await createUserProfile(cred.user);
   registerModal.style.display="none";
 };
 
-/* GOOGLE */
-googleLogin.onclick = async()=>{
-  const cred = await signInWithPopup(auth, googleProvider);
+/* GOOGLE/GITHUB */
+document.getElementById("googleLogin").onclick=async()=>{
+  const cred=await signInWithPopup(auth,googleProvider);
+  await createUserProfile(cred.user);
+  loginModal.style.display="none";
+};
+document.getElementById("githubLogin").onclick=async()=>{
+  const cred=await signInWithPopup(auth,githubProvider);
   await createUserProfile(cred.user);
   loginModal.style.display="none";
 };
 
-/* GITHUB */
-githubLogin.onclick = async()=>{
-  const cred = await signInWithPopup(auth, githubProvider);
-  await createUserProfile(cred.user);
-  loginModal.style.display="none";
+/* LOGOUT */
+document.getElementById("logoutBtn").onclick=async()=>{
+  await signOut(auth); location.reload();
 };
 
-/* PROFILE FIRESTORE */
+/* CREATE USER PROFILE IN FIRESTORE */
 async function createUserProfile(user){
   await setDoc(doc(db,"users",user.uid),{
     uid:user.uid,
@@ -161,36 +180,53 @@ async function createUserProfile(user){
   },{merge:true});
 }
 
-/* COMMANDES */
-sendOrder.onclick = async()=>{
-  await addDoc(collection(db,"orders"),{
+/* AUTH STATE */
+onAuthStateChanged(auth,user=>{
+  if(!user){authGuest.style.display="flex";authUser.style.display="none";return;}
+  authGuest.style.display="none";authUser.style.display="flex";
+  document.getElementById("userName").textContent=user.displayName||user.email;
+  document.getElementById("userPhoto").src=user.photoURL||"https://i.imgur.com/6VBx3io.png";
+});
+
+/* FIRESTORE RULES SUGGESTION (à mettre dans console Firebase)
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /orders/{orderId} {
+      allow create: if request.auth != null;
+      allow read, update, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+  }
+}
+*/
+
+/* COMMANDE + PAIEMENT (STRIPE CARD) */
+const stripe=Stripe("TON_PUBLIC_KEY_STRIPE"); // remplace par ton key publishable
+const elements=stripe.elements();
+const card=elements.create("card");
+card.mount("#card-element");
+
+document.getElementById("sendOrder").onclick=async()=>{
+  const orderRef=await addDoc(collection(db,"orders"),{
     uid:auth.currentUser.uid,
     service:orderService.value,
     message:orderMessage.value,
     status:"en attente",
     createdAt:serverTimestamp()
   });
-  alert("Commande envoyée");
+
+  // Paiement Stripe côté serveur
+  alert("Commande enregistrée. Redirige vers paiement Stripe côté serveur.");
   orderModal.style.display="none";
 };
 
-/* AUTH STATE */
-onAuthStateChanged(auth, user=>{
-  if(!user){
-    authGuest.style.display="flex";
-    authUser.style.display="none";
-    return;
-  }
-  authGuest.style.display="none";
-  authUser.style.display="flex";
-  userName.textContent = user.displayName||user.email;
-  userPhoto.src = user.photoURL||"https://i.imgur.com/6VBx3io.png";
-});
-
-/* LOGOUT */
-logoutBtn.onclick = async()=>{
-  await signOut(auth);
-  location.reload();
+/* MOBILE MONEY / AIRTEL (placeholder) */
+document.getElementById("mobileMoneyBtn").onclick=async()=>{
+  alert("Simuler paiement Mobile Money / Airtel Money. Implémenter côté serveur avec Stripe / Provider local.");
+  orderModal.style.display="none";
 };
 </script>
 

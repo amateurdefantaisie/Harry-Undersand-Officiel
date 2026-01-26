@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Harry Undersand — Développeur & Solutions IA</title>
 
+<link rel="icon" type="image/svg+xml"
+href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://js.stripe.com/v3/"></script>
 
@@ -29,6 +32,212 @@ display:none;align-items:center;justify-content:center;z-index:2000}
 padding:30px;border-radius:18px;width:100%;max-width:420px}
 .modal input,.modal textarea{width:100%;margin:8px 0;padding:10px;border-radius:10px;border:none}
 footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0b141a;
+--card:#111b21;
+--border:rgba(139,92,246,.35);
+--violet:#8b5cf6;
+--violet-dark:#7c3aed;
+--text:#e9edef;
+--muted:#8696a0;
+}
+
+body{
+font-family:Inter,Arial;
+color:var(--text);
+background-color:var(--bg);
+background-image:
+radial-gradient(circle at 1px 1px, rgba(255,255,255,.03) 1px, transparent 0);
+background-size:24px 24px;
+}
+
+/* GLOBAL */
+section{padding:6rem 1.5rem}
+.container{max-width:1200px;margin:auto}
+h1,h2,h3{font-weight:800}
+p{color:var(--muted);line-height:1.7}
+
+/* NAV */
+header{
+position:fixed;top:0;width:100%;z-index:1000;
+background:rgba(11,20,26,.85);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(--border);
+}
+.navbar{
+max-width:1200px;margin:auto;
+padding:16px 24px;
+display:flex;justify-content:space-between;align-items:center
+}
+.logo{
+color:var(--violet);
+font-weight:800;
+text-decoration:none;
+font-size:1.25rem
+}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:var(--violet)}
+.burger{display:none;font-size:1.6rem;cursor:pointer}
+
+/* HERO */
+.hero{
+padding-top:180px;
+text-align:center;
+}
+.hero h1{
+font-size:3.1rem;
+max-width:900px;
+margin:auto;
+}
+.hero span{color:var(--violet)}
+.hero p{
+margin:22px auto;
+max-width:780px;
+font-size:1.05rem;
+}
+.hero-buttons{
+margin-top:36px;
+display:flex;
+justify-content:center;
+gap:16px;
+flex-wrap:wrap;
+}
+.btn{
+padding:14px 26px;
+border-radius:30px;
+border:none;
+cursor:pointer;
+font-weight:600;
+text-decoration:none;
+}
+.btn-primary{
+background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+color:white;
+}
+.btn-outline{
+background:none;
+border:1px solid var(--border);
+color:white;
+}
+
+/* GRID / CARDS */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:28px;
+margin-top:40px;
+}
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:28px;
+transition:.35s;
+text-decoration:none;
+color:inherit;
+}
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 0 30px rgba(139,92,246,.35);
+}
+.card i{
+font-size:2.2rem;
+color:var(--violet);
+margin-bottom:14px;
+}
+
+/* TRUST */
+.trust{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+margin-top:50px;
+text-align:center;
+}
+.trust div{
+background:var(--card);
+border:1px solid var(--border);
+padding:30px;
+border-radius:18px;
+}
+.trust-text .trust-block {
+  margin-bottom: 4rem;
+}
+
+.trust-text h2 {
+  margin-bottom: 1rem;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+.nav-links{
+position:absolute;
+top:70px;
+left:0;
+width:100%;
+background:#0b141a;
+flex-direction:column;
+padding:20px;
+display:none;
+}
+.nav-links.show{display:flex}
+.burger{display:block}
+}
+
+footer{
+text-align:center;
+padding:4rem 1.5rem;
+color:#6b7280;
+}
+
+/* AUTH GATE */
+#auth-screen {
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+}
+
+.auth-box{
+background:var(--card);
+border:1px solid var(--border);
+padding:40px;
+border-radius:22px;
+max-width:420px;
+width:100%;
+}
+
+.auth-box h2{
+margin-bottom:10px;
+}
+
+.auth-buttons{
+margin-top:24px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+
+.auth-buttons button{
+width:100%;
+}
+
+/* CACHE LE SITE TANT QUE PAS CONNECTÉ */
+#site-content{
+display:none;
+}
+
+/* SERVICES AÉRÉS */
+.services-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:40px;
+margin-top:60px;
+}
 </style>
 </head>
 

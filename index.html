@@ -35,6 +35,26 @@ padding:30px;border-radius:18px;width:100%;max-width:420px}
 .modal input,.modal textarea{width:100%;margin:8px 0;padding:10px;border-radius:10px;border:none}
 footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
 
+/* Anti-spam honeypot */
+#website {
+  display: none;
+}
+
+/* ÉTOILES */
+.stars {
+  font-size: 26px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.stars span {
+  color: #ccc;
+}
+
+.stars span.active {
+  color: gold;
+}
+
 /* === COMMENTAIRES === */
 .comments-section {
   margin-top: 60px;
@@ -483,26 +503,35 @@ Nos prestations incluent la configuration de serveurs, la mise en production aut
 </div>
 </section>
 
-<section class="comments-section container">
-  <h2>💬 Avis des utilisateurs</h2>
+<form id="comment-form" class="comment-form">
 
-  <!-- Liste des commentaires -->
-  <div id="comments-list" class="comments-list">
-    <!-- Injecté par JavaScript -->
+  <h3>⭐ Laisser un avis</h3>
+
+  <!-- Anti-spam (champ invisible) -->
+  <input type="text" id="website" name="website" autocomplete="off">
+
+  <input type="text" id="username" placeholder="Votre nom" required minlength="2">
+
+  <!-- Étoiles -->
+  <div class="stars">
+    <span data-value="1">★</span>
+    <span data-value="2">★</span>
+    <span data-value="3">★</span>
+    <span data-value="4">★</span>
+    <span data-value="5">★</span>
   </div>
 
-  <!-- Formulaire commentaire -->
-  <form id="comment-form" class="comment-form">
-    <h3>Laisser un commentaire</h3>
+  <input type="hidden" id="rating" required>
 
-    <input type="text" id="username" placeholder="Votre nom" required />
+  <textarea id="comment"
+    placeholder="Votre commentaire..."
+    required minlength="10"></textarea>
 
-    <textarea id="comment" rows="4"
-      placeholder="Votre commentaire..." required></textarea>
+  <button type="submit" class="btn">Publier</button>
 
-    <button type="submit" class="btn">Publier</button>
-  </form>
-</section>
+</form>
+
+<div id="comments-list" class="comments-list"></div>
 
 <section class="hero">
 <h1>Harry Undersand</h1>
@@ -699,59 +728,84 @@ document.getElementById("mobileMoneyBtn").onclick=async()=>{
 <script>
 const commentsList = document.getElementById("comments-list");
 const form = document.getElementById("comment-form");
+const stars = document.querySelectorAll(".stars span");
+const ratingInput = document.getElementById("rating");
 
 let comments = JSON.parse(localStorage.getItem("comments")) || [];
+let formLoadTime = Date.now();
 
+/* ⭐ GESTION ÉTOILES */
+stars.forEach(star => {
+  star.addEventListener("click", () => {
+    const value = star.dataset.value;
+    ratingInput.value = value;
+
+    stars.forEach(s => {
+      s.classList.toggle("active", s.dataset.value <= value);
+    });
+  });
+});
+
+/* 📦 AFFICHAGE COMMENTAIRES (max 5) */
 function renderComments() {
   commentsList.innerHTML = "";
+
   comments.slice(0, 5).forEach(c => {
     commentsList.innerHTML += `
       <div class="comment-card">
         <h4>${c.name}</h4>
-        <span>${c.date}</span>
+        <div>${"★".repeat(c.rating)}${"☆".repeat(5 - c.rating)}</div>
         <p>${c.text}</p>
+        <span>${c.date}</span>
       </div>
     `;
   });
 }
 
+/* 🛡️ VALIDATION + ANTI-SPAM */
 form.addEventListener("submit", e => {
   e.preventDefault();
 
+  // Honeypot
+  if (website.value !== "") return;
+
+  // Temps minimum (3 secondes)
+  if (Date.now() - formLoadTime < 3000) {
+    alert("Veuillez patienter quelques secondes avant d'envoyer.");
+    return;
+  }
+
   const name = username.value.trim();
   const text = comment.value.trim();
+  const rating = ratingInput.value;
 
-  if (!name || !text) return;
+  if (!rating) {
+    alert("Veuillez sélectionner une note.");
+    return;
+  }
 
-  comments.unshift({
+  const newComment = {
     name,
     text,
+    rating: Number(rating),
     date: new Date().toLocaleDateString()
-  });
+  };
 
+  comments.unshift(newComment);
   comments = comments.slice(0, 5);
+
   localStorage.setItem("comments", JSON.stringify(comments));
 
   form.reset();
+  ratingInput.value = "";
+  stars.forEach(s => s.classList.remove("active"));
+
   renderComments();
 });
 
 renderComments();
-
-/* === THEME === */
-const toggle = document.getElementById("theme-toggle");
-const savedTheme = localStorage.getItem("theme");
-
-if (savedTheme === "dark") document.body.classList.add("dark");
-
-toggle.onclick = () => {
-  document.body.classList.toggle("dark");
-  localStorage.setItem(
-    "theme",
-    document.body.classList.contains("dark") ? "dark" : "light"
-  );
-};
 </script>
+
  
 </body>
 </html>

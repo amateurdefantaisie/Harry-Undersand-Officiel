@@ -65,44 +65,57 @@ Abonnement Netflix
 </section>
 
 <section class="container">
-<h2>🎬 Cinéma & Séries</h2>
-<div class="grid">
+  <h2>🎬 Cinéma & Séries</h2>
 
-<div class="card">
-<i class="fas fa video"></i> 
-<h3>Netflix Premium</h3>
-<p>4 écrans • Ultra HD • Accès complet</p>
-<button class="btn"
-onclick="createOrder('Netflix','Premium','5000 FCFA')">
-Commander
-</button>
-</div>
+  <div class="grid">
 
-<div class="card">
-<i class="fas fa video"></i> 
-<h3>PrimeVideo</h3>
-<p>Films • Séries • Contenus exclusifs Amazon</p>
-<button class="btn"
-onclick="createOrder('Prime Video','Standard','3000 FCFA')">
-Commander
-</button>
-</div>
+    <!-- NETFLIX -->
+    <div class="card">
+      <i class="fas fa-video"></i>
+      <h3>Netflix Premium</h3>
+      <p>4 écrans • Ultra HD • Accès complet</p>
+      <button class="btn"
+        onclick="sendWhatsAppOrder(
+          'Netflix',
+          'Premium',
+          '5000 FCFA',
+          '4 écrans simultanés, qualité Ultra HD (4K), accès complet'
+        )">
+        Commander
+      </button>
+    </div>
 
-<div class="card">
-<i class="fas fa video"></i> 
-<h3>Netflix Premium</h3>
-<p>4 écrans • Ultra HD • Accès complet</p>
-<button class="btn"
-onclick="sendWhatsAppOrder({
-  service: 'Netflix',
-  pack: 'Premium',
-  price: '5000 FCFA',
-  description: 'Netflix Premium avec 4 écrans simultanés, qualité Ultra HD (4K), accès complet sans restriction.'
-})">
-Commander
-</button>
+    <!-- PRIME VIDEO -->
+    <div class="card">
+      <i class="fas fa-video"></i>
+      <h3>Prime Video</h3>
+      <p>Films • Séries • Contenus exclusifs Amazon</p>
+      <button class="btn"
+        onclick="sendWhatsAppOrder(
+          'Prime Video',
+          'Standard',
+          '3000 FCFA',
+          'Films et séries Amazon Prime, accès complet'
+        )">
+        Commander
+      </button>
+    </div>
 
-</div>
+    <!-- CRUNCHYROLL (remplace Netflix en double) -->
+    <div class="card">
+      <i class="fas fa-video"></i>
+      <h3>Crunchyroll Premium</h3>
+      <p>Animes • Simulcast • Sans publicité</p>
+      <button class="btn"
+        onclick="sendWhatsAppOrder(
+          'Crunchyroll',
+          'Premium',
+          '3500 FCFA',
+          'Animes illimités, sans pub, épisodes en simulcast'
+        )">
+        Commander
+      </button>
+    </div>
 
 <div class="card">
 <i class="fas fa-tv"></i>

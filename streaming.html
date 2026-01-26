@@ -1,37 +1,12 @@
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-onAuthStateChanged(auth, user => {
-if (!user) {
-// Pas connecté → redirection vers page login
-window.location.href = "/";
-}
-});
-</script>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Streaming Premium — Amateur De Fantaisie</title>
 
 <link rel="icon" type="image/svg+xml"
-href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
+  href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -44,45 +19,81 @@ section{padding:5rem 1.5rem}
 h1,h2,h3{font-weight:800}
 p{color:#c7c7d1}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px;margin-top:40px}
+
 .card{
 background:#141425;
 border:1px solid rgba(139,92,246,.3);
-border-radius:18px;
-padding:26px;
-transition:.3s;
+border-radius:20px;
+padding:28px;
+transition:.4s;
+position:relative;
+overflow:hidden;
 }
-.card:hover{transform:translateY(-6px);border-color:#8b5cf6}
-.card i{font-size:2rem;color:#8b5cf6;margin-bottom:12px}
+.card::after{
+content:"";
+position:absolute;
+inset:0;
+background:radial-gradient(circle at top,rgba(139,92,246,.15),transparent 70%);
+opacity:0;
+transition:.4s;
+}
+.card:hover::after{opacity:1}
+.card:hover{transform:translateY(-10px) scale(1.02);border-color:#8b5cf6}
+.card i{font-size:2.2rem;color:#8b5cf6;margin-bottom:14px}
+
 .btn{
-display:inline-block;
-margin-top:14px;
-padding:12px 22px;
-border-radius:30px;
-text-decoration:none;
-font-weight:600;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+margin-top:18px;
+padding:14px 24px;
+border-radius:999px;
+font-weight:700;
+letter-spacing:.3px;
 background:linear-gradient(135deg,#8b5cf6,#7c3aed);
 color:white;
+border:none;
+cursor:pointer;
+transition:.35s;
 }
+.btn i{font-size:1rem}
+.btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 10px 30px rgba(139,92,246,.45)}
+
 .hero{text-align:center;padding-top:140px}
-.hero h1{font-size:3rem}
-.hero-buttons{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-.btn-outline{
-background:none;
-border:1px solid rgba(139,92,246,.4);
-}
+.hero h1{font-size:3.2rem}
+.hero-buttons{margin-top:34px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+
 footer{text-align:center;padding:3rem;color:#7a7a9a}
+
+/* MODAL */
+#orderModal{
+position:fixed;inset:0;background:rgba(0,0,0,.75);
+display:none;z-index:999;align-items:center;justify-content:center
+}
+#orderModal .box{
+background:#141425;
+border-radius:20px;
+padding:26px;
+width:90%;max-width:420px;
+animation:pop .4s ease
+}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+
+#orderModal input,#orderModal select,#orderModal textarea{
+width:100%;margin-top:12px;padding:12px;border-radius:10px;border:none;background:#0f0f1f;color:white
+}
 </style>
 </head>
-
 <body>
 
 <section class="hero">
 <h1>Streaming Premium & Anime</h1>
-<p>Netflix • Prime Video • MyCanal • Crunchyroll • IPTV • Packs Premium</p>
-
+<p>Netflix • Prime Video • MyCanal • Crunchyroll • IPTV</p>
 <div class="hero-buttons">
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20streaming.">Commander maintenant</a>
-<a class="btn btn-outline" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20un%20abonnement%20streaming%20personnalis%C3%A9.">Abonnement personnalisé</a>
+<button class="btn" onclick="openOrder('Abonnement Streaming','Pack Premium','À définir')">
+<i class="fab fa-whatsapp"></i> Commander maintenant
+</button>
 </div>
 </section>
 
@@ -91,159 +102,81 @@ footer{text-align:center;padding:3rem;color:#7a7a9a}
 <div class="grid">
 
 <div class="card">
-<i class="fas fa video"></i> 
+<i class="fas fa-film"></i>
 <h3>Netflix Premium</h3>
 <p>4 écrans • Ultra HD • Accès complet</p>
-<button class="btn"
-onclick="createOrder('Netflix','Premium','5000 FCFA')">
-Commander
-</button>
-</div>
-
-<div class="card">
-<i class="fas fa video"></i> 
-<h3>PrimeVideo</h3>
-<p>Films • Séries • Contenus exclusifs Amazon</p>
-<button class="btn"
-onclick="createOrder('Prime Video','Standard','3000 FCFA')">
-Commander
-</button>
-</div>
-
-<div class="card">
-<i class="fas fa video"></i> 
-<h3>Netflix Premium</h3>
-<p>4 écrans • Ultra HD • Accès complet</p>
-<button class="btn"
-onclick="createOrder(
-'Hébergement Cloud',
-'Premium',
-'40000 FCFA'
-)">
-Commander
+<button class="btn" onclick="openOrder('Netflix','Premium','5000 FCFA')">
+<i class="fab fa-whatsapp"></i> Commander
 </button>
 </div>
 
 <div class="card">
 <i class="fas fa-tv"></i>
-<h3>MyCanal</h3>
-<p>Canal+ Afrique, HD & Full HD</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20MyCanal.">Commander</a>
+<h3>Prime Video</h3>
+<p>Films & séries Amazon</p>
+<button class="btn" onclick="openOrder('Prime Video','Standard','3000 FCFA')">
+<i class="fab fa-whatsapp"></i> Commander
+</button>
 </div>
 
 </div>
 </section>
 
 <section class="container">
-<h2>🎌 Anime & Japan</h2>
+<h2>🎌 Anime</h2>
 <div class="grid">
-
 <div class="card">
 <i class="fas fa-dragon"></i>
 <h3>Crunchyroll</h3>
 <p>Anime illimité sans pub</p>
-<a class="btn" href="https://wa.me/242066973413?text=Salut%20!%20Je%20veux%20un%20abonnement%20Crunchyroll.">Commander</a>
+<button class="btn" onclick="openOrder('Crunchyroll','Premium','À définir')">
+<i class="fab fa-whatsapp"></i> Commander
+</button>
 </div>
-
-<div class="card">
-<i class="fas fa-bolt"></i>
-<h3>Wakanim</h3>
-<p>Animes récents & HD</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20Wakanim.">Commander</a>
-</div>
-
 </div>
 </section>
 
-<section class="container">
-<h2>📡 IPTV & VOD</h2>
-<div class="grid">
+<footer>© 2026 Amateur De Fantaisie — Harry Undersand</footer>
 
-<div class="card">
-<i class="fas fa-satellite-dish"></i>
-<h3>IPTV Premium</h3>
-<p>TV, films, séries, sports</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20suis%20int%C3%A9ress%C3%A9%20par%20IPTV%20Premium.">Commander</a>
+<!-- MODAL -->
+<div id="orderModal">
+<div class="box">
+<h3>📦 Détails de la commande</h3>
+<input id="service" disabled />
+<input id="pack" disabled />
+<input id="price" disabled />
+<select id="duration">
+<option>1 mois</option>
+<option>3 mois</option>
+<option>6 mois</option>
+</select>
+<textarea id="details" placeholder="Détails supplémentaires (optionnel)"></textarea>
+<button class="btn" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> Envoyer</button>
+<button class="btn" style="background:#333" onclick="closeOrder()">Annuler</button>
 </div>
-
-<div class="card">
-<i class="fas fa-lock"></i>
-<h3>Contenu Adulte</h3>
-<p>Accès privé & sécurisé</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20un%20acc%C3%A8s%20adulte.">Commander</a>
 </div>
-
-</div>
-</section>
-
-<section class="container">
-<h2>⭐ Pourquoi nous choisir ?</h2>
-<p>
-Activation rapide • Support WhatsApp • Stabilité • Sécurité • Abonnements fiables  
-<br><br>
-Une solution simple, rapide et professionnelle.
-</p>
-</section>
-
-<footer>
-© 2026 Amateur De Fantaisie — Streaming by Harry Undersand
-</footer>
 
 <script>
-const observer=new IntersectionObserver(e=>{
-e.forEach(el=>{
-if(el.isIntersecting)el.target.classList.add("active");
-});
-},{threshold:0.15});
-document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
-</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { 
-getAuth, 
-onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import { 
-getFirestore, 
-collection, 
-addDoc, 
-serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+const NUMBER = "242066973413";
+let current={};
 
-const app = initializeApp({
-apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain:"harry-undersand.firebaseapp.com",
-projectId:"harry-undersand"
-});
-
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-let currentUser = null;
-
-onAuthStateChanged(auth, user => {
-if(!user){
-window.location.href = "login.html";
-} else {
-currentUser = user;
+function openOrder(s,p,pr){
+current={s,p,pr};
+document.getElementById('service').value=s;
+document.getElementById('pack').value=p;
+document.getElementById('price').value=pr;
+document.getElementById('orderModal').style.display='flex';
 }
-});
 
-window.createOrder = async (service, pack, price) => {
-if(!currentUser) return;
+function closeOrder(){document.getElementById('orderModal').style.display='none'}
 
-await addDoc(collection(db,"orders"),{
-userId: currentUser.uid,
-service: service,
-pack: pack,
-price: price,
-status: "En attente",
-createdAt: serverTimestamp()
-});
-
-alert("✅ Commande envoyée avec succès !");
-window.location.href = "dashboard.html";
-};
+function sendWhatsApp(){
+const d=document.getElementById('duration').value;
+const det=document.getElementById('details').value||"Aucun";
+const msg=`Bonjour 👋,%0A%0A📦 Service : ${current.s}%0A⭐ Pack : ${current.p}%0A💰 Prix : ${current.pr}%0A⏳ Durée : ${d}%0A📝 Détails : ${det}%0A%0AMerci de me confirmer la disponibilité.`;
+window.open(`https://wa.me/${NUMBER}?text=${msg}`,'_blank');
+closeOrder();
+}
 </script>
 
 </body>

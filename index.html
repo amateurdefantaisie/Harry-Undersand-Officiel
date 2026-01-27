@@ -35,6 +35,12 @@ padding:30px;border-radius:18px;width:100%;max-width:420px}
 .modal input,.modal textarea{width:100%;margin:8px 0;padding:10px;border-radius:10px;border:none}
 footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
 
+.verified {
+  color: #22c55e;
+  font-size: 13px;
+  margin-left: 6px;
+}
+
 /* Anti-spam honeypot */
 #website {
   display: none;
@@ -519,6 +525,11 @@ Nos prestations incluent la configuration de serveurs, la mise en production aut
 
 </form>
 
+<div id="rating-summary" style="margin-bottom:20px;font-size:18px">
+  ⭐ <span id="avg-rating">0.0</span>/5
+  (<span id="rating-count">0</span> avis)
+</div>
+
 <div id="comments-list" class="comments-list"></div>
 
 <section class="hero">
@@ -709,85 +720,90 @@ document.getElementById("mobileMoneyBtn").onclick=async()=>{
 };
 </script>
 
-<script>
-const commentsList = document.getElementById("comments-list");
-const form = document.getElementById("comment-form");
-const stars = document.querySelectorAll(".stars span");
-const ratingInput = document.getElementById("rating");
+<script type="module">
+import {
+  collection, addDoc, query, orderBy, limit, getDocs
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-let comments = JSON.parse(localStorage.getItem("comments")) || [];
+const commentsList = document.getElementById("comments-list");
+const avgRatingEl = document.getElementById("avg-rating");
+const ratingCountEl = document.getElementById("rating-count");
+
+let currentUser = null;
 let formLoadTime = Date.now();
 
-/* ⭐ GESTION ÉTOILES */
-stars.forEach(star => {
-  star.addEventListener("click", () => {
-    const value = star.dataset.value;
-    ratingInput.value = value;
-
-    stars.forEach(s => {
-      s.classList.toggle("active", s.dataset.value <= value);
-    });
-  });
+/* AUTH STATE */
+onAuthStateChanged(auth, user => {
+  currentUser = user;
 });
 
-/* 📦 AFFICHAGE COMMENTAIRES (max 5) */
-function renderComments() {
-  commentsList.innerHTML = "";
+/* ⭐ ENVOI COMMENTAIRE */
+document.getElementById("comment-form").addEventListener("submit", async e => {
+  e.preventDefault();
 
-  comments.slice(0, 5).forEach(c => {
+  if (!currentUser) {
+    alert("Vous devez être connecté pour laisser un avis.");
+    return;
+  }
+
+  if (website.value !== "") return;
+  if (Date.now() - formLoadTime < 3000) return;
+
+  const rating = Number(document.getElementById("rating").value);
+  if (!rating) return alert("Sélectionnez une note.");
+
+  await addDoc(collection(db, "comments"), {
+    uid: currentUser.uid,
+    name: username.value.trim(),
+    text: comment.value.trim(),
+    rating,
+    verified: true,
+    createdAt: new Date()
+  });
+
+  e.target.reset();
+  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
+
+  loadComments();
+});
+
+/* 📥 CHARGEMENT COMMENTAIRES */
+async function loadComments() {
+  commentsList.innerHTML = "";
+  let total = 0;
+  let count = 0;
+
+  const q = query(
+    collection(db, "comments"),
+    orderBy("createdAt", "desc"),
+    limit(5)
+  );
+
+  const snap = await getDocs(q);
+
+  snap.forEach(doc => {
+    const c = doc.data();
+    total += c.rating;
+    count++;
+
     commentsList.innerHTML += `
       <div class="comment-card">
-        <h4>${c.name}</h4>
+        <h4>
+          ${c.name}
+          ${c.verified ? `<span class="verified">✔ Avis vérifié</span>` : ""}
+        </h4>
         <div>${"★".repeat(c.rating)}${"☆".repeat(5 - c.rating)}</div>
         <p>${c.text}</p>
-        <span>${c.date}</span>
       </div>
     `;
   });
+
+  avgRatingEl.textContent = count ? (total / count).toFixed(1) : "0.0";
+  ratingCountEl.textContent = count;
 }
 
-/* 🛡️ VALIDATION + ANTI-SPAM */
-form.addEventListener("submit", e => {
-  e.preventDefault();
-
-  // Honeypot
-  if (website.value !== "") return;
-
-  // Temps minimum (3 secondes)
-  if (Date.now() - formLoadTime < 3000) {
-    alert("Veuillez patienter quelques secondes avant d'envoyer.");
-    return;
-  }
-
-  const name = username.value.trim();
-  const text = comment.value.trim();
-  const rating = ratingInput.value;
-
-  if (!rating) {
-    alert("Veuillez sélectionner une note.");
-    return;
-  }
-
-  const newComment = {
-    name,
-    text,
-    rating: Number(rating),
-    date: new Date().toLocaleDateString()
-  };
-
-  comments.unshift(newComment);
-  comments = comments.slice(0, 5);
-
-  localStorage.setItem("comments", JSON.stringify(comments));
-
-  form.reset();
-  ratingInput.value = "";
-  stars.forEach(s => s.classList.remove("active"));
-
-  renderComments();
-});
-
-renderComments();
+loadComments();
 </script>
 
  

@@ -670,6 +670,21 @@ async function createUserProfile(user){
   },{merge:true});
 }
 
+/* ⭐ GESTION DES ÉTOILES */
+const stars = document.querySelectorAll(".stars span");
+const ratingInput = document.getElementById("rating");
+
+stars.forEach(star => {
+  star.addEventListener("click", () => {
+    const value = star.dataset.value;
+    ratingInput.value = value;
+
+    stars.forEach(s =>
+      s.classList.toggle("active", s.dataset.value <= value)
+    );
+  });
+});
+
 /* AUTH STATE */
 onAuthStateChanged(auth,user=>{
   if(!user){authGuest.style.display="flex";authUser.style.display="none";return;}
@@ -677,6 +692,77 @@ onAuthStateChanged(auth,user=>{
   document.getElementById("userName").textContent=user.displayName||user.email;
   document.getElementById("userPhoto").src=user.photoURL||"https://i.imgur.com/6VBx3io.png";
 });
+
+/* ⭐ COMMENTAIRES */
+const commentsList = document.getElementById("comments-list");
+const avgRatingEl = document.getElementById("avg-rating");
+const ratingCountEl = document.getElementById("rating-count");
+
+let formLoadTime = Date.now();
+
+/* ENVOI COMMENTAIRE */
+document.getElementById("comment-form").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  if (!auth.currentUser) {
+    alert("Vous devez être connecté.");
+    return;
+  }
+
+  if (website.value !== "") return;
+  if (Date.now() - formLoadTime < 3000) return;
+
+  const rating = Number(rating.value);
+  if (!rating) return alert("Choisissez une note.");
+
+  await addDoc(collection(db, "comments"), {
+    uid: auth.currentUser.uid,
+    name: username.value.trim(),
+    text: comment.value.trim(),
+    rating,
+    verified: true,
+    createdAt: serverTimestamp()
+  });
+
+  e.target.reset();
+  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
+
+  loadComments();
+});
+
+/* CHARGEMENT COMMENTAIRES */
+async function loadComments() {
+  commentsList.innerHTML = "";
+  let total = 0;
+  let count = 0;
+
+  const q = query(
+    collection(db, "comments"),
+    orderBy("createdAt", "desc"),
+    limit(5)
+  );
+
+  const snap = await getDocs(q);
+
+  snap.forEach(doc => {
+    const c = doc.data();
+    total += c.rating;
+    count++;
+
+    commentsList.innerHTML += `
+      <div class="comment-card">
+        <h4>${c.name} ${c.verified ? `<span class="verified">✔</span>` : ""}</h4>
+        <div>${"★".repeat(c.rating)}${"☆".repeat(5 - c.rating)}</div>
+        <p>${c.text}</p>
+      </div>
+    `;
+  });
+
+  avgRatingEl.textContent = count ? (total / count).toFixed(1) : "0.0";
+  ratingCountEl.textContent = count;
+}
+
+loadComments();
 
 /* FIRESTORE RULES SUGGESTION (à mettre dans console Firebase)
 rules_version = '2';
@@ -720,91 +806,6 @@ document.getElementById("mobileMoneyBtn").onclick=async()=>{
 };
 </script>
 
-<script type="module">
-import {
-  collection, addDoc, query, orderBy, limit, getDocs
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-
-const commentsList = document.getElementById("comments-list");
-const avgRatingEl = document.getElementById("avg-rating");
-const ratingCountEl = document.getElementById("rating-count");
-
-let currentUser = null;
-let formLoadTime = Date.now();
-
-/* AUTH STATE */
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-});
-
-/* ⭐ ENVOI COMMENTAIRE */
-document.getElementById("comment-form").addEventListener("submit", async e => {
-  e.preventDefault();
-
-  if (!currentUser) {
-    alert("Vous devez être connecté pour laisser un avis.");
-    return;
-  }
-
-  if (website.value !== "") return;
-  if (Date.now() - formLoadTime < 3000) return;
-
-  const rating = Number(document.getElementById("rating").value);
-  if (!rating) return alert("Sélectionnez une note.");
-
-  await addDoc(collection(db, "comments"), {
-    uid: currentUser.uid,
-    name: username.value.trim(),
-    text: comment.value.trim(),
-    rating,
-    verified: true,
-    createdAt: new Date()
-  });
-
-  e.target.reset();
-  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
-
-  loadComments();
-});
-
-/* 📥 CHARGEMENT COMMENTAIRES */
-async function loadComments() {
-  commentsList.innerHTML = "";
-  let total = 0;
-  let count = 0;
-
-  const q = query(
-    collection(db, "comments"),
-    orderBy("createdAt", "desc"),
-    limit(5)
-  );
-
-  const snap = await getDocs(q);
-
-  snap.forEach(doc => {
-    const c = doc.data();
-    total += c.rating;
-    count++;
-
-    commentsList.innerHTML += `
-      <div class="comment-card">
-        <h4>
-          ${c.name}
-          ${c.verified ? `<span class="verified">✔ Avis vérifié</span>` : ""}
-        </h4>
-        <div>${"★".repeat(c.rating)}${"☆".repeat(5 - c.rating)}</div>
-        <p>${c.text}</p>
-      </div>
-    `;
-  });
-
-  avgRatingEl.textContent = count ? (total / count).toFixed(1) : "0.0";
-  ratingCountEl.textContent = count;
-}
-
-loadComments();
-</script>
 
  
 </body>

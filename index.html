@@ -592,12 +592,12 @@ Nos prestations incluent la configuration de serveurs, la mise en production aut
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
-  getAuth,onAuthStateChanged,signOut,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider, GithubAuthProvider,
-  signInWithPopup
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+  getFirestore,
+  doc, setDoc,
+  collection, addDoc,
+  serverTimestamp,
+  query, orderBy, limit, getDocs
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 import {
   getFirestore, doc, setDoc,
   collection, addDoc, serverTimestamp
@@ -712,17 +712,18 @@ document.getElementById("comment-form").addEventListener("submit", async e => {
   if (website.value !== "") return;
   if (Date.now() - formLoadTime < 3000) return;
 
-  const rating = Number(rating.value);
+  const ratingValue = Number(document.getElementById("rating").value);
   if (!rating) return alert("Choisissez une note.");
 
-  await addDoc(collection(db, "comments"), {
-    uid: auth.currentUser.uid,
-    name: username.value.trim(),
-    text: comment.value.trim(),
-    rating,
-    verified: true,
-    createdAt: serverTimestamp()
-  });
+await addDoc(collection(db, "comments"), {
+  uid: auth.currentUser.uid,
+  name: username.value.trim(),
+  text: comment.value.trim(),
+  rating: ratingValue,
+  verified: true,
+  createdAt: serverTimestamp()
+});
+
 
   e.target.reset();
   document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));

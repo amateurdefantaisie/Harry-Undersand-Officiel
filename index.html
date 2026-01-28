@@ -3,43 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harry Undersand — Développeur & Solutions IA</title>
+<title>Avis clients</title>
 
-<link rel="icon" type="image/svg+xml"
-href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
+<script src="https://www.google.com/recaptcha/api.js?render=6LdhzFgsAAAAAM94cbBwznlazTvLxnOyHxSiekZ"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<script src="https://js.stripe.com/v3/"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+body{font-family:system-ui;background:#0e1117;color:#fff}
+.container{max-width:800px;margin:auto;padding:20px}
+.comment-card{background:#161b22;padding:15px;border-radius:10px;margin-bottom:10px}
+.stars span{cursor:pointer;font-size:22px;color:#444}
+.stars span.active{color:#ffc107}
+</style>
 </head>
 
 <body>
+<div class="container">
+<h2>💬 Avis clients</h2>
 
-<!-- (TON HTML EST INCHANGÉ JUSQU’AU SCRIPT) -->
+<form id="comment-form">
+<input id="username" placeholder="Votre nom" required><br><br>
+
+<div class="stars">
+<span data-value="1">★</span>
+<span data-value="2">★</span>
+<span data-value="3">★</span>
+<span data-value="4">★</span>
+<span data-value="5">★</span>
+</div>
+
+<input type="hidden" id="rating">
+<input type="text" id="website" style="display:none">
+
+<br>
+<textarea id="comment" placeholder="Votre commentaire" required></textarea><br><br>
+<button type="submit">Publier</button>
+</form>
+
+<div id="comments-list"></div>
+</div>
 
 <script type="module">
-/* ================= FIREBASE IMPORTS ================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
-  getAuth,
-  onAuthStateChanged,
-  signOut,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  signInWithPopup
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-
-import {
-  getFirestore,
-  doc, setDoc,
-  collection, addDoc,
-  serverTimestamp,
-  query, orderBy, limit, getDocs
+  getFirestore, collection, addDoc,
+  serverTimestamp, query, orderBy, limit, getDocs
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-/* ================= FIREBASE CONFIG ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
   authDomain: "harry-undersand.firebaseapp.com",
@@ -47,160 +56,70 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* ================= PROVIDERS ================= */
-const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
-
-/* ================= MENU MOBILE ================= */
-window.toggleMenu = () => {
-  document.getElementById("menu").classList.toggle("show");
-};
-
-/* ================= MODALS ================= */
-const loginModal = document.getElementById("loginModal");
-const registerModal = document.getElementById("registerModal");
-const orderModal = document.getElementById("orderModal");
-
-loginBtn.onclick = () => loginModal.style.display = "flex";
-registerBtn.onclick = () => registerModal.style.display = "flex";
-newOrderBtn.onclick = () => orderModal.style.display = "flex";
-
-[loginModal, registerModal, orderModal].forEach(m =>
-  m.onclick = e => e.target === m && (m.style.display = "none")
-);
-
-/* ================= AUTH ================= */
-doLogin.onclick = async () => {
-  try {
-    await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
-    loginModal.style.display = "none";
-  } catch (e) { alert(e.message); }
-};
-
-doRegister.onclick = async () => {
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, registerEmail.value, registerPassword.value);
-    await createUserProfile(cred.user);
-    registerModal.style.display = "none";
-  } catch (e) { alert(e.message); }
-};
-
-googleLogin.onclick = async () => {
-  const cred = await signInWithPopup(auth, googleProvider);
-  await createUserProfile(cred.user);
-  loginModal.style.display = "none";
-};
-
-githubLogin.onclick = async () => {
-  const cred = await signInWithPopup(auth, githubProvider);
-  await createUserProfile(cred.user);
-  loginModal.style.display = "none";
-};
-
-logoutBtn.onclick = async () => {
-  await signOut(auth);
-  location.reload();
-};
-
-async function createUserProfile(user) {
-  await setDoc(doc(db, "users", user.uid), {
-    uid: user.uid,
-    email: user.email,
-    name: user.displayName || "",
-    photo: user.photoURL || "",
-    createdAt: serverTimestamp()
-  }, { merge: true });
-}
-
-onAuthStateChanged(auth, user => {
-  authGuest.style.display = user ? "none" : "flex";
-  authUser.style.display = user ? "flex" : "none";
-  if (user) {
-    userName.textContent = user.displayName || user.email;
-    userPhoto.src = user.photoURL || "https://i.imgur.com/6VBx3io.png";
-  }
-});
-
-/* ================= ÉTOILES ================= */
 let selectedRating = 0;
-document.querySelectorAll(".stars span").forEach(star => {
-  star.onclick = () => {
+
+document.querySelectorAll(".stars span").forEach(star=>{
+  star.onclick = ()=>{
     selectedRating = Number(star.dataset.value);
-    document.getElementById("rating").value = selectedRating;
+    rating.value = selectedRating;
     document.querySelectorAll(".stars span")
-      .forEach(s => s.classList.toggle("active", s.dataset.value <= selectedRating));
+      .forEach(s=>s.classList.toggle("active", s.dataset.value<=selectedRating));
   };
 });
 
-/* ================= COMMENTAIRES ================= */
-comment-form.addEventListener("submit", async e => {
+comment-form.onsubmit = async e => {
   e.preventDefault();
-
-  if (!auth.currentUser) return alert("Connectez-vous");
   if (website.value !== "") return;
   if (!selectedRating) return alert("Choisissez une note");
 
-  await addDoc(collection(db, "comments"), {
-    uid: auth.currentUser.uid,
-    name: username.value.trim(),
-    text: comment.value.trim(),
-    rating: selectedRating,
-    verified: true,
-    createdAt: serverTimestamp()
+  grecaptcha.ready(()=>{
+    grecaptcha.execute("6LdhzFgsAAAAAM94cbBwznlazTvLxnOyHxSiekZ",{action:"comment"})
+    .then(async token=>{
+      const res = await fetch("/api/verify-recaptcha",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({
+          token,
+          name:username.value,
+          text:comment.value,
+          rating:selectedRating
+        })
+      });
+
+      const data = await res.json();
+      if (!data.success) return alert("Spam détecté");
+
+      await addDoc(collection(db,"comments"),{
+        name:username.value,
+        text:comment.value,
+        rating:selectedRating,
+        createdAt:serverTimestamp()
+      });
+
+      comment-form.reset();
+      selectedRating = 0;
+      loadComments();
+    });
   });
+};
 
-  e.target.reset();
-  selectedRating = 0;
-  loadComments();
-});
-
-async function loadComments() {
-  comments-list.innerHTML = "";
-  let total = 0, count = 0;
-
-  const q = query(collection(db, "comments"), orderBy("createdAt", "desc"), limit(5));
-  const snap = await getDocs(q);
-
-  snap.forEach(d => {
-    const c = d.data();
-    total += c.rating; count++;
-    comments-list.innerHTML += `
+async function loadComments(){
+  comments-list.innerHTML="";
+  const q=query(collection(db,"comments"),orderBy("createdAt","desc"),limit(5));
+  const snap=await getDocs(q);
+  snap.forEach(d=>{
+    const c=d.data();
+    comments-list.innerHTML+=`
       <div class="comment-card">
-        <h4>${c.name} <span class="verified">✔</span></h4>
-        <div>${"★".repeat(c.rating)}${"☆".repeat(5 - c.rating)}</div>
+        <strong>${c.name}</strong><br>
+        ${"★".repeat(c.rating)}${"☆".repeat(5-c.rating)}
         <p>${c.text}</p>
       </div>`;
   });
-
-  avg-rating.textContent = count ? (total / count).toFixed(1) : "0.0";
-  rating-count.textContent = count;
 }
-
 loadComments();
-
-/* ================= STRIPE (SAFE) ================= */
-const STRIPE_KEY = "TON_PUBLIC_KEY_STRIPE";
-if (STRIPE_KEY !== "TON_PUBLIC_KEY_STRIPE") {
-  const stripe = Stripe(STRIPE_KEY);
-  const card = stripe.elements().create("card");
-  card.mount("#card-element");
-}
-
-sendOrder.onclick = async () => {
-  if (!auth.currentUser) return alert("Connexion requise");
-  await addDoc(collection(db, "orders"), {
-    uid: auth.currentUser.uid,
-    service: orderService.value,
-    message: orderMessage.value,
-    createdAt: serverTimestamp()
-  });
-  alert("Commande envoyée");
-  orderModal.style.display = "none";
-};
 </script>
-
 </body>
 </html>

@@ -3,25 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avis clients</title>
+<title>Harry Undersand — Développeur & Solutions IA</title>
 
-<script src="https://www.google.com/recaptcha/api.js?render=6LdhzFgsAAAAAM94cbBwznlazTvLxnOyHxSiekZ"></script>
+<link rel="icon" type="image/svg+xml"
+href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
-body{font-family:system-ui;background:#0e1117;color:#fff}
-.container{max-width:800px;margin:auto;padding:20px}
-.comment-card{background:#161b22;padding:15px;border-radius:10px;margin-bottom:10px}
-.stars span{cursor:pointer;font-size:22px;color:#444}
-.stars span.active{color:#ffc107}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0b141a;
+--card:#111b21;
+--border:rgba(139,92,246,.35);
+--violet:#8b5cf6;
+--violet-dark:#7c3aed;
+--text:#e9edef;
+--muted:#8696a0;
+}
+body{
+font-family:Inter,Arial;
+background:var(--bg);
+color:var(--text);
+}
+section{padding:6rem 1.5rem}
+.container{max-width:1200px;margin:auto}
+h1,h2,h3{font-weight:800}
+p{color:var(--muted);line-height:1.7}
+
+header{
+position:fixed;top:0;width:100%;
+background:rgba(11,20,26,.85);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(--border);
+z-index:1000;
+}
+.navbar{
+max-width:1200px;margin:auto;
+padding:16px 24px;
+display:flex;justify-content:space-between;align-items:center
+}
+.logo{color:var(--violet);font-weight:800;text-decoration:none}
+.nav-links{display:flex;gap:22px}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:var(--violet)}
+.burger{display:none;font-size:1.6rem;cursor:pointer}
+
+.hero{
+padding-top:180px;
+text-align:center;
+}
+.hero h1{font-size:3rem}
+.hero span{color:var(--violet)}
+.hero-buttons{
+margin-top:32px;
+display:flex;gap:16px;justify-content:center;flex-wrap:wrap
+}
+.btn{
+padding:14px 26px;
+border-radius:30px;
+border:none;
+cursor:pointer;
+font-weight:600;
+text-decoration:none;
+}
+.btn-primary{
+background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+color:#fff
+}
+.btn-outline{
+background:none;
+border:1px solid var(--border);
+color:#fff
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:28px;
+margin-top:40px;
+}
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:26px;
+transition:.3s;
+}
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 0 25px rgba(139,92,246,.35);
+}
+.card i{
+font-size:2rem;
+color:var(--violet);
+margin-bottom:12px;
+}
+
+.comment-form{
+max-width:600px;
+margin:80px auto 30px;
+background:var(--card);
+padding:25px;
+border-radius:16px;
+border:1px solid var(--border);
+}
+.comment-form input,
+.comment-form textarea{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border-radius:10px;
+border:none;
+}
+
+.stars span{
+font-size:26px;
+cursor:pointer;
+color:#555
+}
+.stars span.active{color:gold}
+
+.comments-list{
+max-width:600px;
+margin:auto;
+display:grid;
+gap:16px;
+}
+.comment-card{
+background:var(--card);
+padding:16px;
+border-radius:14px;
+border:1px solid var(--border);
+}
+
+.social-links{
+position:fixed;
+bottom:20px;
+left:20px;
+display:flex;
+gap:12px;
+}
+.social-links a{
+font-size:20px;
+background:var(--card);
+padding:10px;
+border-radius:50%;
+color:var(--text);
+}
+
+footer{
+text-align:center;
+padding:4rem 1.5rem;
+color:#6b7280;
+}
 </style>
 </head>
 
 <body>
-<div class="container">
-<h2>💬 Avis clients</h2>
 
-<form id="comment-form">
-<input id="username" placeholder="Votre nom" required><br><br>
+<header>
+<div class="navbar">
+<a class="logo" href="/">彡 Amateur De Fantaisie 彡</a>
+<div class="burger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+<nav class="nav-links" id="menu">
+<a href="services.html">Services</a>
+<a href="streaming.html">Streaming</a>
+<a href="contact.html">Contact</a>
+</nav>
+</div>
+</header>
+
+<section class="hero">
+<h1>Harry Undersand<br><span>Développeur & Architecte IA</span></h1>
+<p>IA • Cloud • Automatisation • Streaming Premium</p>
+<div class="hero-buttons">
+<a href="https://wa.me/242066973413" class="btn btn-outline">WhatsApp</a>
+<a href="services.html" class="btn btn-primary">Nos services</a>
+</div>
+</section>
+
+<section class="container">
+<div class="grid">
+<div class="card">
+<i class="fas fa-robot"></i>
+<h3>Chatbots IA</h3>
+<p>Automatisation WhatsApp & Web</p>
+</div>
+<div class="card">
+<i class="fas fa-film"></i>
+<h3>Streaming Premium</h3>
+<p>Netflix • Prime • Crunchyroll</p>
+</div>
+<div class="card">
+<i class="fas fa-cloud"></i>
+<h3>Cloud & Hébergement</h3>
+<p>Vercel • Netlify • Sécurité</p>
+</div>
+</div>
+</section>
+
+<form id="comment-form" class="comment-form">
+<h3>⭐ Laisser un avis</h3>
+
+<input type="text" id="username" placeholder="Votre nom" required>
 
 <div class="stars">
 <span data-value="1">★</span>
@@ -30,24 +216,34 @@ body{font-family:system-ui;background:#0e1117;color:#fff}
 <span data-value="4">★</span>
 <span data-value="5">★</span>
 </div>
-
 <input type="hidden" id="rating">
-<input type="text" id="website" style="display:none">
 
-<br>
-<textarea id="comment" placeholder="Votre commentaire" required></textarea><br><br>
-<button type="submit">Publier</button>
+<textarea id="comment" placeholder="Votre commentaire" required></textarea>
+<button class="btn btn-primary">Publier</button>
 </form>
 
-<div id="comments-list"></div>
+<div id="rating-summary" style="text-align:center;margin-bottom:20px">
+⭐ <span id="avg-rating">0.0</span>/5 (<span id="rating-count">0</span> avis)
 </div>
 
+<div id="comments-list" class="comments-list"></div>
+
+<div class="social-links">
+<a href="https://github.com/TON_GITHUB" target="_blank"><i class="fab fa-github"></i></a>
+<a href="https://facebook.com/TON_FACEBOOK" target="_blank"><i class="fab fa-facebook"></i></a>
+<a href="https://instagram.com/TON_INSTAGRAM" target="_blank"><i class="fab fa-instagram"></i></a>
+<a href="https://wa.me/242066973413" target="_blank"><i class="fab fa-whatsapp"></i></a>
+</div>
+
+<footer>© 2026 — Amateur De Fantaisie</footer>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getFirestore, collection, addDoc,
-  serverTimestamp, query, orderBy, limit, getDocs
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+  query, orderBy, limit, getDocs, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
@@ -56,70 +252,61 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-let selectedRating = 0;
-
-document.querySelectorAll(".stars span").forEach(star=>{
-  star.onclick = ()=>{
-    selectedRating = Number(star.dataset.value);
-    rating.value = selectedRating;
-    document.querySelectorAll(".stars span")
-      .forEach(s=>s.classList.toggle("active", s.dataset.value<=selectedRating));
-  };
+/* ⭐ étoiles */
+const stars=document.querySelectorAll(".stars span");
+const ratingInput=document.getElementById("rating");
+stars.forEach(star=>{
+star.onclick=()=>{
+const v=star.dataset.value;
+ratingInput.value=v;
+stars.forEach(s=>s.classList.toggle("active",s.dataset.value<=v));
+};
 });
 
-comment-form.onsubmit = async e => {
-  e.preventDefault();
-  if (website.value !== "") return;
-  if (!selectedRating) return alert("Choisissez une note");
+/* commentaires */
+const form=document.getElementById("comment-form");
+const list=document.getElementById("comments-list");
+const avgEl=document.getElementById("avg-rating");
+const countEl=document.getElementById("rating-count");
 
-  grecaptcha.ready(()=>{
-    grecaptcha.execute("6LdhzFgsAAAAAM94cbBwznlazTvLxnOyHxSiekZ",{action:"comment"})
-    .then(async token=>{
-      const res = await fetch("/api/verify-recaptcha",{
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body:JSON.stringify({
-          token,
-          name:username.value,
-          text:comment.value,
-          rating:selectedRating
-        })
-      });
-
-      const data = await res.json();
-      if (!data.success) return alert("Spam détecté");
-
-      await addDoc(collection(db,"comments"),{
-        name:username.value,
-        text:comment.value,
-        rating:selectedRating,
-        createdAt:serverTimestamp()
-      });
-
-      comment-form.reset();
-      selectedRating = 0;
-      loadComments();
-    });
-  });
+form.onsubmit=async e=>{
+e.preventDefault();
+const rating=Number(ratingInput.value);
+if(!rating) return alert("Choisis une note");
+await addDoc(collection(db,"comments"),{
+name:username.value,
+text:comment.value,
+rating,
+createdAt:serverTimestamp()
+});
+form.reset();
+stars.forEach(s=>s.classList.remove("active"));
+loadComments();
 };
 
 async function loadComments(){
-  comments-list.innerHTML="";
-  const q=query(collection(db,"comments"),orderBy("createdAt","desc"),limit(5));
-  const snap=await getDocs(q);
-  snap.forEach(d=>{
-    const c=d.data();
-    comments-list.innerHTML+=`
-      <div class="comment-card">
-        <strong>${c.name}</strong><br>
-        ${"★".repeat(c.rating)}${"☆".repeat(5-c.rating)}
-        <p>${c.text}</p>
-      </div>`;
-  });
+list.innerHTML="";
+let total=0,count=0;
+const q=query(collection(db,"comments"),orderBy("createdAt","desc"),limit(5));
+const snap=await getDocs(q);
+snap.forEach(d=>{
+const c=d.data();
+total+=c.rating;count++;
+list.innerHTML+=`
+<div class="comment-card">
+<strong>${c.name}</strong>
+<div>${"★".repeat(c.rating)}${"☆".repeat(5-c.rating)}</div>
+<p>${c.text}</p>
+</div>`;
+});
+avgEl.textContent=count?(total/count).toFixed(1):"0.0";
+countEl.textContent=count;
 }
 loadComments();
 </script>
+
 </body>
 </html>

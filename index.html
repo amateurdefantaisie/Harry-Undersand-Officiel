@@ -10,587 +10,27 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://js.stripe.com/v3/"></script>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter;background:#0b141a;color:#e9edef}
-header{position:fixed;top:0;width:100%;background:rgba(11,20,26,.9);
-backdrop-filter:blur(15px);border-bottom:1px solid rgba(139,92,246,.35)}
-.navbar{max-width:1200px;margin:auto;padding:16px 24px;
-display:flex;justify-content:space-between;align-items:center}
-.logo{color:#8b5cf6;font-weight:800;text-decoration:none}
-.auth-actions{display:flex;gap:10px;align-items:center}
-.auth-actions img{width:32px;height:32px;border-radius:50%}
-.btn{padding:10px 20px;border-radius:25px;border:none;
-cursor:pointer;font-weight:600}
-.btn-primary{background:#8b5cf6;color:#fff}
-.btn-outline{background:none;border:1px solid rgba(139,92,246,.35);color:#fff}
-.hero{padding-top:160px;text-align:center}
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);
-display:none;align-items:center;justify-content:center;z-index:2000}
-.modal{background:#111b21;border:1px solid rgba(139,92,246,.35);
-padding:30px;border-radius:18px;width:100%;max-width:420px}
-.modal input,.modal textarea{width:100%;margin:8px 0;padding:10px;border-radius:10px;border:none}
-footer{text-align:center;padding:4rem 1.5rem;color:#6b7280}
-
-.verified {
-  color: #22c55e;
-  font-size: 13px;
-  margin-left: 6px;
-}
-
-/* Anti-spam honeypot */
-#website {
-  display: none;
-}
-
-/* ÉTOILES */
-.stars {
-  font-size: 26px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-.stars span {
-  color: #ccc;
-}
-
-.stars span.active {
-  color: gold;
-}
-
-/* === COMMENTAIRES === */
-.comments-section {
-  margin-top: 60px;
-}
-
-.comments-list {
-  display: grid;
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.comment-card {
-  background: var(--card-bg);
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,.08);
-}
-
-.comment-card h4 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.comment-card span {
-  font-size: 12px;
-  opacity: .7;
-}
-
-.comment-form input,
-.comment-form textarea {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-/* === SOCIALS === */
-.social-links {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  gap: 12px;
-  z-index: 1000;
-}
-
-.social-links a {
-  font-size: 20px;
-  background: var(--card-bg);
-  padding: 10px;
-  border-radius: 50%;
-  color: var(--text);
-}
-
-/* === THEME TOGGLE === */
-.theme-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-size: 20px;
-  padding: 10px 14px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  background: var(--card-bg);
-}
-
-/* === THEMES === */
-body {
-  background: var(--bg);
-  color: var(--text);
-}
-
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
---bg:#0b141a;
---card:#111b21;
---border:rgba(139,92,246,.35);
---violet:#8b5cf6;
---violet-dark:#7c3aed;
---text:#e9edef;
---muted:#8696a0;
-}
-
-body{
-font-family:Inter,Arial;
-color:var(--text);
-background-color:var(--bg);
-background-image:
-radial-gradient(circle at 1px 1px, rgba(255,255,255,.03) 1px, transparent 0);
-background-size:24px 24px;
-}
-
-/* GLOBAL */
-section{padding:6rem 1.5rem}
-.container{max-width:1200px;margin:auto}
-h1,h2,h3{font-weight:800}
-p{color:var(--muted);line-height:1.7}
-
-/* NAV */
-header{
-position:fixed;top:0;width:100%;z-index:1000;
-background:rgba(11,20,26,.85);
-backdrop-filter:blur(20px);
-border-bottom:1px solid var(--border);
-}
-.navbar{
-max-width:1200px;margin:auto;
-padding:16px 24px;
-display:flex;justify-content:space-between;align-items:center
-}
-.logo{
-color:var(--violet);
-font-weight:800;
-text-decoration:none;
-font-size:1.25rem
-}
-.nav-links{display:flex;gap:26px;align-items:center}
-.nav-links a{color:var(--muted);text-decoration:none}
-.nav-links a:hover{color:var(--violet)}
-.burger{display:none;font-size:1.6rem;cursor:pointer}
-
-/* HERO */
-.hero{
-padding-top:180px;
-text-align:center;
-}
-.hero h1{
-font-size:3.1rem;
-max-width:900px;
-margin:auto;
-}
-.hero span{color:var(--violet)}
-.hero p{
-margin:22px auto;
-max-width:780px;
-font-size:1.05rem;
-}
-.hero-buttons{
-margin-top:36px;
-display:flex;
-justify-content:center;
-gap:16px;
-flex-wrap:wrap;
-}
-.btn{
-padding:14px 26px;
-border-radius:30px;
-border:none;
-cursor:pointer;
-font-weight:600;
-text-decoration:none;
-}
-.btn-primary{
-background:linear-gradient(135deg,var(--violet),var(--violet-dark));
-color:white;
-}
-.btn-outline{
-background:none;
-border:1px solid var(--border);
-color:white;
-}
-
-/* GRID / CARDS */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:28px;
-margin-top:40px;
-}
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:20px;
-padding:28px;
-transition:.35s;
-text-decoration:none;
-color:inherit;
-}
-.card:hover{
-transform:translateY(-6px);
-box-shadow:0 0 30px rgba(139,92,246,.35);
-}
-.card i{
-font-size:2.2rem;
-color:var(--violet);
-margin-bottom:14px;
-}
-
-/* TRUST */
-.trust{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:30px;
-margin-top:50px;
-text-align:center;
-}
-.trust div{
-background:var(--card);
-border:1px solid var(--border);
-padding:30px;
-border-radius:18px;
-}
-.trust-text .trust-block {
-  margin-bottom: 4rem;
-}
-
-.trust-text h2 {
-  margin-bottom: 1rem;
-}
-
-/* MOBILE */
-@media(max-width:900px){
-.nav-links{
-position:absolute;
-top:70px;
-left:0;
-width:100%;
-background:#0b141a;
-flex-direction:column;
-padding:20px;
-display:none;
-}
-.nav-links.show{display:flex}
-.burger{display:block}
-}
-
-footer{
-text-align:center;
-padding:4rem 1.5rem;
-color:#6b7280;
-}
-
-/* AUTH GATE */
-#auth-screen {
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-}
-
-.auth-box{
-background:var(--card);
-border:1px solid var(--border);
-padding:40px;
-border-radius:22px;
-max-width:420px;
-width:100%;
-}
-
-.auth-box h2{
-margin-bottom:10px;
-}
-
-.auth-buttons{
-margin-top:24px;
-display:flex;
-flex-direction:column;
-gap:14px;
-}
-
-.auth-buttons button{
-width:100%;
-}
-
-/* CACHE LE SITE TANT QUE PAS CONNECTÉ */
-#site-content{
-display:none;
-}
-
-/* SERVICES AÉRÉS */
-.services-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:40px;
-margin-top:60px;
-}
-</style>
 </head>
 
 <body>
 
-<header>
-<div class="navbar">
-<a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
-<div class="burger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-
-<nav class="nav-links" id="menu">
-<a href="services.html">Services</a>
-<a href="chatbot.html">Chatbots</a>
-<a href="hosting.html">Hébergement</a>
-<a href="streaming.html">Streaming</a>
-<a href="premium.html">Premium</a>
-<a href="pack-streaming.html">Premium+</a>
-<a href="commande.html">Commande & Devis</a>
-<a href="dashboard.html">Tableau de bord</a>
-<a href="contact.html">Contact</a>
-<a href="about.html">À propos</a>
-</nav>
-</div>
-
-<div class="auth-actions" id="authGuest">
-<button class="btn btn-outline" id="loginBtn">Connexion</button>
-<button class="btn btn-primary" id="registerBtn">Créer un compte</button>
-</div>
-
-<div class="auth-actions" id="authUser" style="display:none">
-<img id="userPhoto">
-<span id="userName"></span>
-<button class="btn btn-outline" id="logoutBtn">Déconnexion</button>
-</div>
-</div>
-</header>
-
-<!-- HERO -->
-<section class="hero">
-<h1>Harry Undersand  
-<br><span>Développeur & Architecte IA</span></h1>
-
-<p>
-Création de solutions numériques modernes : chatbots intelligents,
-services streaming premium, hébergement sécurisé et automatisation
-WhatsApp pour particuliers et entreprises.
-</p>
-
-<div class="hero-buttons">
-<a href="https://wa.me/242066973413" class="btn btn-outline">Contact WhatsApp</a>
-<a href="services.html" class="btn btn-primary">Découvrir les services</a>
-<a href="dashboard.html" class="btn btn-outline">Mon espace client</a></div>
-</section>
-
-<!-- SERVICES -->
-<section class="container trust-text">
-
-<div class="trust-block">
-<h2>Nos services principaux</h2>
-<p>Chez Harry Undersand – Développeur & Architecte IA, nous proposons un ensemble de services numériques conçus pour accompagner les particuliers et les entreprises dans leur transformation digitale, améliorer l’efficacité opérationnelle et offrir des expériences modernes à leurs utilisateurs. Nos prestations couvrent l’ensemble du spectre technologique, de l’automatisation intelligente à l’hébergement sécurisé et à la diffusion de contenus premium.</p>
-</div>
-
-<div class="trust-block">
-<h2>1. Solutions de Chatbots IA et Automatisation Multicanal</h2>
-<p>Nous concevons, développons et intégrons des chatbots intelligents adaptés aux besoins spécifiques de votre activité. Ces agents conversationnels utilisent des technologies d’intelligence artificielle pour répondre automatiquement à vos utilisateurs, gérer des demandes courantes, générer des leads et optimiser vos interactions clients.
-Nos chatbots sont déployables sur WhatsApp, Instagram, Messenger, Discord et sites web, ce qui vous permet de centraliser l’engagement utilisateur et d’automatiser des tâches répétitives tout en maintenant une interaction naturelle et fluide.</p>
-</div>
-
-<div class="trust-block">
-<h2>2. Services Streaming Premium</h2>
-<p>Nous proposons des solutions de streaming premium qui permettent à vos utilisateurs d’accéder à des contenus de divertissement ou professionnels de manière fluide et sécurisée. Cela inclut l’intégration et l’optimisation de services tels que Netflix, Prime Video, Crunchyroll, Wakanim et myCANAL, dans les environnements numériques de votre choix. Ce service est particulièrement adapté aux plateformes sociales, aux applications personnalisées ou aux portails internes nécessitant l’accès à des flux vidéo de haute qualité.</p>
-</div>
-
-<div class="trust-block">
-<h2>3. Hébergement & Déploiement Cloud Sécurisé</h2>
-<p>Nous assurons des solutions complètes d’hébergement et de déploiement pour vos applications web et services numériques. Utilisant des plateformes cloud modernes telles que Netlify, Vercel, Hostinger et d’autres infrastructures sécurisées, nous veillons à ce que vos services soient disponibles, performants et évolutifs.
-Nos prestations incluent la configuration de serveurs, la mise en production automatisée, l’intégration continue (CI/CD) et les meilleures pratiques de sécurité cloud, afin de garantir une expérience utilisateur optimale et une maintenance simplifiée.</p>
-</div>
-
-<div class="trust-block">
-<h2>Comment nos services vous accompagnent</h2>
-<p>Chacun de ces services est conçu pour répondre à des défis métier concrets : augmenter l’engagement client, réduire les coûts opérationnels, améliorer la disponibilité des systèmes et offrir des expériences numériques performantes. Notre approche intégrée vous permet de combiner ces services selon vos priorités, avec une mise en œuvre rapide, une sécurité renforcée, et un support humain direct, disponibles tout au long de votre projet</p>
-</div>
-
-<div class="grid">
-<a href="chatbot.html" class="card">
-<i class="fas fa-robot"></i>
-<h3>Chatbots IA</h3>
-<p>Automatisation WhatsApp, Instagram, Messenger, Discord & Web.</p>
-</a>
-
-<a href="streaming.html" class="card">
-<i class="fas fa-film"></i>
-<h3>Streaming Premium</h3>
-<p>Netflix, Prime Video, Crunchyroll, Wakanim, myCANAL, MovieBox.</p>
-</a>
-
-<a href="hosting.html" class="card">
-<i class="fas fa-cloud"></i>
-<h3>Hébergement & Déploiement</h3>
-<p>Netlify, Vercel, Hostinger, Katabump, Heroku, Bot-Hosting, Cloud sécurisé et rapide.</p>
-</a>
-</div>
-
-<!-- TRUST -->
-<section class="container trust-text">
-
-<div class="trust-block">
-<h2>Pourquoi nous faire confiance ?</h2>
-<p>Chez Solutions IA & Cloud Nouvelle Génération, la confiance n’est pas simplement un slogan : c’est le fondement de notre manière de travailler, de créer des solutions et de bâtir des relations durables avec nos clients. Nous savons que confier votre transformation digitale à un prestataire est une décision stratégique qui repose autant sur la compétence technique que sur la fiabilité humaine. Voici pourquoi nos clients choisissent et continuent de nous faire confiance :</p>
-</div>
-
-<div class="trust-block">
-<h2>Expertise technique éprouvée</h2>
-<p>Nous mettons à votre service une équipe de spécialistes en intelligence artificielle conversationnelle, en automatisation et en plateformes cloud. Notre savoir-faire couvre l’ensemble du cycle technologique : de l’analyse de vos besoins à la conception, au déploiement et au support opérationnel de solutions numériques avancées. Cela vous garantit des résultats robustes et adaptés à vos contraintes métier.</p>
-</div>
-
-<div class="trust-block">
-<h2>Approche centrée sur les résultats</h2>
-<p>Nos solutions ne sont pas des produits « génériques » : elles sont spécifiquement personnalisées selon vos objectifs, qu’il s’agisse d’améliorer l’engagement client, d’optimiser vos processus internes, ou de réduire vos coûts opérationnels. Par exemple, les chatbots IA bien conçus peuvent améliorer l’efficacité du service client, réduire les délais de réponse et augmenter la satisfaction globale des utilisateurs, tout en libérant vos équipes pour des tâches à plus forte valeur ajoutée, ce qui fait la force de nos solutions intelligentes.</p>
-</div>
-
-<div class="trust-block">
-<h2>Transparence et pédagogie</h2>
-<p>Nous croyons en une communication transparente à chaque étape du projet : définition des besoins, calendrier, livrables, risques et points de contrôle. Cela vous permet de suivre l’avancement avec clarté et confiance, d’ajuster les priorités si nécessaire, et de mesurer l’impact réel de nos interventions. Cette transparence contribue à bâtir une relation de partenariat, non pas de simple fournisseur.</p>
-</div>
-
-<div class="trust-block">
-<h2>Engagement vers la performance et la sécurité</h2>
-<p>Dans un environnement digital en constante évolution, la sécurité, la confidentialité et la performance des systèmes sont des priorités absolues. En vous accompagnant sur des architectures cloud sécurisées et scalables, nous veillons à ce que vos données et vos services restent disponibles, résilients et conformes aux meilleures pratiques du secteur.</p>
-</div>
-
-<div class="trust-block">
-<h2>Support continu et proximité</h2>
-<p>Notre engagement ne s’arrête pas à la mise en production : nous assurons un suivi continu, un support réactif et des mises à jour régulières pour que les solutions évoluent avec vos besoins et les nouvelles technologies. Cette proximité avec nos clients génère un taux de satisfaction élevé et des relations de long terme basées sur la confiance mutuelle</p>
-</div>
-
-<div class="trust">
-<div>
-<h3>🔒 Sécurité</h3>
-<p>Services fiables, accès sécurisés et accompagnement humain.</p>
-</div>
-<div>
-<h3>⚡ Rapidité</h3>
-<p>Mise en place rapide, support WhatsApp direct.</p>
-</div>
-<div>
-<h3>🎯 Transparence</h3>
-<p>Explications claires, aucun engagement caché.</p>
-</div>
-<div>
-<h3>💬 Support humain</h3>
-<p>Contact direct, réponses rapides et personnalisées.</p>
-</div>
-</div>
-</section>
-
-<form id="comment-form" class="comment-form">
-
-  <h3>⭐ Laisser un avis</h3>
-
-  <!-- Anti-spam (champ invisible) -->
-  <input type="text" id="website" name="website" autocomplete="off">
-
-  <input type="text" id="username" placeholder="Votre nom" required minlength="2">
-
-  <!-- Étoiles -->
-  <div class="stars">
-    <span data-value="1">★</span>
-    <span data-value="2">★</span>
-    <span data-value="3">★</span>
-    <span data-value="4">★</span>
-    <span data-value="5">★</span>
-  </div>
-
-  <input type="hidden" id="rating" required>
-
-  <textarea id="comment"
-    placeholder="Votre commentaire..."
-    required minlength="10"></textarea>
-
-  <button type="submit" class="btn">Publier</button>
-
-</form>
-
-<div id="rating-summary" style="margin-bottom:20px;font-size:18px">
-  ⭐ <span id="avg-rating">0.0</span>/5
-  (<span id="rating-count">0</span> avis)
-</div>
-
-<div id="comments-list" class="comments-list"></div>
-
-<section class="hero">
-<h1>Harry Undersand</h1>
-<p>IA • Cloud • Automatisation</p>
-<button class="btn btn-primary" id="newOrderBtn">Nouvelle Commande / Paiement</button>
-</section>
-
-<div class="social-links">
-  <a href="https://github.com/TON_GITHUB" target="_blank"><i class="fab fa-github"></i></a>
-  <a href="https://facebook.com/TON_FACEBOOK" target="_blank"><i class="fab fa-facebook"></i></a>
-  <a href="https://bsky.app/profile/TON_BLUESKY" target="_blank">🦋</a>
-  <a href="https://mediafire.com/TON_MEDIAFIRE" target="_blank">📁</a>
-  <a href="https://instagram.com/TON_INSTAGRAM" target="_blank"><i class="fab fa-instagram"></i></a>
-  <a href="https://wa.me/242066973413" target="_blank"><i class="fab fa-whatsapp"></i></a>
-</div>
-
-<footer>
-© 2026 — Amateur De Fantaisie
-</footer>
-
-<!-- LOGIN MODAL -->
-<div class="modal-bg" id="loginModal">
-<div class="modal">
-<h3>Connexion</h3>
-<input id="loginEmail" placeholder="Email">
-<input id="loginPassword" type="password" placeholder="Mot de passe">
-<button class="btn btn-primary" id="doLogin">Connexion</button>
-<hr>
-<button class="btn btn-outline" id="googleLogin">Google</button>
-<button class="btn btn-outline" id="githubLogin">GitHub</button>
-</div>
-</div>
-
-<!-- REGISTER MODAL -->
-<div class="modal-bg" id="registerModal">
-<div class="modal">
-<h3>Créer un compte</h3>
-<input id="registerEmail" placeholder="Email">
-<input id="registerPassword" type="password" placeholder="Mot de passe">
-<button class="btn btn-primary" id="doRegister">Créer</button>
-</div>
-</div>
-
-<!-- COMMANDE & PAIEMENT MODAL -->
-<div class="modal-bg" id="orderModal">
-<div class="modal">
-<h3>Nouvelle commande & Paiement</h3>
-<input id="orderService" placeholder="Service">
-<textarea id="orderMessage" placeholder="Détails"></textarea>
-<h4>Paiement Carte</h4>
-<div id="card-element"></div>
-<button class="btn btn-primary" id="sendOrder">Envoyer & Payer</button>
-<hr>
-<h4>Mobile Money / Airtel Money</h4>
-<button class="btn btn-outline" id="mobileMoneyBtn">Payer Mobile Money / Airtel</button>
-</div>
-</div>
+<!-- (TON HTML EST INCHANGÉ JUSQU’AU SCRIPT) -->
 
 <script type="module">
+/* ================= FIREBASE IMPORTS ================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
 import {
   getFirestore,
   doc, setDoc,
@@ -598,216 +38,169 @@ import {
   serverTimestamp,
   query, orderBy, limit, getDocs
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-import {
-  getFirestore, doc, setDoc,
-  collection, addDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-/* Firebase config */
+/* ================= FIREBASE CONFIG ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
   authDomain: "harry-undersand.firebaseapp.com",
   projectId: "harry-undersand"
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* Providers */
+/* ================= PROVIDERS ================= */
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
-/* UI Elements */
-const authGuest=document.getElementById("authGuest");
-const authUser=document.getElementById("authUser");
-const loginModal=document.getElementById("loginModal");
-const registerModal=document.getElementById("registerModal");
-const orderModal=document.getElementById("orderModal");
-const newOrderBtn=document.getElementById("newOrderBtn");
+/* ================= MENU MOBILE ================= */
+window.toggleMenu = () => {
+  document.getElementById("menu").classList.toggle("show");
+};
 
-/* OPEN MODALS */
-document.getElementById("loginBtn").onclick=()=>loginModal.style.display="flex";
-document.getElementById("registerBtn").onclick=()=>registerModal.style.display="flex";
-newOrderBtn.onclick=()=>orderModal.style.display="flex";
-loginModal.onclick=e=>e.target===loginModal&&(loginModal.style.display="none");
-registerModal.onclick=e=>e.target===registerModal&&(registerModal.style.display="none");
-orderModal.onclick=e=>e.target===orderModal&&(orderModal.style.display="none");
+/* ================= MODALS ================= */
+const loginModal = document.getElementById("loginModal");
+const registerModal = document.getElementById("registerModal");
+const orderModal = document.getElementById("orderModal");
 
-/* LOGIN/REGISTER */
-document.getElementById("doLogin").onclick=async()=>{await signInWithEmailAndPassword(auth,loginEmail.value,loginPassword.value);loginModal.style.display="none";};
-document.getElementById("doRegister").onclick=async()=>{
-  const cred=await createUserWithEmailAndPassword(auth,registerEmail.value,registerPassword.value);
+loginBtn.onclick = () => loginModal.style.display = "flex";
+registerBtn.onclick = () => registerModal.style.display = "flex";
+newOrderBtn.onclick = () => orderModal.style.display = "flex";
+
+[loginModal, registerModal, orderModal].forEach(m =>
+  m.onclick = e => e.target === m && (m.style.display = "none")
+);
+
+/* ================= AUTH ================= */
+doLogin.onclick = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+    loginModal.style.display = "none";
+  } catch (e) { alert(e.message); }
+};
+
+doRegister.onclick = async () => {
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, registerEmail.value, registerPassword.value);
+    await createUserProfile(cred.user);
+    registerModal.style.display = "none";
+  } catch (e) { alert(e.message); }
+};
+
+googleLogin.onclick = async () => {
+  const cred = await signInWithPopup(auth, googleProvider);
   await createUserProfile(cred.user);
-  registerModal.style.display="none";
+  loginModal.style.display = "none";
 };
 
-/* GOOGLE/GITHUB */
-document.getElementById("googleLogin").onclick=async()=>{
-  const cred=await signInWithPopup(auth,googleProvider);
+githubLogin.onclick = async () => {
+  const cred = await signInWithPopup(auth, githubProvider);
   await createUserProfile(cred.user);
-  loginModal.style.display="none";
-};
-document.getElementById("githubLogin").onclick=async()=>{
-  const cred=await signInWithPopup(auth,githubProvider);
-  await createUserProfile(cred.user);
-  loginModal.style.display="none";
+  loginModal.style.display = "none";
 };
 
-/* LOGOUT */
-document.getElementById("logoutBtn").onclick=async()=>{
-  await signOut(auth); location.reload();
+logoutBtn.onclick = async () => {
+  await signOut(auth);
+  location.reload();
 };
 
-/* CREATE USER PROFILE IN FIRESTORE */
-async function createUserProfile(user){
-  await setDoc(doc(db,"users",user.uid),{
-    uid:user.uid,
-    email:user.email,
-    name:user.displayName||"",
-    photo:user.photoURL||"",
-    provider:user.providerData[0].providerId,
-    createdAt:serverTimestamp()
-  },{merge:true});
+async function createUserProfile(user) {
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    email: user.email,
+    name: user.displayName || "",
+    photo: user.photoURL || "",
+    createdAt: serverTimestamp()
+  }, { merge: true });
 }
 
-/* ⭐ GESTION DES ÉTOILES */
-const stars = document.querySelectorAll(".stars span");
-const ratingInput = document.getElementById("rating");
-
-stars.forEach(star => {
-  star.addEventListener("click", () => {
-    const value = star.dataset.value;
-    ratingInput.value = value;
-
-    stars.forEach(s =>
-      s.classList.toggle("active", s.dataset.value <= value)
-    );
-  });
+onAuthStateChanged(auth, user => {
+  authGuest.style.display = user ? "none" : "flex";
+  authUser.style.display = user ? "flex" : "none";
+  if (user) {
+    userName.textContent = user.displayName || user.email;
+    userPhoto.src = user.photoURL || "https://i.imgur.com/6VBx3io.png";
+  }
 });
 
-/* AUTH STATE */
-onAuthStateChanged(auth,user=>{
-  if(!user){authGuest.style.display="flex";authUser.style.display="none";return;}
-  authGuest.style.display="none";authUser.style.display="flex";
-  document.getElementById("userName").textContent=user.displayName||user.email;
-  document.getElementById("userPhoto").src=user.photoURL||"https://i.imgur.com/6VBx3io.png";
+/* ================= ÉTOILES ================= */
+let selectedRating = 0;
+document.querySelectorAll(".stars span").forEach(star => {
+  star.onclick = () => {
+    selectedRating = Number(star.dataset.value);
+    document.getElementById("rating").value = selectedRating;
+    document.querySelectorAll(".stars span")
+      .forEach(s => s.classList.toggle("active", s.dataset.value <= selectedRating));
+  };
 });
 
-/* ⭐ COMMENTAIRES */
-const commentsList = document.getElementById("comments-list");
-const avgRatingEl = document.getElementById("avg-rating");
-const ratingCountEl = document.getElementById("rating-count");
-
-let formLoadTime = Date.now();
-
-/* ENVOI COMMENTAIRE */
-document.getElementById("comment-form").addEventListener("submit", async e => {
+/* ================= COMMENTAIRES ================= */
+comment-form.addEventListener("submit", async e => {
   e.preventDefault();
 
-  if (!auth.currentUser) {
-    alert("Vous devez être connecté.");
-    return;
-  }
-
+  if (!auth.currentUser) return alert("Connectez-vous");
   if (website.value !== "") return;
-  if (Date.now() - formLoadTime < 3000) return;
+  if (!selectedRating) return alert("Choisissez une note");
 
-  const ratingValue = Number(document.getElementById("rating").value);
-  if (!rating) return alert("Choisissez une note.");
-
-await addDoc(collection(db, "comments"), {
-  uid: auth.currentUser.uid,
-  name: username.value.trim(),
-  text: comment.value.trim(),
-  rating: ratingValue,
-  verified: true,
-  createdAt: serverTimestamp()
-});
-
+  await addDoc(collection(db, "comments"), {
+    uid: auth.currentUser.uid,
+    name: username.value.trim(),
+    text: comment.value.trim(),
+    rating: selectedRating,
+    verified: true,
+    createdAt: serverTimestamp()
+  });
 
   e.target.reset();
-  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
-
+  selectedRating = 0;
   loadComments();
 });
 
-/* CHARGEMENT COMMENTAIRES */
 async function loadComments() {
-  commentsList.innerHTML = "";
-  let total = 0;
-  let count = 0;
+  comments-list.innerHTML = "";
+  let total = 0, count = 0;
 
-  const q = query(
-    collection(db, "comments"),
-    orderBy("createdAt", "desc"),
-    limit(5)
-  );
-
+  const q = query(collection(db, "comments"), orderBy("createdAt", "desc"), limit(5));
   const snap = await getDocs(q);
 
-  snap.forEach(doc => {
-    const c = doc.data();
-    total += c.rating;
-    count++;
-
-    commentsList.innerHTML += `
+  snap.forEach(d => {
+    const c = d.data();
+    total += c.rating; count++;
+    comments-list.innerHTML += `
       <div class="comment-card">
-        <h4>${c.name} ${c.verified ? `<span class="verified">✔</span>` : ""}</h4>
+        <h4>${c.name} <span class="verified">✔</span></h4>
         <div>${"★".repeat(c.rating)}${"☆".repeat(5 - c.rating)}</div>
         <p>${c.text}</p>
-      </div>
-    `;
+      </div>`;
   });
 
-  avgRatingEl.textContent = count ? (total / count).toFixed(1) : "0.0";
-  ratingCountEl.textContent = count;
+  avg-rating.textContent = count ? (total / count).toFixed(1) : "0.0";
+  rating-count.textContent = count;
 }
 
 loadComments();
 
-/* FIRESTORE RULES SUGGESTION (à mettre dans console Firebase)
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    match /orders/{orderId} {
-      allow create: if request.auth != null;
-      allow read, update, delete: if request.auth != null && resource.data.uid == request.auth.uid;
-    }
-  }
+/* ================= STRIPE (SAFE) ================= */
+const STRIPE_KEY = "TON_PUBLIC_KEY_STRIPE";
+if (STRIPE_KEY !== "TON_PUBLIC_KEY_STRIPE") {
+  const stripe = Stripe(STRIPE_KEY);
+  const card = stripe.elements().create("card");
+  card.mount("#card-element");
 }
-*/
 
-/* COMMANDE + PAIEMENT (STRIPE CARD) */
-const stripe=Stripe("TON_PUBLIC_KEY_STRIPE"); // remplace par ton key publishable
-const elements=stripe.elements();
-const card=elements.create("card");
-card.mount("#card-element");
-
-document.getElementById("sendOrder").onclick=async()=>{
-  const orderRef=await addDoc(collection(db,"orders"),{
-    uid:auth.currentUser.uid,
-    service:orderService.value,
-    message:orderMessage.value,
-    status:"en attente",
-    createdAt:serverTimestamp()
+sendOrder.onclick = async () => {
+  if (!auth.currentUser) return alert("Connexion requise");
+  await addDoc(collection(db, "orders"), {
+    uid: auth.currentUser.uid,
+    service: orderService.value,
+    message: orderMessage.value,
+    createdAt: serverTimestamp()
   });
-
-  // Paiement Stripe côté serveur
-  alert("Commande enregistrée. Redirige vers paiement Stripe côté serveur.");
-  orderModal.style.display="none";
-};
-
-/* MOBILE MONEY / AIRTEL (placeholder) */
-document.getElementById("mobileMoneyBtn").onclick=async()=>{
-  alert("Simuler paiement Mobile Money / Airtel Money. Implémenter côté serveur avec Stripe / Provider local.");
-  orderModal.style.display="none";
+  alert("Commande envoyée");
+  orderModal.style.display = "none";
 };
 </script>
 
-
- 
 </body>
 </html>

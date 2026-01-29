@@ -56,13 +56,13 @@ h2{margin-bottom:1rem}
 /* BUTTONS */
 .btn{
   display:inline-block;
-  margin-top:16px;
   padding:14px 26px;
   border-radius:30px;
   background:linear-gradient(135deg,var(--violet),var(--violet-dark));
   color:#fff;
-  text-decoration:none;
+  border:none;
   font-weight:600;
+  cursor:pointer;
 }
 .btn-outline{
   background:none;
@@ -95,6 +95,56 @@ textarea{min-height:120px;resize:vertical}
 
 /* FOOTER */
 footer{text-align:center;padding:3rem;color:#777}
+
+/* ===== MODAL LOGIN ===== */
+#loginModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(6px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.modal-box{
+  background:#0f0f1e;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:38px;
+  max-width:420px;
+  width:92%;
+  text-align:center;
+  animation:pop .3s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(.85);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.modal-box i{
+  font-size:2.8rem;
+  color:var(--violet);
+  margin-bottom:14px;
+}
+
+.google-btn{
+  margin-top:22px;
+  width:100%;
+  padding:14px;
+  border-radius:30px;
+  border:none;
+  background:#fff;
+  color:#111;
+  font-weight:700;
+  cursor:pointer;
+}
+.google-btn i{margin-right:8px}
+
+/* HIDE */
+.hidden{display:none}
 </style>
 </head>
 
@@ -256,54 +306,51 @@ if(el.isIntersecting)el.target.classList.add("active");
 },{threshold:0.15});
 document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
 </script>
+
+<!-- FIREBASE AUTH -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import { 
-getAuth, 
-onAuthStateChanged 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import { 
-getFirestore, 
-collection, 
-addDoc, 
-serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-const app = initializeApp({
-apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain:"harry-undersand.firebaseapp.com",
-projectId:"harry-undersand"
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
+};
 
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-let currentUser = null;
+const modal = document.getElementById("loginModal");
 
+// Vérifie l'état utilisateur
 onAuthStateChanged(auth, user => {
-if(!user){
-window.location.href = "login.html";
-} else {
-currentUser = user;
-}
+  if (!user) {
+    modal.classList.remove("hidden");
+  } else {
+    modal.classList.add("hidden");
+    console.log("✅ Connecté :", user.email);
+  }
 });
 
-window.createOrder = async (service, pack, price) => {
-if(!currentUser) return;
-
-await addDoc(collection(db,"orders"),{
-userId: currentUser.uid,
-service: service,
-pack: pack,
-price: price,
-status: "En attente",
-createdAt: serverTimestamp()
-});
-
-alert("✅ Commande envoyée avec succès !");
-window.location.href = "dashboard.html";
+// Connexion Google
+window.loginGoogle = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (e) {
+    alert("Connexion annulée");
+  }
 };
 </script>
+
+</body>
+</html>
 
 </body>
 </html>

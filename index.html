@@ -505,28 +505,25 @@ display:
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-signOut,
-onAuthStateChanged
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-query,
-orderBy,
-limit,
-doc,
-setDoc,
-serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
-// 🔑 CONFIG FIREBASE (LAISSE LA TIENNE)
+// 🔑 CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
   authDomain: "harry-undersand.firebaseapp.com",
@@ -538,61 +535,60 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-
 // 🎯 ELEMENTS HTML
 const authGuest = document.getElementById("authGuest");
 const authUser = document.getElementById("authUser");
 const adminPanel = document.getElementById("adminPanel");
-const welcome = document.getElementById("welcome");
+const welcomeText = document.getElementById("welcomeText");
+const userPhoto = document.getElementById("userPhoto");
 const usersTable = document.getElementById("usersTable");
 const adminVisits = document.getElementById("adminVisits");
 
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-// 🔐 CONNEXION
-document.getElementById("loginGoogle").onclick = () =>
-  signInWithPopup(auth, provider);
-
-document.getElementById("logout").onclick = () =>
-  signOut(auth);
-
+// 🔐 CONNEXION GOOGLE
+loginBtn.onclick = () => signInWithPopup(auth, provider);
+registerBtn.onclick = () => signInWithPopup(auth, provider);
+logoutBtn.onclick = () => signOut(auth);
 
 // 👤 AUTH STATE
-onAuthStateChanged(auth, async user => {
+onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
-    authGuest.style.display = "block";
+    authGuest.style.display = "flex";
     authUser.style.display = "none";
     adminPanel.style.display = "none";
     return;
   }
 
   authGuest.style.display = "none";
-  authUser.style.display = "block";
-  welcome.textContent = "Bienvenue " + user.displayName;
+  authUser.style.display = "flex";
 
-  const userRef = doc(db,"users",user.uid);
+  welcomeText.textContent = "Bienvenue " + user.displayName;
+  userPhoto.src = user.photoURL;
+
+  const userRef = doc(db, "users", user.uid);
   let snap = await getDoc(userRef);
 
-  // créer utilisateur
   if (!snap.exists()) {
-    await setDoc(userRef,{
-      name:user.displayName,
-      email:user.email,
-      role:"user",
-      blocked:false,
-      createdAt:serverTimestamp()
+    await setDoc(userRef, {
+      name: user.displayName,
+      email: user.email,
+      role: "user",
+      blocked: false,
+      createdAt: serverTimestamp()
     });
     snap = await getDoc(userRef);
   }
 
-  // bloqué
   if (snap.data().blocked) {
     alert("Compte bloqué");
     await signOut(auth);
     return;
   }
 
-  // admin
   if (snap.data().role === "admin") {
     adminPanel.style.display = "block";
     loadStats();
@@ -602,30 +598,29 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-
-// 📊 STATS VISITES
-async function loadStats(){
-  const ref = doc(db,"stats","global");
-  await setDoc(ref,{visits:increment(1)},{merge:true});
+// 📊 STATS
+async function loadStats() {
+  const ref = doc(db, "stats", "global");
+  await setDoc(ref, { visits: increment(1) }, { merge: true });
   const snap = await getDoc(ref);
-  adminVisits.textContent = snap.data().visits || 0;
+  adminVisits.textContent = snap.data()?.visits || 0;
 }
 
-
 // 👥 USERS
-async function loadUsers(){
-  usersTable.innerHTML="";
-  const snap = await getDocs(collection(db,"users"));
-  snap.forEach(d=>{
-    const u=d.data();
-    usersTable.innerHTML+=`
+async function loadUsers() {
+  usersTable.innerHTML = "";
+  const snap = await getDocs(collection(db, "users"));
+
+  snap.forEach(d => {
+    const u = d.data();
+    usersTable.innerHTML += `
       <tr>
         <td>${u.email}</td>
         <td>${u.role}</td>
-        <td>${u.blocked?"⛔":"✅"}</td>
+        <td>${u.blocked ? "⛔" : "✅"}</td>
         <td>
-          <button onclick="toggleBlock('${d.id}',${u.blocked})">
-            ${u.blocked?"Débloquer":"Bloquer"}
+          <button onclick="toggleBlock('${d.id}', ${u.blocked})">
+            ${u.blocked ? "Débloquer" : "Bloquer"}
           </button>
         </td>
       </tr>
@@ -633,11 +628,10 @@ async function loadUsers(){
   });
 }
 
-window.toggleBlock = async (uid, blocked)=>{
-  await setDoc(doc(db,"users",uid),{blocked:!blocked},{merge:true});
+window.toggleBlock = async (uid, blocked) => {
+  await setDoc(doc(db, "users", uid), { blocked: !blocked }, { merge: true });
   loadUsers();
 };
-
 </script>
 </body>
 </html>

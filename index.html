@@ -274,10 +274,7 @@ padding:30px;border-radius:18px;width:100%;max-width:420px}
 }
 
 .comment-card {
-  background: var(--card-bg);
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,.08);
+  background: var(--card);
 }
 
 .comment-card h4 {
@@ -369,17 +366,6 @@ display: none;
 .burger { display: block; }
 }
  
-
-footer{
-text-align:center;
-padding:4rem 1.5rem;
-color:#6b7280;
-}
-flex;
-flex-direction:column;
-gap:14px;
-}
-
 .auth-buttons button{
 width:100%;
 }
@@ -421,7 +407,24 @@ margin-bottom:10px;
 .auth-buttons{
 margin-top:24px;
 display:
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th, .users-table td {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+.users-table button {
+  padding: 6px 10px;
+  cursor: pointer;
+}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-N696WFVZ8G"></script>
@@ -480,6 +483,10 @@ réseaux pour particuliers et entreprises.
 <a href="https://wa.me/242066973413" class="btn btn-outline">Contact WhatsApp</a>
 <a href="services.html" class="btn btn-primary">Découvrir les services</a>
 <a href="dashboard.html" class="btn btn-outline">Mon espace client</a></div>
+</section>
+
+<section class="container">
+  <div id="user-panel" style="display:none"></div>
 </section>
 
 <!-- SERVICES -->
@@ -629,6 +636,24 @@ Nos prestations incluent la configuration de serveurs, la mise en production aut
 
 <div id="comments-list" class="comments-list"></div>
 
+<section class="container" id="stats-panel" style="display:none">
+<div class="card">
+<h3>📊 Statistiques</h3>
+<p>👁️ Visites : <span id="visitCount">0</span></p>
+</div>
+</section>
+
+<div class="card">
+<h4>📅 Visites aujourd’hui</h4>
+<p><span id="todayVisits">0</span></p>
+</div>
+
+<div class="card">
+<h3>🧾 Connexions récentes</h3>
+<ul id="loginList"></ul>
+</div>
+
+<section>
 <div class="social-links">
 <a href="https://github.com/amateurdefantaisie" target="_blank"><i class="fab fa-github"></i></a>
 <a href="https://facebook.com/amateurdefantaisie" target="_blank"><i class="fab fa-facebook"></i></a>
@@ -636,10 +661,12 @@ Nos prestations incluent la configuration de serveurs, la mise en production aut
 <a href="https://wa.me/242066973413" target="_blank"><i class="fab fa-whatsapp"></i></a>
 <a href="https://bsky.app/profile/amteurdefantaisie.bsky.social" traget="_blank"><i class="fab fa-bsky"></i></a>
 </div>
+</section>
 
 <footer>© 2026 — Amateur De Fantaisie</footer>
 
 <script type="module">
+const statsPanel = document.getElementById("statsPanel");
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getAuth,
@@ -651,10 +678,16 @@ onAuthStateChanged
 
 import {
 getFirestore,
+collection,
+addDoc,
+getDocs,
+query,
+orderBy,
+limit,
 doc,
 setDoc,
 serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
 
 const firebaseConfig = {
 apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
@@ -687,30 +720,122 @@ logoutBtn.onclick = async () => {
 await signOut(auth);
 };
 
+const userPanel = document.getElementById("user-panel");
+
 onAuthStateChanged(auth, async (user) => {
 if (user) {
 authGuest.style.display = "none";
 authUser.style.display = "flex";
+
 welcomeText.textContent = `Bienvenue ${user.displayName}`;
 userPhoto.src = user.photoURL;
 
-// 🔥 Stockage utilisateur dans Firestore
-await setDoc(doc(db, "users", user.uid), {
-name: user.displayName,
-email: user.email,
-photo: user.photoURL,
-lastLogin: serverTimestamp()
+await setDoc(doc(db, "stats", "users"), {
+totalUsers: increment(1)
 }, { merge: true });
 
-} else {
+async function loadStats() {
+const ctx = document.getElementById("visitsChart");
+
+new Chart(ctx, {
+type: "line",
+data: {
+labels: ["Lun", "Mar", "Mer", "Jeu", "Ven"],
+datasets: [{
+label: "Visites",
+data: [12, 19, 7, 14, 22],
+tension: 0.4
+}]
+}
+});
+}
+
+async function loadUsers() {
+const snap = await getDocs(collection(db, "users"));
+const usersList = document.getElementById("usersList");
+usersList.innerHTML = "";
+
+snap.forEach(d => {
+const u = d.data();
+usersList.innerHTML += `
+<tr>
+<td>${u.name || "-"}</td>
+<td>${u.email}</td>
+<td>${u.role}</td>
+<td>${u.blocked ? "⛔ Bloqué" : "✅ Actif"}</td>
+<td>
+<button onclick="toggleBlock('${d.id}', ${u.blocked})">
+${u.blocked ? "Débloquer" : "Bloquer"}
+</button>
+</td>
+</tr>
+`;
+});
+}
+
+async function toggleBlock(uid, blocked) {
+await updateDoc(doc(db, "users", uid), {
+blocked: !blocked
+});
+loadUsers();
+}
+
+
+statsPanel.style.display = "block";
+loadStats();
+
+// ✅ FICHE UTILISATEUR
+userPanel.style.display = "block";
+userPanel.innerHTML = `
+<div class="card">
+<h3>Votre profil</h3>
+<img src="${user.photoURL}" style="width:80px;border-radius:50%">
+<p><strong>${user.displayName}</strong></p>
+<p>${user.email}</p>
+</div>
+`;
+
+// 🔥 Stockage utilisateur dans Firestore
+await addDoc(collection(db, "logins"), {
+uid: user.uid,
+name: user.displayName,
+email: user.email,
+date: serverTimestamp(),
+userAgent: navigator.userAgent
+});
+  
+// 🔥 vérifier si admin
+const snap = await getDoc(doc(db, "users", user.uid));
+
+if (snap.exists() && snap.data().role === "admin") {
+statsPanel.style.display = "block";
+loadStats();
+}}
+
+if (userSnap.data().blocked) {
+alert("Votre compte est bloqué.");
+await signOut(auth);
+return;
+}
+
+else {
 authGuest.style.display = "flex";
 authUser.style.display = "none";
+statsPanel.style.display = "none";
 }
 });
 
 window.toggleMenu = () => {
 document.getElementById("menu").classList.toggle("show");
 };
+
+{
+name: "Amateur De Fantaisie",
+email: "amateurdefantaisie@gmail.com",
+role: "user",
+blocked: false,
+createdAt: timestamp
+}
 
 /* ⭐ étoiles */
 const stars=document.querySelectorAll(".stars span");
@@ -763,6 +888,70 @@ avgEl.textContent=count?(total/count).toFixed(1):"0.0";
 countEl.textContent=count;
 }
 loadComments();
+
+import { increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+async function registerVisit() {
+const today = new Date().toISOString().split("T")[0];
+
+// Total global
+await setDoc(doc(db, "stats", "global"), {
+visits: increment(1),
+lastVisit: serverTimestamp()
+}, { merge: true });
+
+// Par jour
+await setDoc(doc(db, "stats-days", today), {
+visits: increment(1)
+}, { merge: true });
+}
+
+registerVisit();
+
+const loginList = document.getElementById("loginList");
+
+async function loadLogins() {
+const q = query(
+collection(db, "logins"),
+orderBy("date", "desc"),
+limit(10)
+);
+
+const snap = await getDocs(q);
+loginList.innerHTML = "";
+snap.forEach(d => {
+const l = d.data();
+loginList.innerHTML += `
+<li>${l.name} — ${new Date(l.date.seconds*1000).toLocaleString()}</li>
+`;
+});
+}
+
+const todayVisits = document.getElementById("todayVisits");
+
+async function loadStats() {
+const today = new Date().toISOString().split("T")[0];
+
+const globalSnap = await getDoc(doc(db, "stats", "global"));
+if (globalSnap.exists()) {
+visitCount.textContent = globalSnap.data().visits || 0;
+}
+
+const daySnap = await getDoc(doc(db, "stats-days", today));
+if (daySnap.exists()) {
+todayVisits.textContent = daySnap.data().visits || 0;
+}
+}
+
+const visitCount = document.getElementById("visitCount");
+const statsPanel = document.getElementById("stats-panel");
+
+async function loadStats() {
+const snap = await getDoc(doc(db, "stats", "global"));
+if (snap.exists()) {
+visitCount.textContent = snap.data().visits || 0;
+}
+}
 </script>
 
 </body>

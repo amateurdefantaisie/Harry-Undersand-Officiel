@@ -456,8 +456,8 @@ display:
 </nav>
 
 <div class="auth-actions" id="authGuest">
-<button class="btn btn-outline" id="loginBtn">Connexion Google</button>
-<button class="btn btn-primary" id="registerBtn">Créer un compte</button>
+<button class="btn btn-outline" id="loginBtn">Connexion</button>
+<button class="btn btn-primary" id="registerBtn">Inscription</button>
 </div>
 
 <div class="auth-actions" id="authUser" style="display:none">
@@ -666,7 +666,6 @@ Nos prestations incluent la configuration de serveurs, la mise en production aut
 <footer>© 2026 — Amateur De Fantaisie</footer>
 
 <script type="module">
-const statsPanel = document.getElementById("statsPanel");
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getAuth,
@@ -706,6 +705,8 @@ const authGuest = document.getElementById("authGuest");
 const authUser = document.getElementById("authUser");
 const welcomeText = document.getElementById("welcomeText");
 const userPhoto = document.getElementById("userPhoto");
+
+const statsPanel = document.getElementById("statsPanel");
 
 loginBtn.onclick = async () => {
 try {

@@ -448,6 +448,57 @@ display:
   padding: 6px 10px;
   cursor: pointer;
 }
+
+.auth-btn{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:12px;
+}
+
+.auth-btn.google{
+  background:#fff;
+  color:#000;
+}
+
+.auth-btn.facebook{
+  background:#1877f2;
+  color:#fff;
+}
+
+.auth-btn.github{
+  background:#0f172a;
+  color:#fff;
+}
+
+.auth-btn i{
+  font-size:18px;
+}
+
+.close-btn{
+  margin-top:18px;
+  background:none;
+  border:none;
+  color:#94a3b8;
+  cursor:pointer;
+}
+
+.modal h2{
+  margin-bottom:6px;
+}
+
+.modal p{
+  font-size:14px;
+  opacity:.7;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -773,10 +824,25 @@ const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const authModal = document.getElementById("authModal");
+const closeModal = document.getElementById("closeModal");
+
 // 🔐 CONNEXION GOOGLE
-loginBtn.onclick = () => signInWithPopup(auth, provider);
-registerBtn.onclick = () => signInWithPopup(auth, provider);
+loginBtn.onclick = () => authModal.style.display = "flex";
+registerBtn.onclick = () => authModal.style.display = "flex";
 logoutBtn.onclick = () => signOut(auth);
+
+closeModal.onclick = () => authModal.style.display = "none";
+
+// CONNEXIONS
+document.getElementById("googleLogin").onclick = () =>
+  signInWithPopup(auth, googleProvider);
+
+document.getElementById("facebookLogin").onclick = () =>
+  signInWithPopup(auth, facebookProvider);
+
+document.getElementById("githubLogin").onclick = () =>
+  signInWithPopup(auth, githubProvider);
 
 // 👤 AUTH STATE
 onAuthStateChanged(auth, async (user) => {

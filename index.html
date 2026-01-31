@@ -505,29 +505,32 @@ display:
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+signOut,
+onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  getDocs,
-  collection,
-  serverTimestamp,
-  increment
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+getFirestore,
+collection,
+addDoc,
+getDocs,
+query,
+orderBy,
+limit,
+doc,
+setDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
 
 
 // 🔑 CONFIG FIREBASE (LAISSE LA TIENNE)
 const firebaseConfig = {
-  apiKey: "TA_CLE",
-  authDomain: "TON_DOMAINE",
-  projectId: "TON_PROJECT_ID",
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand",
 };
 
 const app = initializeApp(firebaseConfig);

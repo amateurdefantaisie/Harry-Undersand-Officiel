@@ -2,85 +2,114 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Harry Undersand</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{font-family:Arial;background:#0b141a;color:#fff;margin:0}
-header{padding:15px;border-bottom:1px solid #333}
-.auth{display:flex;gap:10px}
-button{padding:10px 16px;border-radius:8px;border:none;cursor:pointer}
-.primary{background:#8b5cf6;color:#fff}
-.card{background:#111b21;padding:20px;border-radius:12px;margin:20px auto;max-width:600px}
-.stars span{font-size:26px;cursor:pointer;color:#555}
-.stars span.active{color:gold}
-.comment{border-bottom:1px solid #333;padding:10px 0}
+body {
+  font-family: Arial, sans-serif;
+  background:#0f172a;
+  color:#e5e7eb;
+  margin:0;
+  padding:0;
+}
+.container {
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+.card {
+  background:#020617;
+  border-radius:10px;
+  padding:20px;
+  margin-bottom:20px;
+}
+button {
+  padding:10px 16px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+.btn-google {
+  background:#2563eb;
+  color:white;
+}
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+th,td {
+  padding:8px;
+  border-bottom:1px solid #334155;
+}
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="auth" id="authGuest">
-    <button id="loginBtn">Connexion Google</button>
+<div class="container">
+
+  <!-- VISITEUR -->
+  <div class="card" id="authGuest">
+    <h2>Connexion</h2>
+    <button class="btn-google" id="loginGoogle">Connexion Google</button>
   </div>
-  <div class="auth" id="authUser" style="display:none">
-    <span id="welcome"></span>
-    <button id="logoutBtn">Déconnexion</button>
+
+  <!-- UTILISATEUR CONNECTÉ -->
+  <div class="card" id="authUser" style="display:none">
+    <h2 id="welcome"></h2>
+    <button id="logout">Déconnexion</button>
   </div>
-</header>
 
-<div class="card">
-<h3>⭐ Laisser un avis</h3>
+  <!-- ADMIN -->
+  <div class="card" id="adminPanel" style="display:none">
+    <h2>👑 Administration</h2>
 
-<form id="commentForm">
-<input id="username" placeholder="Votre nom" required><br><br>
+    <p>📊 Visites : <b><span id="adminVisits">0</span></b></p>
 
-<div class="stars">
-<span data-value="1">★</span>
-<span data-value="2">★</span>
-<span data-value="3">★</span>
-<span data-value="4">★</span>
-<span data-value="5">★</span>
-</div>
-<input type="hidden" id="rating">
+    <h3>👥 Utilisateurs</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </div>
 
-<br>
-<textarea id="comment" placeholder="Commentaire" required></textarea><br><br>
-<button class="primary">Publier</button>
-</form>
-</div>
-
-<div class="card">
-<h3>💬 Avis</h3>
-<div id="comments"></div>
 </div>
 
-<div class="card">
-<h3>📊 Visites</h3>
-<p>Total : <span id="visitCount">0</span></p>
-</div>
-
+<!-- 🔥 FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getAuth, GoogleAuthProvider,
-  signInWithPopup, signOut,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
-  getFirestore, collection, addDoc, getDocs,
-  doc, setDoc, getDoc,
-  serverTimestamp, increment
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  getDocs,
+  collection,
+  serverTimestamp,
+  increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+
+// 🔑 CONFIG FIREBASE (LAISSE LA TIENNE)
 const firebaseConfig = {
-  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain: "harry-undersand.firebaseapp.com",
-  projectId: "harry-undersand"
+  apiKey: "TA_CLE",
+  authDomain: "TON_DOMAINE",
+  projectId: "TON_PROJECT_ID",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -88,83 +117,106 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-/* AUTH */
-loginBtn.onclick = () => signInWithPopup(auth, provider);
-logoutBtn.onclick = () => signOut(auth);
 
+// 🎯 ELEMENTS HTML
+const authGuest = document.getElementById("authGuest");
+const authUser = document.getElementById("authUser");
+const adminPanel = document.getElementById("adminPanel");
+const welcome = document.getElementById("welcome");
+const usersTable = document.getElementById("usersTable");
+const adminVisits = document.getElementById("adminVisits");
+
+
+// 🔐 CONNEXION
+document.getElementById("loginGoogle").onclick = () =>
+  signInWithPopup(auth, provider);
+
+document.getElementById("logout").onclick = () =>
+  signOut(auth);
+
+
+// 👤 AUTH STATE
 onAuthStateChanged(auth, async user => {
+
   if (!user) {
-    authGuest.style.display="flex";
-    authUser.style.display="none";
+    authGuest.style.display = "block";
+    authUser.style.display = "none";
+    adminPanel.style.display = "none";
     return;
   }
 
-  authGuest.style.display="none";
-  authUser.style.display="flex";
+  authGuest.style.display = "none";
+  authUser.style.display = "block";
   welcome.textContent = "Bienvenue " + user.displayName;
 
-  const ref = doc(db,"users",user.uid);
-  if (!(await getDoc(ref)).exists()) {
-    await setDoc(ref,{
+  const userRef = doc(db,"users",user.uid);
+  let snap = await getDoc(userRef);
+
+  // créer utilisateur
+  if (!snap.exists()) {
+    await setDoc(userRef,{
       name:user.displayName,
       email:user.email,
       role:"user",
       blocked:false,
       createdAt:serverTimestamp()
     });
+    snap = await getDoc(userRef);
+  }
+
+  // bloqué
+  if (snap.data().blocked) {
+    alert("Compte bloqué");
+    await signOut(auth);
+    return;
+  }
+
+  // admin
+  if (snap.data().role === "admin") {
+    adminPanel.style.display = "block";
+    loadStats();
+    loadUsers();
+  } else {
+    adminPanel.style.display = "none";
   }
 });
 
-/* ⭐ étoiles */
-const stars=document.querySelectorAll(".stars span");
-stars.forEach(s=>s.onclick=()=>{
-  rating.value=s.dataset.value;
-  stars.forEach(x=>x.classList.toggle("active",x.dataset.value<=rating.value));
-});
 
-/* 💬 commentaires */
-commentForm.onsubmit=async e=>{
-  e.preventDefault();
-  if(!rating.value) return alert("Choisis une note");
+// 📊 STATS VISITES
+async function loadStats(){
+  const ref = doc(db,"stats","global");
+  await setDoc(ref,{visits:increment(1)},{merge:true});
+  const snap = await getDoc(ref);
+  adminVisits.textContent = snap.data().visits || 0;
+}
 
-  await addDoc(collection(db,"comments"),{
-    name:username.value,
-    text:comment.value,
-    rating:Number(rating.value),
-    createdAt:serverTimestamp()
+
+// 👥 USERS
+async function loadUsers(){
+  usersTable.innerHTML="";
+  const snap = await getDocs(collection(db,"users"));
+  snap.forEach(d=>{
+    const u=d.data();
+    usersTable.innerHTML+=`
+      <tr>
+        <td>${u.email}</td>
+        <td>${u.role}</td>
+        <td>${u.blocked?"⛔":"✅"}</td>
+        <td>
+          <button onclick="toggleBlock('${d.id}',${u.blocked})">
+            ${u.blocked?"Débloquer":"Bloquer"}
+          </button>
+        </td>
+      </tr>
+    `;
   });
+}
 
-  commentForm.reset();
-  stars.forEach(s=>s.classList.remove("active"));
-  loadComments();
+window.toggleBlock = async (uid, blocked)=>{
+  await setDoc(doc(db,"users",uid),{blocked:!blocked},{merge:true});
+  loadUsers();
 };
 
-async function loadComments(){
-  comments.innerHTML="";
-  const snap=await getDocs(collection(db,"comments"));
-  snap.forEach(d=>{
-    const c=d.data();
-    comments.innerHTML+=`
-      <div class="comment">
-        <strong>${c.name}</strong><br>
-        ${"★".repeat(c.rating)}
-        <p>${c.text}</p>
-      </div>`;
-  });
-}
-loadComments();
-
-/* 📊 visites */
-async function registerVisit(){
-  await setDoc(doc(db,"stats","global"),{
-    visits:increment(1)
-  },{merge:true});
-
-  const snap=await getDoc(doc(db,"stats","global"));
-  visitCount.textContent=snap.data().visits || 0;
-}
-registerVisit();
 </script>
-
 </body>
 </html>

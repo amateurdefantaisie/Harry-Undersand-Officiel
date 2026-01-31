@@ -535,27 +535,6 @@ display:
 </header>
 <div class="container">
 
-<div class="modal-bg" id="authModal">
-  <div class="modal auth-box">
-    <h2>Connexion</h2>
-    <p>Choisis un moyen pour continuer</p>
-
-    <button class="auth-btn google" id="googleLogin">
-      <i class="fab fa-google"></i> Continuer avec Google
-    </button>
-
-    <button class="auth-btn facebook" id="facebookLogin">
-      <i class="fab fa-facebook"></i> Continuer avec Facebook
-    </button>
-
-    <button class="auth-btn github" id="githubLogin">
-      <i class="fab fa-github"></i> Continuer avec GitHub
-    </button>
-
-    <button class="close-btn" id="closeModal">Fermer</button>
-  </div>
-</div>
-
   <!-- ADMIN -->
   <div class="card" id="adminPanel" style="display:none">
     <h2>👑 Administration</h2>
@@ -924,5 +903,26 @@ window.toggleBlock = async (uid, blocked) => {
   loadUsers();
 };
 </script>
+
+<div class="modal-bg" id="authModal">
+  <div class="modal auth-box">
+    <h2>Connexion</h2>
+    <p>Choisis un moyen pour continuer</p>
+
+    <button class="auth-btn google" id="googleLogin">
+      <i class="fab fa-google"></i> Continuer avec Google
+    </button>
+
+    <button class="auth-btn facebook" id="facebookLogin">
+      <i class="fab fa-facebook"></i> Continuer avec Facebook
+    </button>
+
+    <button class="auth-btn github" id="githubLogin">
+      <i class="fab fa-github"></i> Continuer avec GitHub
+    </button>
+
+    <button class="close-btn" id="closeModal">Fermer</button>
+  </div>
+</div>
 </body>
 </html>

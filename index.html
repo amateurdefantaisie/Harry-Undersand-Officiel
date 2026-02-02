@@ -109,6 +109,11 @@ gap:10px
 .nav-links.show{display:flex}
 .burger{display:block}
 }
+
+.stars-display{
+  margin:6px 0 10px;
+  color:#facc15;
+}
 </style>
 </head>
 
@@ -448,7 +453,9 @@ onSnapshot(q, snap => {
     commentsList.innerHTML += `
       <div class="comment-card">
         <h4>${c.name}</h4>
-        <p>${"⭐".repeat(c.rating)}</p>
+        <div class="stars-display">
+          ${"⭐".repeat(c.rating)}
+        </div>
         <p>${c.comment}</p>
       </div>
     `;

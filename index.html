@@ -115,6 +115,27 @@ gap:10px
 <body>
 
 <header>
+<section class="container" id="adminPanel" style="display:none">
+  <div class="card">
+    <h2>👑 Administration</h2>
+
+    <p>📊 Visites : <b><span id="adminVisits">0</span></b></p>
+
+    <h3>👥 Utilisateurs</h3>
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </div>
+</section>
+
 <div class="navbar">
 <a class="logo" href="/">彡 Amateur De Fantaisie 彡</a>
 <div class="burger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
@@ -159,23 +180,53 @@ gap:10px
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  collection,
+  serverTimestamp,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* 🔑 FIREBASE CONFIG */
 const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand"
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
+/* PROVIDERS */
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
+/* ELEMENTS */
+const authGuest = document.getElementById("authGuest");
+const authUser = document.getElementById("authUser");
+const adminPanel = document.getElementById("adminPanel");
+const usersTable = document.getElementById("usersTable");
+const adminVisits = document.getElementById("adminVisits");
+
 const authModal = document.getElementById("authModal");
 
+/* BOUTONS */
 loginBtn.onclick = () => authModal.style.display = "flex";
 registerBtn.onclick = () => authModal.style.display = "flex";
 closeModal.onclick = () => authModal.style.display = "none";
@@ -185,23 +236,90 @@ facebookLogin.onclick = () => signInWithPopup(auth, facebookProvider);
 githubLogin.onclick = () => signInWithPopup(auth, githubProvider);
 logoutBtn.onclick = () => signOut(auth);
 
-onAuthStateChanged(auth, user => {
-if(!user){
-authGuest.style.display="flex";
-authUser.style.display="none";
-return;
-}
-authGuest.style.display="none";
-authUser.style.display="flex";
-welcomeText.textContent = "Bienvenue " + user.displayName;
-userPhoto.src = user.photoURL;
-});
-</script>
+/* AUTH STATE */
+onAuthStateChanged(auth, async user => {
 
-<script>
-function toggleMenu(){
-document.getElementById("menu").classList.toggle("show");
+  if (!user) {
+    authGuest.style.display = "flex";
+    authUser.style.display = "none";
+    adminPanel.style.display = "none";
+    return;
+  }
+
+  authGuest.style.display = "none";
+  authUser.style.display = "flex";
+  welcomeText.textContent = "Bienvenue " + user.displayName;
+  userPhoto.src = user.photoURL;
+
+  const userRef = doc(db, "users", user.uid);
+  let snap = await getDoc(userRef);
+
+  /* CRÉATION UTILISATEUR */
+  if (!snap.exists()) {
+    await setDoc(userRef, {
+      name: user.displayName,
+      email: user.email,
+      role: "user",
+      blocked: false,
+      createdAt: serverTimestamp()
+    });
+    snap = await getDoc(userRef);
+  }
+
+  const data = snap.data();
+
+  /* BLOCAGE */
+  if (data.blocked) {
+    alert("⛔ Compte bloqué");
+    await signOut(auth);
+    return;
+  }
+
+  /* ADMIN */
+  if (data.role === "admin") {
+    adminPanel.style.display = "block";
+    loadUsers();
+    loadStats();
+  } else {
+    adminPanel.style.display = "none";
+  }
+});
+
+/* 📊 STATS */
+async function loadStats() {
+  const ref = doc(db, "stats", "global");
+  await setDoc(ref, { visits: increment(1) }, { merge: true });
+  const snap = await getDoc(ref);
+  adminVisits.textContent = snap.data()?.visits || 0;
 }
+
+/* 👥 UTILISATEURS */
+async function loadUsers() {
+  usersTable.innerHTML = "";
+  const snap = await getDocs(collection(db, "users"));
+
+  snap.forEach(d => {
+    const u = d.data();
+    usersTable.innerHTML += `
+      <tr>
+        <td>${u.email}</td>
+        <td>${u.role}</td>
+        <td>${u.blocked ? "⛔" : "✅"}</td>
+        <td>
+          <button onclick="toggleBlock('${d.id}', ${u.blocked})">
+            ${u.blocked ? "Débloquer" : "Bloquer"}
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+/* ACTION ADMIN */
+window.toggleBlock = async (uid, blocked) => {
+  await setDoc(doc(db, "users", uid), { blocked: !blocked }, { merge: true });
+  loadUsers();
+};
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

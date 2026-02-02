@@ -177,6 +177,8 @@ gap:10px
 </div>
 </div>
 
+<p>📅 Aujourd’hui : <b><span id="todayVisits">0</span></b></p>
+
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -200,6 +202,78 @@ import {
   serverTimestamp,
   increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ⭐ COMMENTAIRES & ÉTOILES */
+import {
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const commentForm = document.getElementById("comment-form");
+const commentsList = document.getElementById("comments-list");
+const avgRating = document.getElementById("avg-rating");
+const ratingCount = document.getElementById("rating-count");
+const ratingInput = document.getElementById("rating");
+
+let selectedRating = 0;
+
+/* Gestion étoiles */
+document.querySelectorAll(".stars span").forEach(star => {
+  star.onclick = () => {
+    selectedRating = Number(star.dataset.value);
+    ratingInput.value = selectedRating;
+    document.querySelectorAll(".stars span").forEach(s =>
+      s.classList.toggle("active", s.dataset.value <= selectedRating)
+    );
+  };
+});
+
+/* Envoi commentaire */
+commentForm.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  if (!selectedRating) {
+    alert("Choisis une note ⭐");
+    return;
+  }
+
+  await addDoc(collection(db, "comments"), {
+    name: username.value,
+    comment: comment.value,
+    rating: selectedRating,
+    createdAt: serverTimestamp()
+  });
+
+  commentForm.reset();
+  selectedRating = 0;
+  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
+});
+
+/* Lecture commentaires en temps réel */
+const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
+
+onSnapshot(q, snap => {
+  commentsList.innerHTML = "";
+  let total = 0;
+
+  snap.forEach(d => {
+    const c = d.data();
+    total += c.rating;
+
+    commentsList.innerHTML += `
+      <div class="comment-card">
+        <h4>${c.name}</h4>
+        <p>${"⭐".repeat(c.rating)}</p>
+        <p>${c.comment}</p>
+      </div>
+    `;
+  });
+
+  ratingCount.textContent = snap.size;
+  avgRating.textContent = snap.size ? (total / snap.size).toFixed(1) : "0.0";
+});
 
 /* 🔑 FIREBASE CONFIG */
 const firebaseConfig = {
@@ -285,6 +359,25 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
+const loginList = document.getElementById("loginList");
+
+async function loadLogins() {
+  const q = query(
+    collection(db, "logins"),
+    orderBy("createdAt", "desc")
+  );
+
+  onSnapshot(q, snap => {
+    loginList.innerHTML = "";
+    snap.forEach(d => {
+      const l = d.data();
+      loginList.innerHTML += `
+        <li>${l.email} — ${l.provider}</li>
+      `;
+    });
+  });
+}
+
 /* 📊 STATS */
 async function loadStats() {
   const ref = doc(db, "stats", "global");
@@ -314,6 +407,21 @@ async function loadUsers() {
     `;
   });
 }
+
+/* 📊 VISITES */
+function todayKey() {
+  return new Date().toISOString().split("T")[0];
+}
+
+async function registerVisit() {
+  const globalRef = doc(db, "stats", "global");
+  const dailyRef = doc(db, "stats_daily", todayKey());
+
+  await setDoc(globalRef, { total: increment(1) }, { merge: true });
+  await setDoc(dailyRef, { count: increment(1) }, { merge: true });
+}
+
+registerVisit();
 
 /* ACTION ADMIN */
 window.toggleBlock = async (uid, blocked) => {

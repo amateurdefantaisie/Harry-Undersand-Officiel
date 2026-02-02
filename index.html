@@ -203,78 +203,6 @@ import {
   increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ⭐ COMMENTAIRES & ÉTOILES */
-import {
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const commentForm = document.getElementById("comment-form");
-const commentsList = document.getElementById("comments-list");
-const avgRating = document.getElementById("avg-rating");
-const ratingCount = document.getElementById("rating-count");
-const ratingInput = document.getElementById("rating");
-
-let selectedRating = 0;
-
-/* Gestion étoiles */
-document.querySelectorAll(".stars span").forEach(star => {
-  star.onclick = () => {
-    selectedRating = Number(star.dataset.value);
-    ratingInput.value = selectedRating;
-    document.querySelectorAll(".stars span").forEach(s =>
-      s.classList.toggle("active", s.dataset.value <= selectedRating)
-    );
-  };
-});
-
-/* Envoi commentaire */
-commentForm.addEventListener("submit", async e => {
-  e.preventDefault();
-
-  if (!selectedRating) {
-    alert("Choisis une note ⭐");
-    return;
-  }
-
-  await addDoc(collection(db, "comments"), {
-    name: username.value,
-    comment: comment.value,
-    rating: selectedRating,
-    createdAt: serverTimestamp()
-  });
-
-  commentForm.reset();
-  selectedRating = 0;
-  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
-});
-
-/* Lecture commentaires en temps réel */
-const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
-
-onSnapshot(q, snap => {
-  commentsList.innerHTML = "";
-  let total = 0;
-
-  snap.forEach(d => {
-    const c = d.data();
-    total += c.rating;
-
-    commentsList.innerHTML += `
-      <div class="comment-card">
-        <h4>${c.name}</h4>
-        <p>${"⭐".repeat(c.rating)}</p>
-        <p>${c.comment}</p>
-      </div>
-    `;
-  });
-
-  ratingCount.textContent = snap.size;
-  avgRating.textContent = snap.size ? (total / snap.size).toFixed(1) : "0.0";
-});
-
 /* 🔑 FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
@@ -428,6 +356,78 @@ window.toggleBlock = async (uid, blocked) => {
   await setDoc(doc(db, "users", uid), { blocked: !blocked }, { merge: true });
   loadUsers();
 };
+
+/* ⭐ COMMENTAIRES & ÉTOILES */
+import {
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const commentForm = document.getElementById("comment-form");
+const commentsList = document.getElementById("comments-list");
+const avgRating = document.getElementById("avg-rating");
+const ratingCount = document.getElementById("rating-count");
+const ratingInput = document.getElementById("rating");
+
+let selectedRating = 0;
+
+/* Gestion étoiles */
+document.querySelectorAll(".stars span").forEach(star => {
+  star.onclick = () => {
+    selectedRating = Number(star.dataset.value);
+    ratingInput.value = selectedRating;
+    document.querySelectorAll(".stars span").forEach(s =>
+      s.classList.toggle("active", s.dataset.value <= selectedRating)
+    );
+  };
+});
+
+/* Envoi commentaire */
+commentForm.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  if (!selectedRating) {
+    alert("Choisis une note ⭐");
+    return;
+  }
+
+  await addDoc(collection(db, "comments"), {
+    name: username.value,
+    comment: comment.value,
+    rating: selectedRating,
+    createdAt: serverTimestamp()
+  });
+
+  commentForm.reset();
+  selectedRating = 0;
+  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
+});
+
+/* Lecture commentaires en temps réel */
+const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
+
+onSnapshot(q, snap => {
+  commentsList.innerHTML = "";
+  let total = 0;
+
+  snap.forEach(d => {
+    const c = d.data();
+    total += c.rating;
+
+    commentsList.innerHTML += `
+      <div class="comment-card">
+        <h4>${c.name}</h4>
+        <p>${"⭐".repeat(c.rating)}</p>
+        <p>${c.comment}</p>
+      </div>
+    `;
+  });
+
+  ratingCount.textContent = snap.size;
+  avgRating.textContent = snap.size ? (total / snap.size).toFixed(1) : "0.0";
+});
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

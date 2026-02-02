@@ -425,9 +425,12 @@ commentForm.addEventListener("submit", async e => {
   await addDoc(collection(db, "comments"), {
     name: username.value,
     comment: comment.value,
-    rating: selectedRating,
+    rating: Nomber(selectedRating),
     createdAt: serverTimestamp()
   });
+
+  form.reset();
+};
 
   commentForm.reset();
   selectedRating = 0;

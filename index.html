@@ -179,6 +179,35 @@ gap:10px
 
 <p>📅 Aujourd’hui : <b><span id="todayVisits">0</span></b></p>
 
+<section id="comments">
+
+  <h2>Avis clients</h2>
+
+  <form id="comment-form">
+    <input type="text" id="username" placeholder="Votre nom" required>
+
+    <div class="stars">
+      <span data-value="1">⭐</span>
+      <span data-value="2">⭐</span>
+      <span data-value="3">⭐</span>
+      <span data-value="4">⭐</span>
+      <span data-value="5">⭐</span>
+    </div>
+
+    <input type="hidden" id="rating">
+
+    <textarea id="comment" placeholder="Votre commentaire" required></textarea>
+
+    <button type="submit">Envoyer</button>
+  </form>
+
+  <p>Moyenne : <span id="avg-rating">0</span> ⭐  
+     (<span id="rating-count">0</span> avis)</p>
+
+  <div id="comments-list"></div>
+
+</section>
+
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";

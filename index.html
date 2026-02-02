@@ -392,7 +392,11 @@ background:#b91c1c;
      (<span id="rating-count">0</span> avis)</p>
 
   <div id="comments-list"></div>
-
+  <div style="text-align:center;margin-top:20px">
+  <button id="loadMoreBtn" class="btn btn-outline">
+    Voir plus d’avis (<span id="remainingCount">0</span>)
+  </button>
+  </div>
 </section>
 
 <!-- FIREBASE -->
@@ -576,13 +580,19 @@ window.toggleBlock = async (uid, blocked) => {
   loadUsers();
 };
 
+let lastVisibleComment = null;
+let totalComments = 0;
+let loadedComments = 0;
+
 /* ⭐ COMMENTAIRES & ÉTOILES */
 import {
   addDoc,
   query,
   orderBy,
   onSnapshot,
-  limit
+  limit,
+  startAfter,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let isAdmin = false;
@@ -628,40 +638,55 @@ commentForm.addEventListener("submit", async e => {
 });
 
 /* Lecture commentaires en temps réel */
-const q = query(collection(db, "comments"), orderBy("createdAt", "desc"), limit(10));
+async function loadComments(loadMore = false) {
 
-onSnapshot(q, snap => {
-  commentsList.innerHTML = "";
-  let total = 0;
+  let q;
+
+  if (loadMore && lastVisibleComment) {
+    q = query(
+      collection(db, "comments"),
+      orderBy("createdAt", "desc"),
+      startAfter(lastVisibleComment),
+      limit(10)
+    );
+  } else {
+    commentsList.innerHTML = "";
+    q = query(
+      collection(db, "comments"),
+      orderBy("createdAt", "desc"),
+      limit(10)
+    );
+  }
+
+  const snap = await getDocs(q);
+
+  if (!snap.empty) {
+    lastVisibleComment = snap.docs[snap.docs.length - 1];
+  }
 
   snap.forEach(d => {
     const c = d.data();
-    total += c.rating;
+    loadedComments++;
 
-const date = c.createdAt?.toDate();
-const formattedDate = date
-  ? date.toLocaleDateString("fr-FR") + " à " +
-    date.toLocaleTimeString("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit"
-    })
-  : "Date inconnue";
+    commentsList.innerHTML += `
+      <div class="comment-card">
+        <h4>${c.name}</h4>
+        <p>${"⭐".repeat(c.rating)}</p>
+        <p>${c.comment}</p>
+      </div>
+    `;
+  });
 
-commentsList.innerHTML += `
-  <div class="comment-card">
-    <h4>${c.name}</h4>
+  document.getElementById("remainingCount").textContent =
+    Math.max(0, totalComments - loadedComments);
+}
 
-    <div class="stars-display">
-      ${"⭐".repeat(c.rating)}
-    </div>
-
-    <p>${c.comment}</p>
-
-    <small class="comment-date">🕒 ${formattedDate}</small>
-    ${isAdmin ? `<button class="delete-comment" data-id="${d.id}">Supprimer</button>` : ""}
-  </div>
-`;
-});
+async function countComments() {
+  const snap = await getDocs(collection(db, "comments"));
+  totalComments = snap.size;
+  document.getElementById("remainingCount").textContent =
+    Math.max(0, totalComments - loadedComments);
+}
 
   ratingCount.textContent = snap.size;
   avgRating.textContent = snap.size ? (total / snap.size).toFixed(1) : "0.0";
@@ -675,6 +700,8 @@ document.addEventListener("click", async e => {
   const id = e.target.dataset.id;
   await deleteDoc(doc(db, "comments", id));
 });
+
+document.getElement
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

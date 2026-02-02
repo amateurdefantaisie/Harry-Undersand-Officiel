@@ -581,7 +581,8 @@ import {
   addDoc,
   query,
   orderBy,
-  onSnapshot
+  onSnapshot,
+  limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let isAdmin = false;
@@ -627,7 +628,7 @@ commentForm.addEventListener("submit", async e => {
 });
 
 /* Lecture commentaires en temps réel */
-const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
+const q = query(collection(db, "comments"), orderBy("createdAt", "desc"), limit(10));
 
 onSnapshot(q, snap => {
   commentsList.innerHTML = "";

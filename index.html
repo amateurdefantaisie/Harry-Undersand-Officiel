@@ -114,6 +114,166 @@ gap:10px
   margin:6px 0 10px;
   color:#facc15;
 }
+
+/* =========================
+   ⭐ AVIS & COMMENTAIRES
+========================= */
+
+#comments{
+max-width:900px;
+margin:80px auto;
+padding:40px;
+background:linear-gradient(180deg,#0f172a,#020617);
+border:1px solid var(--border);
+border-radius:26px;
+box-shadow:0 0 60px rgba(139,92,246,.25);
+}
+
+#comments h2{
+text-align:center;
+font-size:2.2rem;
+margin-bottom:25px;
+background:linear-gradient(135deg,var(--violet),#a78bfa);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+/* FORM */
+#comment-form{
+display:flex;
+flex-direction:column;
+gap:16px;
+background:rgba(255,255,255,.02);
+padding:30px;
+border-radius:20px;
+border:1px solid rgba(255,255,255,.06);
+}
+
+#comment-form input,
+#comment-form textarea{
+background:#020617;
+border:1px solid rgba(255,255,255,.08);
+border-radius:14px;
+padding:14px 16px;
+color:#fff;
+font-size:15px;
+outline:none;
+}
+
+#comment-form textarea{
+min-height:120px;
+resize:none;
+}
+
+#comment-form input:focus,
+#comment-form textarea:focus{
+border-color:var(--violet);
+box-shadow:0 0 0 2px rgba(139,92,246,.35);
+}
+
+/* ⭐ ÉTOILES */
+.stars{
+display:flex;
+justify-content:center;
+gap:10px;
+font-size:32px;
+cursor:pointer;
+}
+
+.stars span{
+filter:grayscale(1);
+opacity:.4;
+transition:.25s ease;
+}
+
+.stars span:hover,
+.stars span.active{
+filter:none;
+opacity:1;
+transform:scale(1.25);
+text-shadow:0 0 14px rgba(250,204,21,.7);
+}
+
+/* BOUTON */
+#comment-form button{
+margin-top:10px;
+align-self:center;
+padding:14px 34px;
+border-radius:40px;
+border:none;
+font-weight:700;
+font-size:15px;
+cursor:pointer;
+color:white;
+background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+box-shadow:0 0 30px rgba(139,92,246,.45);
+transition:.3s;
+}
+
+#comment-form button:hover{
+transform:translateY(-2px);
+box-shadow:0 0 50px rgba(139,92,246,.65);
+}
+
+/* 📊 STATS */
+#comments > p{
+text-align:center;
+margin:25px 0 35px;
+font-size:1.1rem;
+color:#c4b5fd;
+}
+
+/* LISTE COMMENTAIRES */
+#comments-list{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:22px;
+}
+
+/* CARTE COMMENTAIRE */
+.comment-card{
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+border-radius:20px;
+padding:22px;
+transition:.3s;
+position:relative;
+overflow:hidden;
+}
+
+.comment-card::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(120deg,transparent,rgba(139,92,246,.18),transparent);
+opacity:0;
+transition:.4s;
+}
+
+.comment-card:hover::before{
+opacity:1;
+}
+
+.comment-card:hover{
+transform:translateY(-6px);
+box-shadow:0 0 40px rgba(139,92,246,.35);
+}
+
+.comment-card h4{
+margin-bottom:6px;
+color:#a78bfa;
+}
+
+.comment-card p{
+color:#e5e7eb;
+font-size:14px;
+line-height:1.6;
+}
+
+.comment-card .stars-display{
+margin:6px 0 10px;
+color:#facc15;
+}
 </style>
 </head>
 

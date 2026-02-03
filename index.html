@@ -421,7 +421,14 @@ import {
   collection,
   serverTimestamp,
   increment,
-  deleteDoc
+  deleteDoc,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  limit,
+  startAfter,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* 🔑 FIREBASE CONFIG */
@@ -584,17 +591,7 @@ let lastVisibleComment = null;
 let totalComments = 0;
 let loadedComments = 0;
 
-/* ⭐ COMMENTAIRES & ÉTOILES */
-import {
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  limit,
-  startAfter,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+/* ⭐ COMMENTAIRES & ÉTOILE */
 let isAdmin = false;
 
 const commentForm = document.getElementById("comment-form");
@@ -663,19 +660,42 @@ async function loadComments(loadMore = false) {
   if (!snap.empty) {
     lastVisibleComment = snap.docs[snap.docs.length - 1];
   }
-
+  
+let totalRating = 0;
   snap.forEach(d => {
-    const c = d.data();
-    loadedComments++;
+  const c = d.data();
+  loadedComments++;
+  totalRating += c.rating;   
 
-    commentsList.innerHTML += `
-      <div class="comment-card">
-        <h4>${c.name}</h4>
-        <p>${"⭐".repeat(c.rating)}</p>
-        <p>${c.comment}</p>
-      </div>
-    `;
-  });
+ratingCount.textContent = loadedComments;
+avgRating.textContent = loadedComments
+  ? (totalRating / loadedComments).toFixed(1)
+  : "0.0";
+
+commentsList.innerHTML += `
+  <div class="comment-card">
+    <h4>${c.name}</h4>
+
+    <div class="stars-display">
+      ${"⭐".repeat(c.rating)}
+    </div>
+
+    <p>${c.comment}</p>
+
+    <span class="comment-date">
+      ${c.createdAt?.toDate().toLocaleString("fr-FR")}
+    </span>
+
+    ${
+      isAdmin
+        ? `<button class="delete-comment" data-id="${d.id}">
+             Supprimer
+           </button>`
+        : ""
+    }
+  </div>
+`;
+});
 
   document.getElementById("remainingCount").textContent =
     Math.max(0, totalComments - loadedComments);
@@ -688,10 +708,6 @@ async function countComments() {
     Math.max(0, totalComments - loadedComments);
 }
 
-  ratingCount.textContent = snap.size;
-  avgRating.textContent = snap.size ? (total / snap.size).toFixed(1) : "0.0";
-});
-
 document.addEventListener("click", async e => {
   if (!e.target.classList.contains("delete-comment")) return;
 
@@ -702,6 +718,15 @@ document.addEventListener("click", async e => {
 });
 
 document.getElement
+
+document.getElementById("loadMoreBtn").addEventListener("click", async () => {
+  await loadComments(true);
+});
+
+&(async () => {
+  await countComments();   // compte tous les commentaires
+  await loadComments();    // charge les 10 premiers
+})();
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

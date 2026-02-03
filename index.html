@@ -320,16 +320,6 @@ background:#b91c1c;
       </thead>
       <tbody id="usersTable"></tbody>
     </table>
-    <h3>🕒 Historique des connexions</h3>
-
-  <ul id="loginList" style="
-    margin-top:10px;
-    padding-left:18px;
-    color:#e5e7eb;
-    font-size:14px;
-  ">
-  <li>Chargement...</li>
-  </ul>
   </div>
 </section>
 
@@ -402,11 +392,7 @@ background:#b91c1c;
      (<span id="rating-count">0</span> avis)</p>
 
   <div id="comments-list"></div>
-  <div style="text-align:center;margin-top:20px">
-  <button id="loadMoreBtn" class="btn btn-outline">
-    Voir plus d’avis (<span id="remainingCount">0</span>)
-  </button>
-  </div>
+
 </section>
 
 <!-- FIREBASE -->
@@ -431,13 +417,7 @@ import {
   collection,
   serverTimestamp,
   increment,
-  deleteDoc,
-  addDoc,
-  query,
-  orderBy,
-  limit,
-  startAfter,
-  onSnapshot
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* 🔑 FIREBASE CONFIG */
@@ -457,21 +437,6 @@ const facebookProvider = new FacebookAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
 /* ELEMENTS */
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const closeModal = document.getElementById("closeModal");
-
-const googleLogin = document.getElementById("googleLogin");
-const facebookLogin = document.getElementById("facebookLogin");
-const githubLogin = document.getElementById("githubLogin");
-const logoutBtn = document.getElementById("logoutBtn");
-
-const welcomeText = document.getElementById("welcomeText");
-const userPhoto = document.getElementById("userPhoto");
-
-const username = document.getElementById("username");
-const comment = document.getElementById("comment");
-
 const authGuest = document.getElementById("authGuest");
 const authUser = document.getElementById("authUser");
 const adminPanel = document.getElementById("adminPanel");
@@ -490,8 +455,6 @@ facebookLogin.onclick = () => signInWithPopup(auth, facebookProvider);
 githubLogin.onclick = () => signInWithPopup(auth, githubProvider);
 logoutBtn.onclick = () => signOut(auth);
 
-let isAdmin = false;
-
 /* AUTH STATE */
 onAuthStateChanged(auth, async user => {
 
@@ -504,7 +467,6 @@ onAuthStateChanged(auth, async user => {
 
   authGuest.style.display = "none";
   authUser.style.display = "flex";
-  authModal.style.display = "none";
   welcomeText.textContent = "Bienvenue " + user.displayName;
   userPhoto.src = user.photoURL;
 
@@ -538,23 +500,11 @@ onAuthStateChanged(auth, async user => {
   adminPanel.style.display = "block";
   loadUsers();
   loadStats();
-  loadLogins();
 } else {
   isAdmin = false;
   adminPanel.style.display = "none";
 }
-await addDoc(collection(db, "logins"), {
-  uid: user.uid,
-  email: user.email,
-  provider: user.providerData[0]?.providerId || "unknown",
-  createdAt: serverTimestamp()
 });
-});
-
-/* COMMENTS */
-let lastDoc = null;
-let loaded = 0;
-let globalSum = 0;
 
 const loginList = document.getElementById("loginList");
 
@@ -614,7 +564,7 @@ async function registerVisit() {
   const globalRef = doc(db, "stats", "global");
   const dailyRef = doc(db, "stats_daily", todayKey());
 
-  await setDoc(globalRef, { visits: increment(1) }, { merge: true });
+  await setDoc(globalRef, { total: increment(1) }, { merge: true });
   await setDoc(dailyRef, { count: increment(1) }, { merge: true });
 }
 
@@ -626,11 +576,17 @@ window.toggleBlock = async (uid, blocked) => {
   loadUsers();
 };
 
-let lastVisibleComment = null;
-let totalComments = 0;
-let loadedComments = 0;
+/* ⭐ COMMENTAIRES & ÉTOILES */
+import {
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  limit
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ⭐ COMMENTAIRES & ÉTOILE */
+let isAdmin = false;
+
 const commentForm = document.getElementById("comment-form");
 const commentsList = document.getElementById("comments-list");
 const avgRating = document.getElementById("avg-rating");
@@ -654,63 +610,42 @@ document.querySelectorAll(".stars span").forEach(star => {
 commentForm.addEventListener("submit", async e => {
   e.preventDefault();
 
-  try {
-    if (!selectedRating) {
-      alert("Choisis une note ⭐");
-      return;
-    }
-
-    await addDoc(collection(db, "comments"), {
-      name: username.value.trim(),
-      comment: comment.value.trim(),
-      rating: selectedRating,
-      createdAt: serverTimestamp()
-    });
-
-    commentForm.reset();
-    selectedRating = 0;
-    document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
-
-    alert("✅ Commentaire envoyé !");
-  } catch (err) {
-    console.error("Erreur commentaire :", err);
-    alert("❌ Erreur lors de l’envoi");
+  if (!selectedRating) {
+    alert("Choisis une note ⭐");
+    return;
   }
+
+  await addDoc(collection(db, "comments"), {
+    name: username.value,
+    comment: comment.value,
+    rating: selectedRating,
+    createdAt: serverTimestamp()
+  });
+
+  commentForm.reset();
+  selectedRating = 0;
+  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
 });
 
 /* Lecture commentaires en temps réel */
-async function loadComments(loadMore = false) {
+const q = query(collection(db, "comments"), orderBy("createdAt", "desc"), limit(10));
 
-  let q;
+onSnapshot(q, snap => {
+  commentsList.innerHTML = "";
+  let total = 0;
 
-  if (loadMore && lastVisibleComment) {
-    q = query(
-      collection(db, "comments"),
-      orderBy("createdAt", "desc"),
-      startAfter(lastVisibleComment),
-      limit(10)
-    );
-  } else {
-    commentsList.innerHTML = "";
-    q = query(
-      collection(db, "comments"),
-      orderBy("createdAt", "desc"),
-      limit(10)
-    );
-  }
-
-  const snap = await getDocs(q);
-
-  if (!snap.empty) {
-    lastVisibleComment = snap.docs[snap.docs.length - 1];
-  }
-
-let globalRatingSum = 0;
-let totalRating = 0;
   snap.forEach(d => {
-  const c = d.data();
-  loadedComments++;
-  totalRating += c.rating;   
+    const c = d.data();
+    total += c.rating;
+
+const date = c.createdAt?.toDate();
+const formattedDate = date
+  ? date.toLocaleDateString("fr-FR") + " à " +
+    date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })
+  : "Date inconnue";
 
 commentsList.innerHTML += `
   <div class="comment-card">
@@ -722,36 +657,15 @@ commentsList.innerHTML += `
 
     <p>${c.comment}</p>
 
-    <span class="comment-date">
-      ${c.createdAt?.toDate().toLocaleString("fr-FR")}
-    </span>
-
-    ${
-      isAdmin
-        ? `<button class="delete-comment" data-id="${d.id}">
-             Supprimer
-           </button>`
-        : ""
-    }
+    <small class="comment-date">🕒 ${formattedDate}</small>
+    ${isAdmin ? `<button class="delete-comment" data-id="${d.id}">Supprimer</button>` : ""}
   </div>
 `;
 });
 
-ratingCount.textContent = loadedComments;
-avgRating.textContent = loadedComments
-  ? (globalRatingSum / loadedComments).toFixed(1)
-  : "0.0";
-
-  document.getElementById("remainingCount").textContent =
-    Math.max(0, totalComments - loadedComments);
-}
-
-async function countComments() {
-  const snap = await getDocs(collection(db, "comments"));
-  totalComments = snap.size;
-  document.getElementById("remainingCount").textContent =
-    Math.max(0, totalComments - loadedComments);
-}
+  ratingCount.textContent = snap.size;
+  avgRating.textContent = snap.size ? (total / snap.size).toFixed(1) : "0.0";
+});
 
 document.addEventListener("click", async e => {
   if (!e.target.classList.contains("delete-comment")) return;
@@ -761,15 +675,6 @@ document.addEventListener("click", async e => {
   const id = e.target.dataset.id;
   await deleteDoc(doc(db, "comments", id));
 });
-
-document.getElementById("loadMoreBtn").addEventListener("click", async () => {
-  await loadComments(true);
-});
-
-(async () => {
-  await countComments();   // compte tous les commentaires
-  await loadComments();    // charge les 10 premiers
-})();
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

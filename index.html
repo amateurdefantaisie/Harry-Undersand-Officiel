@@ -490,6 +490,8 @@ facebookLogin.onclick = () => signInWithPopup(auth, facebookProvider);
 githubLogin.onclick = () => signInWithPopup(auth, githubProvider);
 logoutBtn.onclick = () => signOut(auth);
 
+let isAdmin = false;
+
 /* AUTH STATE */
 onAuthStateChanged(auth, async user => {
 
@@ -508,6 +510,7 @@ onAuthStateChanged(auth, async user => {
 
   authGuest.style.display = "none";
   authUser.style.display = "flex";
+  authModal.style.display = "none";
   welcomeText.textContent = "Bienvenue " + user.displayName;
   userPhoto.src = user.photoURL;
 
@@ -623,8 +626,6 @@ let totalComments = 0;
 let loadedComments = 0;
 
 /* ⭐ COMMENTAIRES & ÉTOILE */
-let isAdmin = false;
-
 const commentForm = document.getElementById("comment-form");
 const commentsList = document.getElementById("comments-list");
 const avgRating = document.getElementById("avg-rating");
@@ -648,21 +649,28 @@ document.querySelectorAll(".stars span").forEach(star => {
 commentForm.addEventListener("submit", async e => {
   e.preventDefault();
 
-  if (!selectedRating) {
-    alert("Choisis une note ⭐");
-    return;
+  try {
+    if (!selectedRating) {
+      alert("Choisis une note ⭐");
+      return;
+    }
+
+    await addDoc(collection(db, "comments"), {
+      name: username.value.trim(),
+      comment: comment.value.trim(),
+      rating: selectedRating,
+      createdAt: serverTimestamp()
+    });
+
+    commentForm.reset();
+    selectedRating = 0;
+    document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
+
+    alert("✅ Commentaire envoyé !");
+  } catch (err) {
+    console.error("Erreur commentaire :", err);
+    alert("❌ Erreur lors de l’envoi");
   }
-
-  await addDoc(collection(db, "comments"), {
-    name: username.value,
-    comment: comment.value,
-    rating: selectedRating,
-    createdAt: serverTimestamp()
-  });
-
-  commentForm.reset();
-  selectedRating = 0;
-  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
 });
 
 /* Lecture commentaires en temps réel */

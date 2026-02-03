@@ -425,10 +425,8 @@ import {
   addDoc,
   query,
   orderBy,
-  onSnapshot,
   limit,
-  startAfter,
-  getDocs
+  startAfter
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* 🔑 FIREBASE CONFIG */
@@ -667,11 +665,6 @@ let totalRating = 0;
   loadedComments++;
   totalRating += c.rating;   
 
-ratingCount.textContent = loadedComments;
-avgRating.textContent = loadedComments
-  ? (totalRating / loadedComments).toFixed(1)
-  : "0.0";
-
 commentsList.innerHTML += `
   <div class="comment-card">
     <h4>${c.name}</h4>
@@ -697,6 +690,11 @@ commentsList.innerHTML += `
 `;
 });
 
+ratingCount.textContent = loadedComments;
+avgRating.textContent = loadedComments
+  ? (totalRating / loadedComments).toFixed(1)
+  : "0.0";
+
   document.getElementById("remainingCount").textContent =
     Math.max(0, totalComments - loadedComments);
 }
@@ -717,13 +715,11 @@ document.addEventListener("click", async e => {
   await deleteDoc(doc(db, "comments", id));
 });
 
-document.getElement
-
 document.getElementById("loadMoreBtn").addEventListener("click", async () => {
   await loadComments(true);
 });
 
-&(async () => {
+(async () => {
   await countComments();   // compte tous les commentaires
   await loadComments();    // charge les 10 premiers
 })();

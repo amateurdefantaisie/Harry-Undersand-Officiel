@@ -320,6 +320,16 @@ background:#b91c1c;
       </thead>
       <tbody id="usersTable"></tbody>
     </table>
+    <h3>🕒 Historique des connexions</h3>
+
+  <ul id="loginList" style="
+    margin-top:10px;
+    padding-left:18px;
+    color:#e5e7eb;
+    font-size:14px;
+  ">
+  <li>Chargement...</li>
+  </ul>
   </div>
 </section>
 
@@ -426,7 +436,8 @@ import {
   query,
   orderBy,
   limit,
-  startAfter
+  startAfter,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* 🔑 FIREBASE CONFIG */
@@ -446,6 +457,21 @@ const facebookProvider = new FacebookAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
 /* ELEMENTS */
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const closeModal = document.getElementById("closeModal");
+
+const googleLogin = document.getElementById("googleLogin");
+const facebookLogin = document.getElementById("facebookLogin");
+const githubLogin = document.getElementById("githubLogin");
+const logoutBtn = document.getElementById("logoutBtn");
+
+const welcomeText = document.getElementById("welcomeText");
+const userPhoto = document.getElementById("userPhoto");
+
+const username = document.getElementById("username");
+const comment = document.getElementById("comment");
+
 const authGuest = document.getElementById("authGuest");
 const authUser = document.getElementById("authUser");
 const adminPanel = document.getElementById("adminPanel");
@@ -473,6 +499,12 @@ onAuthStateChanged(auth, async user => {
     adminPanel.style.display = "none";
     return;
   }
+
+  await addDoc(collection(db, "logins"), {
+  email: user.email,
+  provider: user.providerData[0].providerId,
+  createdAt: serverTimestamp()
+});
 
   authGuest.style.display = "none";
   authUser.style.display = "flex";
@@ -509,6 +541,7 @@ onAuthStateChanged(auth, async user => {
   adminPanel.style.display = "block";
   loadUsers();
   loadStats();
+  loadLogins();
 } else {
   isAdmin = false;
   adminPanel.style.display = "none";
@@ -573,7 +606,7 @@ async function registerVisit() {
   const globalRef = doc(db, "stats", "global");
   const dailyRef = doc(db, "stats_daily", todayKey());
 
-  await setDoc(globalRef, { total: increment(1) }, { merge: true });
+  await setDoc(globalRef, { visits: increment(1) }, { merge: true });
   await setDoc(dailyRef, { count: increment(1) }, { merge: true });
 }
 

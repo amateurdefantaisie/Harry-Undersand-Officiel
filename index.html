@@ -549,6 +549,12 @@ await addDoc(collection(db, "logins"), {
   provider: user.providerData[0]?.providerId || "unknown",
   createdAt: serverTimestamp()
 });
+});
+
+/* COMMENTS */
+let lastDoc = null;
+let loaded = 0;
+let globalSum = 0;
 
 const loginList = document.getElementById("loginList");
 
@@ -698,7 +704,8 @@ async function loadComments(loadMore = false) {
   if (!snap.empty) {
     lastVisibleComment = snap.docs[snap.docs.length - 1];
   }
-  
+
+let globalRatingSum = 0;
 let totalRating = 0;
   snap.forEach(d => {
   const c = d.data();
@@ -732,7 +739,7 @@ commentsList.innerHTML += `
 
 ratingCount.textContent = loadedComments;
 avgRating.textContent = loadedComments
-  ? (totalRating / loadedComments).toFixed(1)
+  ? (globalRatingSum / loadedComments).toFixed(1)
   : "0.0";
 
   document.getElementById("remainingCount").textContent =

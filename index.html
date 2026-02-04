@@ -397,6 +397,11 @@ background:#b91c1c;
 
   <div id="comments-list"></div>
 
+  <div style="text-align:center;margin-top:30px">
+  <button id="loadMoreComments" class="btn btn-outline">
+    Voir plus
+  </button>
+</div>
 </section>
 
 <!-- FIREBASE -->
@@ -602,7 +607,10 @@ const ratingCount = document.getElementById("rating-count");
 const ratingInput = document.getElementById("rating");
 const usernameInput = document.getElementById("username");
 const commentInput = document.getElementById("comment");
+const loadMoreBtn = document.getElementById("loadMoreComments");
 
+let commentsLimit = 10;
+let lastVisible = null;
 let selectedRating = 0;
 
 /* Gestion étoiles */
@@ -638,7 +646,59 @@ commentForm.addEventListener("submit", async e => {
 });
 
 /* Lecture commentaires en temps réel */
-const q = query(collection(db, "comments"), orderBy("createdAt", "desc"), limit(10));
+function loadComments() {
+  let q;
+
+  if (lastVisible) {
+    q = query(
+      collection(db, "comments"),
+      orderBy("createdAt", "desc"),
+      startAfter(lastVisible),
+      limit(10)
+    );
+  } else {
+    q = query(
+      collection(db, "comments"),
+      orderBy("createdAt", "desc"),
+      limit(10)
+    );
+  }
+
+  onSnapshot(q, snap => {
+    if (snap.empty) {
+      loadMoreBtn.style.display = "none";
+      return;
+    }
+
+    lastVisible = snap.docs[snap.docs.length - 1];
+
+    snap.forEach(d => {
+      const c = d.data();
+
+      const date = c.createdAt?.toDate();
+      const formattedDate = date
+        ? date.toLocaleDateString("fr-FR") + " à " +
+          date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
+        : "Date inconnue";
+
+      commentsList.innerHTML += `
+        <div class="comment-card">
+          <h4>${c.name}</h4>
+          <div class="stars-display">${"⭐".repeat(c.rating)}</div>
+          <p>${c.comment}</p>
+          <small class="comment-date">🕒 ${formattedDate}</small>
+          ${isAdmin ? `<button class="delete-comment" data-id="${d.id}">Supprimer</button>` : ""}
+        </div>
+      `;
+    });
+  });
+}
+
+loadComments();
+
+loadMoreBtn.addEventListener("click", () => {
+  loadComments();
+});
 
 onSnapshot(q, snap => {
   commentsList.innerHTML = "";

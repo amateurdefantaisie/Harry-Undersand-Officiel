@@ -540,7 +540,6 @@ onAuthStateChanged(auth, async user => {
 /* 📊 STATS */
 async function loadStats() {
   const ref = doc(db, "stats", "global");
-  await setDoc(ref, { visits: increment(1) }, { merge: true });
   const snap = await getDoc(ref);
   adminVisits.textContent = snap.data()?.visits || 0;
 }
@@ -591,7 +590,11 @@ async function loadTodayVisits() {
   if (el) el.textContent = value;
 }
 
-registerVisit();
+if (!sessionStorage.getItem("visited")) {
+  sessionStorage.setItem("visited", "true");
+  registerVisit();
+}
+
 loadTodayVisits();
 
 /* ACTION ADMIN */
@@ -701,36 +704,6 @@ loadMoreBtn.addEventListener("click", () => {
 });
 
 loadComments();
-
-  onSnapshot(q, snap => {
-    if (snap.empty) {
-      loadMoreBtn.style.display = "none";
-      return;
-    }
-
-    lastVisible = snap.docs[snap.docs.length - 1];
-
-    snap.forEach(d => {
-      const c = d.data();
-
-      const date = c.createdAt?.toDate();
-      const formattedDate = date
-        ? date.toLocaleDateString("fr-FR") + " à " +
-          date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
-        : "Date inconnue";
-
-      commentsList.innerHTML += `
-        <div class="comment-card">
-          <h4>${c.name}</h4>
-          <div class="stars-display">${"⭐".repeat(c.rating)}</div>
-          <p>${c.comment}</p>
-          <small class="comment-date">🕒 ${formattedDate}</small>
-          ${isAdmin ? `<button class="delete-comment" data-id="${d.id}">Supprimer</button>` : ""}
-        </div>
-      `;
-    });
-  });
-}
 
 document.addEventListener("click", async e => {
   if (!e.target.classList.contains("delete-comment")) return;

@@ -648,61 +648,89 @@ commentForm.addEventListener("submit", async e => {
 
 /* Lecture commentaires en temps réel */
 function loadComments() {
-  let q;
+  const q = query(
+    collection(db, "comments"),
+    orderBy("createdAt", "desc"),
+    limit(commentsLimit)
+  );
 
-  if (lastVisible) {
-    q = query(
-      collection(db, "comments"),
-      orderBy("createdAt", "desc"),
-      startAfter(lastVisible),
-      limit(10)
-    );
-  } else {
-    q = query(
-      collection(db, "comments"),
-      orderBy("createdAt", "desc"),
-      limit(10)
-    );
-  }
+  onSnapshot(q, snap => {
+    commentsList.innerHTML = "";
+    let total = 0;
 
-loadComments();
+    snap.forEach(d => {
+      const c = d.data();
+      total += c.rating;
+
+      const date = c.createdAt?.toDate();
+      const formattedDate = date
+        ? date.toLocaleDateString("fr-FR") + " à " +
+          date.toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit"
+          })
+        : "Date inconnue";
+
+      commentsList.innerHTML += `
+        <div class="comment-card">
+          <h4>${c.name}</h4>
+          <div class="stars-display">${"⭐".repeat(c.rating)}</div>
+          <p>${c.comment}</p>
+          <small class="comment-date">🕒 ${formattedDate}</small>
+          ${isAdmin ? `<button class="delete-comment" data-id="${d.id}">Supprimer</button>` : ""}
+        </div>
+      `;
+    });
+
+    ratingCount.textContent = snap.size;
+    avgRating.textContent = snap.size
+      ? (total / snap.size).toFixed(1)
+      : "0.0";
+
+    if (snap.size < commentsLimit) {
+      loadMoreBtn.style.display = "none";
+    } else {
+      loadMoreBtn.style.display = "inline-block";
+    }
+  });
+}
 
 loadMoreBtn.addEventListener("click", () => {
+  commentsLimit += 10;
   loadComments();
 });
 
-onSnapshot(q, snap => {
-  commentsList.innerHTML = "";
-  let total = 0;
+loadComments();
 
-  snap.forEach(d => {
-    const c = d.data();
-    total += c.rating;
+  onSnapshot(q, snap => {
+    if (snap.empty) {
+      loadMoreBtn.style.display = "none";
+      return;
+    }
 
-const date = c.createdAt?.toDate();
-const formattedDate = date
-  ? date.toLocaleDateString("fr-FR") + " à " +
-    date.toLocaleTimeString("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit"
-    })
-  : "Date inconnue";
+    lastVisible = snap.docs[snap.docs.length - 1];
 
-commentsList.innerHTML += `
-  <div class="comment-card">
-    <h4>${c.name}</h4>
+    snap.forEach(d => {
+      const c = d.data();
 
-    <div class="stars-display">
-      ${"⭐".repeat(c.rating)}
-    </div>
+      const date = c.createdAt?.toDate();
+      const formattedDate = date
+        ? date.toLocaleDateString("fr-FR") + " à " +
+          date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
+        : "Date inconnue";
 
-    <p>${c.comment}</p>
-
-    <small class="comment-date">🕒 ${formattedDate}</small>
-    ${isAdmin ? `<button class="delete-comment" data-id="${d.id}">Supprimer</button>` : ""}
-  </div>
-`;
-});
+      commentsList.innerHTML += `
+        <div class="comment-card">
+          <h4>${c.name}</h4>
+          <div class="stars-display">${"⭐".repeat(c.rating)}</div>
+          <p>${c.comment}</p>
+          <small class="comment-date">🕒 ${formattedDate}</small>
+          ${isAdmin ? `<button class="delete-comment" data-id="${d.id}">Supprimer</button>` : ""}
+        </div>
+      `;
+    });
+  });
+}
 
 document.addEventListener("click", async e => {
   if (!e.target.classList.contains("delete-comment")) return;

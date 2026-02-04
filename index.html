@@ -403,6 +403,16 @@ background:#b91c1c;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
+  getAuth,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
   getFirestore,
   doc,
   setDoc,
@@ -553,18 +563,33 @@ async function loadUsers() {
 
 /* 📊 VISITES */
 function todayKey() {
-  return new Date().toISOString().split("T")[0];
+  const d = new Date();
+  return d.toISOString().slice(0, 10); // ex: 2026-02-04
 }
 
 async function registerVisit() {
   const globalRef = doc(db, "stats", "global");
   const dailyRef = doc(db, "stats_daily", todayKey());
 
-  await setDoc(globalRef, { total: increment(1) }, { merge: true });
+  await setDoc(globalRef, { visits: increment(1) }, { merge: true });
   await setDoc(dailyRef, { count: increment(1) }, { merge: true });
 }
 
+async function loadTodayVisits() {
+  const ref = doc(db, "stats_daily", todayKey());
+  const snap = await getDoc(ref);
+
+  const value = snap.exists() ? snap.data().count || 0 : 0;
+
+  const el = document.getElementById("todayVisits");
+  if (el) el.textContent = value;
+}
+
+const snap = await getDoc(dailyRef);
+document.getElementById("todayVisits").textContent = snap.data()?.count || 0;
+
 registerVisit();
+loadTodayVisits();
 
 /* ACTION ADMIN */
 window.toggleBlock = async (uid, blocked) => {
@@ -573,14 +598,6 @@ window.toggleBlock = async (uid, blocked) => {
 };
 
 /* ⭐ COMMENTAIRES & ÉTOILES */
-import {
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  limit
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 const commentForm = document.getElementById("comment-form");
 const commentsList = document.getElementById("comments-list");
 const avgRating = document.getElementById("avg-rating");

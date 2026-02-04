@@ -352,6 +352,12 @@ background:#b91c1c;
 <p>Chatbots IA, Streaming Premium, Hébergement Cloud et automatisation digitale.</p>
 </section>
 
+<section class="container" style="text-align:center;margin-top:40px">
+  <p style="color:#c4b5fd;font-size:1.1rem">
+    📅 Aujourd’hui : <b><span id="todayVisits">0</span></b>
+  </p>
+</section>
+
 <!-- MODALE AUTH -->
 <div class="modal-bg" id="authModal">
 <div class="modal">
@@ -363,8 +369,6 @@ background:#b91c1c;
 <button class="close-btn" id="closeModal">Fermer</button>
 </div>
 </div>
-
-<p>📅 Aujourd’hui : <b><span id="todayVisits">0</span></b></p>
 
 <section id="comments">
 
@@ -399,26 +403,27 @@ background:#b91c1c;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getAuth,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  GithubAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
   getFirestore,
   doc,
   setDoc,
   getDoc,
   getDocs,
   collection,
+  addDoc,
+  deleteDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  limit,
   serverTimestamp,
-  increment,
-  deleteDoc
+  increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+let isAdmin = false;
+
+window.toggleMenu = () => {
+  document.getElementById("menu").classList.toggle("show");
+};
 
 /* 🔑 FIREBASE CONFIG */
 const firebaseConfig = {
@@ -444,6 +449,16 @@ const usersTable = document.getElementById("usersTable");
 const adminVisits = document.getElementById("adminVisits");
 
 const authModal = document.getElementById("authModal");
+
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const closeModal = document.getElementById("closeModal");
+const googleLogin = document.getElementById("googleLogin");
+const facebookLogin = document.getElementById("facebookLogin");
+const githubLogin = document.getElementById("githubLogin");
+const logoutBtn = document.getElementById("logoutBtn");
+const welcomeText = document.getElementById("welcomeText");
+const userPhoto = document.getElementById("userPhoto");
 
 /* BOUTONS */
 loginBtn.onclick = () => authModal.style.display = "flex";
@@ -506,25 +521,6 @@ onAuthStateChanged(auth, async user => {
 }
 });
 
-const loginList = document.getElementById("loginList");
-
-async function loadLogins() {
-  const q = query(
-    collection(db, "logins"),
-    orderBy("createdAt", "desc")
-  );
-
-  onSnapshot(q, snap => {
-    loginList.innerHTML = "";
-    snap.forEach(d => {
-      const l = d.data();
-      loginList.innerHTML += `
-        <li>${l.email} — ${l.provider}</li>
-      `;
-    });
-  });
-}
-
 /* 📊 STATS */
 async function loadStats() {
   const ref = doc(db, "stats", "global");
@@ -584,8 +580,6 @@ import {
   onSnapshot,
   limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-let isAdmin = false;
 
 const commentForm = document.getElementById("comment-form");
 const commentsList = document.getElementById("comments-list");

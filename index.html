@@ -585,9 +585,6 @@ async function loadTodayVisits() {
   if (el) el.textContent = value;
 }
 
-const snap = await getDoc(dailyRef);
-document.getElementById("todayVisits").textContent = snap.data()?.count || 0;
-
 registerVisit();
 loadTodayVisits();
 
@@ -603,6 +600,8 @@ const commentsList = document.getElementById("comments-list");
 const avgRating = document.getElementById("avg-rating");
 const ratingCount = document.getElementById("rating-count");
 const ratingInput = document.getElementById("rating");
+const usernameInput = document.getElementById("username");
+const commentInput = document.getElementById("comment");
 
 let selectedRating = 0;
 
@@ -627,8 +626,8 @@ commentForm.addEventListener("submit", async e => {
   }
 
   await addDoc(collection(db, "comments"), {
-    name: username.value,
-    comment: comment.value,
+    name: usernameInput.value,
+    comment: commentInput.value,
     rating: selectedRating,
     createdAt: serverTimestamp()
   });

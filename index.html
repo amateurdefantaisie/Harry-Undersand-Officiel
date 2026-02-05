@@ -784,10 +784,27 @@ document.getElementById("registerForm").addEventListener("submit", async e => {
     alert("✅ Inscription réussie");
     registerModal.style.display = "none";
 
-  } catch (err) {
-    alert("❌ " + err.message);
+} catch (err) {
+
+  if (err.code === "auth/email-already-in-use") {
+    alert("⚠️ Cette adresse email est déjà utilisée.\n👉 Connecte-toi à la place.");
+    registerModal.style.display = "none";
+    authModal.style.display = "flex";
+    return;
   }
-});
+
+  if (err.code === "auth/weak-password") {
+    alert("🔐 Mot de passe trop faible (minimum 6 caractères)");
+    return;
+  }
+
+  if (err.code === "auth/invalid-email") {
+    alert("📧 Adresse email invalide");
+    return;
+  }
+
+  alert("❌ Erreur : " + err.message);
+}
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

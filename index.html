@@ -784,7 +784,7 @@ document.getElementById("registerForm").addEventListener("submit", async e => {
     alert("✅ Inscription réussie");
     registerModal.style.display = "none";
 
-} catch (err) {
+    } catch (err) {
 
   if (err.code === "auth/email-already-in-use") {
     alert("⚠️ Cette adresse email est déjà utilisée.\n👉 Connecte-toi à la place.");

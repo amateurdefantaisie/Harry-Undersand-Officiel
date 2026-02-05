@@ -926,6 +926,19 @@ document.addEventListener("click", async e => {
   const id = e.target.dataset.id;
   await deleteDoc(doc(db, "comments", id));
 });
+
+/* ✨ ANIMATION AU SCROLL */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll(".service-card").forEach(card => {
+  observer.observe(card);
+});
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

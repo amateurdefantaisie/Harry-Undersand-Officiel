@@ -464,15 +464,10 @@ background:#b91c1c;
   z-index:3001;
 }
 
-.drawer-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  backdrop-filter:blur(10px);
-  opacity:0;
-  pointer-events:none;
-  transition:.35s ease;
-  z-index:1999;
+.drawer-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
 }
 
 .drawer-overlay.show{
@@ -480,24 +475,17 @@ background:#b91c1c;
   pointer-events:auto;
 }
 
-.drawer{
-  position:fixed;
-  top:0;
-  right:-100%;
-  width:340px;
-  max-width:90%;
-  height:100%;
-  background:var(--card);
-  border-left:1px solid var(--border);
-  padding:28px;
-  transition:.45s cubic-bezier(.4,0,.2,1);
-  z-index:2000;
-  display:flex;
-  flex-direction:column;
+.drawer {
+  transform: translateX(-100%) scale(0.98);
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
 }
 
-.drawer.open{
-  right:0;
+.drawer.open {
+  transform: translateX(0) scale(1);
+  box-shadow: 12px 0 40px rgba(0,0,0,0.25);
 }
 
 .drawer-header{
@@ -551,6 +539,24 @@ background:#b91c1c;
     transform:translateX(0);
   }
 }
+
+.drawer-nav a {
+  opacity: 0;
+  transform: translateX(-12px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.drawer.open .drawer-nav a {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.drawer.open .drawer-nav a:nth-child(1){ transition-delay: 0.08s; }
+.drawer.open .drawer-nav a:nth-child(2){ transition-delay: 0.14s; }
+.drawer.open .drawer-nav a:nth-child(3){ transition-delay: 0.20s; }
+.drawer.open .drawer-nav a:nth-child(4){ transition-delay: 0.26s; }
 </style>
 </head>
 
@@ -1040,15 +1046,40 @@ document.querySelectorAll(".service-card").forEach(card => {
   observer.observe(card);
 });
 
+const drawer = document.querySelector(".drawer");
+const overlay = document.querySelector(".drawer-overlay");
+
 window.openDrawer = function(){
-  document.querySelector(".drawer").classList.add("open");
-  document.querySelector(".drawer-overlay").classList.add("show");
+  drawer.classList.add("open");
+  overlay.classList.add("show");
 };
 
 window.closeDrawer = function(){
-  document.querySelector(".drawer").classList.remove("open");
-  document.querySelector(".drawer-overlay").classList.remove("show");
+  drawer.classList.remove("open");
+  overlay.classList.remove("show");
 };
+
+/* ===== SWIPE MOBILE ===== */
+let touchStartX = 0;
+let touchEndX = 0;
+
+drawer.addEventListener("touchstart", (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+drawer.addEventListener("touchend", (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe(){
+  const swipeDistance = touchStartX - touchEndX;
+
+  // swipe vers la gauche
+  if (swipeDistance > 70){
+    closeDrawer();
+  }
+}
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

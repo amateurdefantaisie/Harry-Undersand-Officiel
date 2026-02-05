@@ -905,8 +905,11 @@ async function loadTodayVisits() {
   if (el) el.textContent = value;
 }
 
-if (!sessionStorage.getItem("visited")) {
-  sessionStorage.setItem("visited", "true");
+const today = todayKey();
+const visitKey = "visited_" + today;
+
+if (!localStorage.getItem(visitKey)) {
+  localStorage.setItem(visitKey, "true");
   registerVisit();
 }
 

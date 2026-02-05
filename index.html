@@ -587,6 +587,16 @@ welcomeText.textContent = "Bienvenue " + fullName;
 }
 });
 
+const commentFormSection = document.getElementById("comment-form");
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    commentFormSection.style.display = "none";
+  } else {
+    commentFormSection.style.display = "flex";
+  }
+});
+
 /* 📊 STATS */
 async function loadStats() {
   const ref = doc(db, "stats", "global");
@@ -667,7 +677,6 @@ const commentInput = document.getElementById("comment");
 const loadMoreBtn = document.getElementById("loadMoreComments");
 
 let commentsLimit = 10;
-let lastVisible = null;
 let selectedRating = 0;
 
 /* Gestion étoiles */

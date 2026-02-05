@@ -117,12 +117,6 @@ gap:10px
 .auth-btn.github{background:#0f172a;color:#fff}
 .close-btn{margin-top:16px;background:none;border:none;color:#94a3b8;cursor:pointer}
 
-@media(max-width:900px){
-.nav-links{display:none;flex-direction:column;background:#0b141a;position:absolute;top:70px;left:0;width:100%;padding:20px}
-.nav-links.show{display:flex}
-.burger{display:block}
-}
-
 .stars-display{
   margin:6px 0 10px;
   color:#facc15;
@@ -464,9 +458,10 @@ background:#b91c1c;
 }
 
 .menu-btn{
-  font-size:22px;
+  font-size:24px;
   cursor:pointer;
   color:var(--text);
+  z-index:3001;
 }
 
 .drawer-overlay{
@@ -562,28 +557,6 @@ background:#b91c1c;
 <body>
 
 <header>
-<div class="drawer-overlay" onclick="closeDrawer()"></div>
-
-<aside class="drawer" id="drawerMenu">
-  <div class="drawer-header">
-    <span>Navigation</span>
-    <button onclick="closeDrawer()">✕</button>
-  </div>
-
-  <nav class="drawer-links">
-    <a href="chatbot.html">🤖 Chatbots IA</a>
-    <a href="streaming.html">🎬 Streaming</a>
-    <a href="hosting.html">☁️ Hébergement</a>
-    <a href="premium.html">💎 Premium</a>
-    <a href="services.html">🧩 Services</a>
-
-    <hr>
-
-    <a href="commande.html" class="drawer-cta">Commander</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-</aside>
-
 <section class="container" id="adminPanel" style="display:none">
   <div class="card">
     <h2>👑 Administration</h2>
@@ -610,15 +583,6 @@ background:#b91c1c;
 <div class="menu-btn" onclick="openDrawer()">
   <i class="fas fa-bars"></i>
 </div>
-<nav class="nav-links" id="menu">
-<a href="services.html">Services</a>
-<a href="chatbot.html">Chatbots</a>
-<a href="streaming.html">Streaming</a>
-<a href="hosting.html">Hébergement</a>
-<a href="premium.html">Premium</a>
-<a href="commande.html">Commande</a>
-<a href="contact.html">Contact</a>
-</nav>
 <div class="auth-actions" id="authGuest">
 <button class="btn btn-outline" id="loginBtn">Connexion</button>
 <button class="btn btn-primary" id="registerBtn">Inscription</button>
@@ -630,6 +594,28 @@ background:#b91c1c;
 </div>
 </div>
 </header>
+
+<div class="drawer-overlay" onclick="closeDrawer()"></div>
+
+<aside class="drawer" id="drawerMenu">
+  <div class="drawer-header">
+    <span>Navigation</span>
+    <button onclick="closeDrawer()">✕</button>
+  </div>
+
+<nav class="drawer-links">
+  <a href="chatbot.html" style="--i:1">🤖 Chatbots IA</a>
+  <a href="streaming.html" style="--i:2">🎬 Streaming</a>
+  <a href="hosting.html" style="--i:3">☁️ Hébergement</a>
+  <a href="premium.html" style="--i:4">💎 Premium</a>
+  <a href="services.html" style="--i:5">🧩 Services</a>
+
+  <hr>
+
+  <a href="commande.html" class="drawer-cta" style="--i:6">Commander</a>
+  <a href="contact.html" style="--i:7">Contact</a>
+</nav>
+</aside>
 
 <section class="hero">
 <h1>Harry Undersand<br><span>Développeur & Architecte IA</span></h1>
@@ -767,10 +753,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let isAdmin = false;
-
-window.toggleMenu = () => {
-  document.getElementById("menu").classList.toggle("show");
-};
 
 /* 🔑 FIREBASE CONFIG */
 const firebaseConfig = {

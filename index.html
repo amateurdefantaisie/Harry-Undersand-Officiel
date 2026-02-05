@@ -536,7 +536,6 @@ onAuthStateChanged(auth, async user => {
 
   authGuest.style.display = "none";
   authUser.style.display = "flex";
-welcomeText.textContent = "Bienvenue " + (user.displayName || "Utilisateur");
 
 if (user.photoURL) {
   userPhoto.src = user.photoURL;
@@ -560,6 +559,8 @@ if (!snap.exists()) {
   snap = await getDoc(userRef);
 }
 
+  const data = snap.data();
+  
   const fullName =
   data.firstName && data.lastName
     ? `${data.firstName} ${data.lastName}`
@@ -708,6 +709,8 @@ commentForm.addEventListener("submit", async e => {
 });
 
 /* Lecture commentaires en temps réel */
+let unsubscribeComments = null;
+
 function loadComments() {
   const q = query(
     collection(db, "comments"),
@@ -715,7 +718,9 @@ function loadComments() {
     limit(commentsLimit)
   );
 
-  onSnapshot(q, snap => {
+ if (unsubscribeComments) unsubscribeComments();
+
+ unsubscribeComments = onSnapshot(q, snap => {
     commentsList.innerHTML = "";
     let total = 0;
 

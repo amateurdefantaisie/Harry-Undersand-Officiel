@@ -682,14 +682,14 @@ document.querySelectorAll(".stars span").forEach(star => {
 });
 
 /* Envoi commentaire */
-if (!auth.currentUser) {
-  alert("🔒 Connecte-toi pour laisser un avis");
-  authModal.style.display = "flex";
-  return;
-}
-
 commentForm.addEventListener("submit", async e => {
   e.preventDefault();
+
+  if (!auth.currentUser) {
+    alert("🔒 Connecte-toi pour laisser un avis");
+    authModal.style.display = "flex";
+    return;
+  }
 
   if (!selectedRating) {
     alert("Choisis une note ⭐");
@@ -705,7 +705,8 @@ commentForm.addEventListener("submit", async e => {
 
   commentForm.reset();
   selectedRating = 0;
-  document.querySelectorAll(".stars span").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".stars span")
+    .forEach(s => s.classList.remove("active"));
 });
 
 /* Lecture commentaires en temps réel */

@@ -351,6 +351,117 @@ background:#b91c1c;
     margin: 0 12px;
   }
 }
+
+/* =========================
+   🧠 SECTION DESCRIPTION
+========================= */
+.about{
+  max-width:1200px;
+  margin:100px auto;
+  padding:40px 20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:50px;
+  align-items:center;
+}
+
+.about h2{
+  font-size:2.4rem;
+  margin-bottom:20px;
+  background:linear-gradient(135deg,var(--violet),#a78bfa);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.about p{
+  color:var(--muted);
+  font-size:1.05rem;
+  line-height:1.8;
+  margin-bottom:16px;
+}
+
+.about ul{
+  margin-top:20px;
+  padding-left:20px;
+}
+
+.about li{
+  margin-bottom:10px;
+  color:#e5e7eb;
+}
+
+.about img{
+  width:100%;
+  border-radius:22px;
+  border:1px solid var(--border);
+  box-shadow:0 0 60px rgba(139,92,246,.35);
+}
+
+@media(max-width:900px){
+  .about{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+}
+
+/* =========================
+   🧩 CARTES SERVICES
+========================= */
+.services{
+  max-width:1200px;
+  margin:80px auto;
+  padding:0 20px;
+}
+
+.services h2{
+  text-align:center;
+  font-size:2.4rem;
+  margin-bottom:50px;
+  background:linear-gradient(135deg,var(--violet),#a78bfa);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:28px;
+}
+
+.service-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:30px;
+  transition:.35s ease;
+  opacity:0;
+  transform:translateY(30px);
+}
+
+.service-card i{
+  font-size:36px;
+  color:var(--violet);
+  margin-bottom:18px;
+}
+
+.service-card h3{
+  margin-bottom:12px;
+}
+
+.service-card p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.service-card.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.service-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 0 40px rgba(139,92,246,.35);
+}
 </style>
 </head>
 
@@ -405,6 +516,53 @@ background:#b91c1c;
 <section class="hero">
 <h1>Harry Undersand<br><span>Développeur & Architecte IA</span></h1>
 <p>Chatbots IA, Streaming Premium, Hébergement Cloud et automatisation digitale.</p>
+</section>
+
+</section>
+
+<!-- 🧩 SERVICES -->
+<section class="services">
+  <h2>Mes services</h2>
+
+  <div class="services-grid">
+
+    <div class="service-card">
+      <i class="fas fa-robot"></i>
+      <h3>Chatbots IA</h3>
+      <p>
+        Conception de chatbots intelligents capables de dialoguer,
+        automatiser le support client et améliorer l’expérience utilisateur.
+      </p>
+    </div>
+
+    <div class="service-card">
+      <i class="fas fa-cloud"></i>
+      <h3>Hébergement Cloud</h3>
+      <p>
+        Infrastructure sécurisée, rapide et scalable pour vos
+        applications web et plateformes professionnelles.
+      </p>
+    </div>
+
+    <div class="service-card">
+      <i class="fas fa-video"></i>
+      <h3>Streaming Premium</h3>
+      <p>
+        Développement de plateformes de streaming modernes,
+        optimisées pour la performance et la confidentialité.
+      </p>
+    </div>
+
+    <div class="service-card">
+      <i class="fas fa-gears"></i>
+      <h3>Automatisation</h3>
+      <p>
+        Automatisation de processus métier pour gagner du temps,
+        réduire les erreurs et améliorer la productivité.
+      </p>
+    </div>
+
+  </div>
 </section>
 
 <section class="container" style="text-align:center;margin-top:40px">

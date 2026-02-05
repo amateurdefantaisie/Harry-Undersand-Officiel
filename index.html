@@ -1040,15 +1040,15 @@ document.querySelectorAll(".service-card").forEach(card => {
   observer.observe(card);
 });
 
-function openDrawer(){
+window.openDrawer = function(){
   document.querySelector(".drawer").classList.add("open");
   document.querySelector(".drawer-overlay").classList.add("show");
-}
+};
 
-function closeDrawer(){
+window.closeDrawer = function(){
   document.querySelector(".drawer").classList.remove("open");
   document.querySelector(".drawer-overlay").classList.remove("show");
-}
+};
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

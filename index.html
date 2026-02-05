@@ -541,6 +541,8 @@ const authUser = document.getElementById("authUser");
 const adminPanel = document.getElementById("adminPanel");
 const usersTable = document.getElementById("usersTable");
 const adminVisits = document.getElementById("adminVisits");
+const commentForm = document.getElementById("comment-form");
+commentForm.style.display = "none";
 
 const authModal = document.getElementById("authModal");
 
@@ -587,15 +589,6 @@ if (user.photoURL) {
 }
 
 // 🔒 Gestion formulaire commentaire
-const commentForm = document.getElementById("comment-form");
-
-if (!user) {
-  commentForm.style.display = "none";
-} else {
-  commentForm.style.display = "flex";
-}
-commentForm.style.display = "none";
-
   const userRef = doc(db, "users", user.uid);
   let snap = await getDoc(userRef);
 
@@ -610,6 +603,8 @@ if (!snap.exists()) {
 
   snap = await getDoc(userRef);
 }
+
+loadComments();
 
   const data = snap.data();
   
@@ -640,8 +635,6 @@ commentForm.style.display = user ? "flex" : "none";
   adminPanel.style.display = "none";
 }
 });
-
-loadComments();
 
 /* 📊 STATS */
 async function loadStats() {

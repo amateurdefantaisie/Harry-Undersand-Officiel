@@ -560,7 +560,12 @@ if (!snap.exists()) {
   snap = await getDoc(userRef);
 }
 
-  const data = snap.data();
+  const fullName =
+  data.firstName && data.lastName
+    ? `${data.firstName} ${data.lastName}`
+    : (user.displayName || "Utilisateur");
+
+welcomeText.textContent = "Bienvenue " + fullName;
 
   /* BLOCAGE */
   if (data.blocked) {
@@ -676,6 +681,12 @@ document.querySelectorAll(".stars span").forEach(star => {
 });
 
 /* Envoi commentaire */
+if (!auth.currentUser) {
+  alert("🔒 Connecte-toi pour laisser un avis");
+  authModal.style.display = "flex";
+  return;
+}
+
 commentForm.addEventListener("submit", async e => {
   e.preventDefault();
 

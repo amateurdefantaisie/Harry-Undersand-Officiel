@@ -296,6 +296,20 @@ color:white;
 .delete-comment:hover{
 background:#b91c1c;
 }
+
+#registerForm{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+#registerForm input{
+  background:#020617;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  padding:14px;
+  color:white;
+}
 </style>
 </head>
 
@@ -370,6 +384,27 @@ background:#b91c1c;
 </div>
 </div>
 
+<!-- MODALE INSCRIPTION -->
+<div class="modal-bg" id="registerModal">
+  <div class="modal">
+    <h2>Inscription</h2>
+
+    <form id="registerForm">
+      <input type="text" id="regFirstName" placeholder="Prénom" required>
+      <input type="text" id="regLastName" placeholder="Nom" required>
+      <input type="email" id="regEmail" placeholder="Adresse email" required>
+      <input type="tel" id="regPhone" placeholder="Numéro de téléphone" required>
+      <input type="password" id="regPassword" placeholder="Mot de passe" required>
+
+      <button class="auth-btn google" type="submit">
+        Créer mon compte
+      </button>
+    </form>
+
+    <button class="close-btn" id="closeRegister">Fermer</button>
+  </div>
+</div>
+
 <section id="comments">
 
   <h2>Avis clients</h2>
@@ -414,7 +449,8 @@ import {
   GithubAuthProvider,
   signInWithPopup,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -477,9 +513,11 @@ const welcomeText = document.getElementById("welcomeText");
 const userPhoto = document.getElementById("userPhoto");
 
 /* BOUTONS */
-loginBtn.onclick = () => authModal.style.display = "flex";
-registerBtn.onclick = () => authModal.style.display = "flex";
+loginBtn.onclick = () => authModal.style.display = "flex"
 closeModal.onclick = () => authModal.style.display = "none";
+registerBtn.onclick = () => {
+  document.getElementById("registerModal").style.display = "flex";
+};
 
 googleLogin.onclick = () => signInWithPopup(auth, googleProvider);
 facebookLogin.onclick = () => signInWithPopup(auth, facebookProvider);
@@ -712,6 +750,43 @@ document.addEventListener("click", async e => {
 
   const id = e.target.dataset.id;
   await deleteDoc(doc(db, "comments", id));
+});
+
+const registerModal = document.getElementById("registerModal");
+const closeRegister = document.getElementById("closeRegister");
+
+closeRegister.onclick = () => {
+  registerModal.style.display = "none";
+};
+
+document.getElementById("registerForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const firstName = document.getElementById("regFirstName").value;
+  const lastName = document.getElementById("regLastName").value;
+  const email = document.getElementById("regEmail").value;
+  const phone = document.getElementById("regPhone").value;
+  const password = document.getElementById("regPassword").value;
+
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+    await setDoc(doc(db, "users", cred.user.uid), {
+      firstName,
+      lastName,
+      email,
+      phone,
+      role: "user",
+      blocked: false,
+      createdAt: serverTimestamp()
+    });
+
+    alert("✅ Inscription réussie");
+    registerModal.style.display = "none";
+
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
 });
 </script>
 

@@ -462,12 +462,128 @@ background:#b91c1c;
   transform:translateY(-6px);
   box-shadow:0 0 40px rgba(139,92,246,.35);
 }
+
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+  color:var(--text);
+}
+
+.drawer-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);
+  opacity:0;
+  pointer-events:none;
+  transition:.35s ease;
+  z-index:1999;
+}
+
+.drawer-overlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.drawer{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:340px;
+  max-width:90%;
+  height:100%;
+  background:var(--card);
+  border-left:1px solid var(--border);
+  padding:28px;
+  transition:.45s cubic-bezier(.4,0,.2,1);
+  z-index:2000;
+  display:flex;
+  flex-direction:column;
+}
+
+.drawer.open{
+  right:0;
+}
+
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:700;
+  margin-bottom:30px;
+}
+
+.drawer-header button{
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-size:20px;
+  cursor:pointer;
+}
+
+.drawer-links a{
+  display:block;
+  padding:14px 12px;
+  margin-bottom:6px;
+  border-radius:14px;
+  color:var(--muted);
+  text-decoration:none;
+  font-weight:500;
+  opacity:0;
+  transform:translateX(20px);
+  animation:linkFade .4s forwards;
+}
+
+.drawer.open .drawer-links a{
+  animation-delay:calc(var(--i) * 80ms);
+}
+
+.drawer-links a:hover{
+  background:rgba(139,92,246,.15);
+  color:var(--violet);
+}
+
+.drawer-cta{
+  background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+  color:#fff !important;
+  text-align:center;
+  font-weight:700;
+}
+
+@keyframes linkFade{
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
 </style>
 </head>
 
 <body>
 
 <header>
+<div class="drawer-overlay" onclick="closeDrawer()"></div>
+
+<aside class="drawer" id="drawerMenu">
+  <div class="drawer-header">
+    <span>Navigation</span>
+    <button onclick="closeDrawer()">✕</button>
+  </div>
+
+  <nav class="drawer-links">
+    <a href="chatbot.html">🤖 Chatbots IA</a>
+    <a href="streaming.html">🎬 Streaming</a>
+    <a href="hosting.html">☁️ Hébergement</a>
+    <a href="premium.html">💎 Premium</a>
+    <a href="services.html">🧩 Services</a>
+
+    <hr>
+
+    <a href="commande.html" class="drawer-cta">Commander</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</aside>
+
 <section class="container" id="adminPanel" style="display:none">
   <div class="card">
     <h2>👑 Administration</h2>
@@ -491,7 +607,9 @@ background:#b91c1c;
 
 <div class="navbar">
 <a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
-<div class="burger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+<div class="menu-btn" onclick="openDrawer()">
+  <i class="fas fa-bars"></i>
+</div>
 <nav class="nav-links" id="menu">
 <a href="services.html">Services</a>
 <a href="chatbot.html">Chatbots</a>
@@ -939,6 +1057,16 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll(".service-card").forEach(card => {
   observer.observe(card);
 });
+
+function openDrawer(){
+  document.querySelector(".drawer").classList.add("open");
+  document.querySelector(".drawer-overlay").classList.add("show");
+}
+
+function closeDrawer(){
+  document.querySelector(".drawer").classList.remove("open");
+  document.querySelector(".drawer-overlay").classList.remove("show");
+}
 </script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

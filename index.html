@@ -576,8 +576,6 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
-loadComments();
-
   authGuest.style.display = "none";
   authUser.style.display = "flex";
 
@@ -596,6 +594,7 @@ if (!user) {
 } else {
   commentForm.style.display = "flex";
 }
+commentForm.style.display = "none";
 
   const userRef = doc(db, "users", user.uid);
   let snap = await getDoc(userRef);
@@ -621,6 +620,8 @@ if (!snap.exists()) {
 
 welcomeText.textContent = "Bienvenue " + fullName;
 
+commentForm.style.display = user ? "flex" : "none";
+
   /* BLOCAGE */
   if (data.blocked) {
     alert("⛔ Compte bloqué");
@@ -639,6 +640,8 @@ welcomeText.textContent = "Bienvenue " + fullName;
   adminPanel.style.display = "none";
 }
 });
+
+loadComments();
 
 /* 📊 STATS */
 async function loadStats() {
@@ -710,7 +713,6 @@ window.toggleBlock = async (uid, blocked) => {
 };
 
 /* ⭐ COMMENTAIRES & ÉTOILES */
-const commentForm = document.getElementById("comment-form");
 const commentsList = document.getElementById("comments-list");
 const avgRating = document.getElementById("avg-rating");
 const ratingCount = document.getElementById("rating-count");

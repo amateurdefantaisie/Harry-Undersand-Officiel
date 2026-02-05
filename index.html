@@ -115,6 +115,48 @@ gap:10px
   color:#facc15;
 }
 
+@media (max-width: 600px) {
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+
+  .navbar {
+    padding: 14px;
+  }
+
+  .auth-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #comments {
+    margin: 40px 12px;
+    padding: 24px 16px;
+  }
+
+  #comment-form {
+    padding: 20px;
+  }
+
+  .stars {
+    font-size: 26px;
+  }
+
+  .comment-card {
+    padding: 18px;
+  }
+
+  .modal {
+    margin: 0 12px;
+  }
+}
+
 /* =========================
    ⭐ AVIS & COMMENTAIRES
 ========================= */
@@ -534,6 +576,8 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
+loadComments();
+
   authGuest.style.display = "none";
   authUser.style.display = "flex";
 
@@ -542,6 +586,15 @@ if (user.photoURL) {
   userPhoto.style.display = "block";
 } else {
   userPhoto.style.display = "none";
+}
+
+// 🔒 Gestion formulaire commentaire
+const commentForm = document.getElementById("comment-form");
+
+if (!user) {
+  commentForm.style.display = "none";
+} else {
+  commentForm.style.display = "flex";
 }
 
   const userRef = doc(db, "users", user.uid);
@@ -585,16 +638,6 @@ welcomeText.textContent = "Bienvenue " + fullName;
   isAdmin = false;
   adminPanel.style.display = "none";
 }
-});
-
-const commentFormSection = document.getElementById("comment-form");
-
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    commentFormSection.style.display = "none";
-  } else {
-    commentFormSection.style.display = "flex";
-  }
 });
 
 /* 📊 STATS */
@@ -705,12 +748,13 @@ commentForm.addEventListener("submit", async e => {
     return;
   }
 
-  await addDoc(collection(db, "comments"), {
-    name: usernameInput.value,
-    comment: commentInput.value,
-    rating: selectedRating,
-    createdAt: serverTimestamp()
-  });
+await addDoc(collection(db, "comments"), {
+  uid: auth.currentUser.uid,
+  name: usernameInput.value,
+  comment: commentInput.value,
+  rating: selectedRating,
+  createdAt: serverTimestamp()
+});
 
   commentForm.reset();
   selectedRating = 0;
@@ -775,8 +819,6 @@ loadMoreBtn.addEventListener("click", () => {
   commentsLimit += 10;
   loadComments();
 });
-
-loadComments();
 
 document.addEventListener("click", async e => {
   if (!e.target.classList.contains("delete-comment")) return;

@@ -536,23 +536,29 @@ onAuthStateChanged(auth, async user => {
 
   authGuest.style.display = "none";
   authUser.style.display = "flex";
-  welcomeText.textContent = "Bienvenue " + user.displayName;
+welcomeText.textContent = "Bienvenue " + (user.displayName || "Utilisateur");
+
+if (user.photoURL) {
   userPhoto.src = user.photoURL;
+  userPhoto.style.display = "block";
+} else {
+  userPhoto.style.display = "none";
+}
 
   const userRef = doc(db, "users", user.uid);
   let snap = await getDoc(userRef);
 
   /* CRÉATION UTILISATEUR */
-  if (!snap.exists()) {
-    await setDoc(userRef, {
-      name: user.displayName,
-      email: user.email,
-      role: "user",
-      blocked: false,
-      createdAt: serverTimestamp()
-    });
-    snap = await getDoc(userRef);
-  }
+if (!snap.exists()) {
+  await setDoc(userRef, {
+    email: user.email,
+    role: "user",
+    blocked: false,
+    createdAt: serverTimestamp()
+  }, { merge: true });
+
+  snap = await getDoc(userRef);
+}
 
   const data = snap.data();
 
@@ -579,7 +585,10 @@ onAuthStateChanged(auth, async user => {
 async function loadStats() {
   const ref = doc(db, "stats", "global");
   const snap = await getDoc(ref);
-  adminVisits.textContent = snap.data()?.visits || 0;
+
+  adminVisits.textContent = snap.exists()
+    ? snap.data().visits || 0
+    : 0;
 }
 
 /* 👥 UTILISATEURS */

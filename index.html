@@ -897,7 +897,9 @@ async function registerVisit() {
 
 async function loadTodayVisits() {
   const ref = doc(db, "stats_daily", todayKey());
-  const snap = await getDoc(ref);
+  onSnapshot(ref, snap => {
+  adminVisits.textContent = snap.data()?.visits || 0;
+});
 
   const value = snap.exists() ? snap.data().count || 0 : 0;
 
@@ -905,8 +907,11 @@ async function loadTodayVisits() {
   if (el) el.textContent = value;
 }
 
-if (!sessionStorage.getItem("visited")) {
-  sessionStorage.setItem("visited", "true");
+const today = todayKey();
+const visitKey = "visited_" + today;
+
+if (!localStorage.getItem(visitKey)) {
+  localStorage.setItem(visitKey, "true");
   registerVisit();
 }
 

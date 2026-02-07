@@ -543,6 +543,7 @@ background:#b91c1c;
   flex:1;
   overflow-y:auto;
   padding-right:6px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .drawer-links::after{
@@ -1133,14 +1134,12 @@ window.closeDrawer = function(){
 
 window.openDrawer = function(){
   document.querySelector(".drawer").classList.add("open");
-  document.querySelector(".drawer-overlay").classList.add("show");
-  document.body.style.overflow = "hidden";
+  document.querySelector(".drawer-overlay").classList.add("show")
 };
 
 window.closeDrawer = function(){
   document.querySelector(".drawer").classList.remove("open");
   document.querySelector(".drawer-overlay").classList.remove("show");
-  document.body.style.overflow = "";
 };
 
 document.querySelectorAll(".drawer-links a").forEach(link=>{

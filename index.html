@@ -483,21 +483,26 @@ background:#b91c1c;
 .drawer{
   position:fixed;
   top:0;
-  right:-100%;
+  right:-0;
+  transform:translateX(100%);
+  opacity:0;
   width:340px;
   max-width:90%;
   height:100vh;
   background:var(--card);
   border-left:1px solid var(--border);
   padding:28px;
-  transition:.45s cubic-bezier(.4,0,.2,1);
+  transition:
+    transform .45s cubic-bezier(.4,0,.2,1),
+    opacity .3s ease;
   z-index:2000;
   display:flex;
   flex-direction:column;
   }
 
 .drawer.open{
-  right:0;
+  transform:translateX(0);
+  opacity:1;
 }
 
 .drawer-header{
@@ -527,6 +532,7 @@ background:#b91c1c;
   opacity:0;
   transform:translateX(20px);
   animation:linkFade .4s forwards;
+  touch-action:manipulation;
 }
 
 .drawer.open .drawer-links a{
@@ -608,6 +614,13 @@ background:#b91c1c;
     opacity:1;
     transform:translateX(0);
   }
+}
+
+.drawer-links mark{
+  background:rgba(139,92,246,.3);
+  color:inherit;
+  padding:2px 4px;
+  border-radius:4px;
 }
 </style>
 </head>
@@ -1109,6 +1122,8 @@ function updateDrawerShadow(){
 drawerLinks.addEventListener("scroll", updateDrawerShadow);
 window.addEventListener("resize", updateDrawerShadow);
 
+updateDrawerShadow();
+
 /* ✨ ANIMATION AU SCROLL */
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
@@ -1124,22 +1139,14 @@ document.querySelectorAll(".service-card").forEach(card => {
 
 window.openDrawer = function(){
   document.querySelector(".drawer").classList.add("open");
-  document.querySelector(".drawer-overlay").classList.add("show");
-};
-
-window.closeDrawer = function(){
-  document.querySelector(".drawer").classList.remove("open");
-  document.querySelector(".drawer-overlay").classList.remove("show");
-};
-
-window.openDrawer = function(){
-  document.querySelector(".drawer").classList.add("open");
   document.querySelector(".drawer-overlay").classList.add("show")
+  document.body.style.overflow = "hidden";
 };
 
 window.closeDrawer = function(){
   document.querySelector(".drawer").classList.remove("open");
   document.querySelector(".drawer-overlay").classList.remove("show");
+  document.body.style.overflow = "";
 };
 
 document.querySelectorAll(".drawer-links a").forEach(link=>{
@@ -1151,12 +1158,25 @@ document.querySelectorAll(".drawer-links a").forEach(link=>{
 const searchInput = document.getElementById("drawerSearch");
 const drawerItems = document.querySelectorAll(".drawer-links a");
 
+function highlight(text, query){
+  if(!query) return text;
+  const regex = new RegExp(`(${query})`, "gi");
+  return text.replace(regex, "<mark>$1</mark>");
+}
+
 searchInput.addEventListener("input", ()=>{
   const value = searchInput.value.toLowerCase();
 
   drawerItems.forEach(item=>{
-    const text = item.textContent.toLowerCase();
-    item.style.display = text.includes(value) ? "flex" : "none";
+    if(!item.dataset.label){
+      item.dataset.label = item.textContent.trim();
+    }
+
+    const label = item.dataset.label;
+    const match = label.toLowerCase().includes(value);
+
+    item.style.display = match ? "flex" : "none";
+    item.innerHTML = highlight(label, value);
   });
 });
 </script>

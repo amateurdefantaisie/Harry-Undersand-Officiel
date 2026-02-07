@@ -536,12 +536,34 @@ background:#b91c1c;
 .drawer-links a:hover{
   background:rgba(139,92,246,.15);
   color:var(--violet);
+  position:relative;
 }
 
 .drawer-links{
   flex:1;
   overflow-y:auto;
   padding-right:6px;
+}
+
+.drawer-links::after{
+  content:"";
+  position:sticky;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:24px;
+  pointer-events:none;
+  background:linear-gradient(
+    to bottom,
+    rgba(15,15,25,0),
+    rgba(15,15,25,.85)
+  );
+  opacity:0;
+  transition:.3s;
+}
+
+.drawer-links.can-scroll::after{
+  opacity:1;
 }
 
 .drawer-links::-webkit-scrollbar{
@@ -560,6 +582,24 @@ background:#b91c1c;
   color:#fff !important;
   text-align:center;
   font-weight:700;
+}
+
+.drawer-search{
+  margin-bottom:16px;
+}
+
+.drawer-search input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--text);
+  outline:none;
+}
+
+.drawer-search input::placeholder{
+  color:var(--muted);
 }
 
 @keyframes linkFade{
@@ -619,6 +659,10 @@ background:#b91c1c;
     <span>Navigation</span>
     <button onclick="closeDrawer()">✕</button>
   </div>
+  
+<div class="drawer-search">
+  <input type="text" id="drawerSearch" placeholder="Rechercher...">
+</div>
 
 <nav class="drawer-links">
   <a href="harry-undersand.html" style="--i:1">👤 Harry Undersand</a>
@@ -1051,6 +1095,19 @@ document.addEventListener("click", async e => {
   await deleteDoc(doc(db, "comments", id));
 });
 
+const drawerLinks = document.querySelector(".drawer-links");
+
+function updateDrawerShadow(){
+  if(drawerLinks.scrollHeight > drawerLinks.clientHeight){
+    drawerLinks.classList.add("can-scroll");
+  } else {
+    drawerLinks.classList.remove("can-scroll");
+  }
+}
+
+drawerLinks.addEventListener("scroll", updateDrawerShadow);
+window.addEventListener("resize", updateDrawerShadow);
+
 /* ✨ ANIMATION AU SCROLL */
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
@@ -1085,6 +1142,24 @@ window.closeDrawer = function(){
   document.querySelector(".drawer-overlay").classList.remove("show");
   document.body.style.overflow = "";
 };
+
+document.querySelectorAll(".drawer-links a").forEach(link=>{
+  link.addEventListener("click", ()=>{
+    closeDrawer();
+  });
+});
+
+const searchInput = document.getElementById("drawerSearch");
+const drawerItems = document.querySelectorAll(".drawer-links a");
+
+searchInput.addEventListener("input", ()=>{
+  const value = searchInput.value.toLowerCase();
+
+  drawerItems.forEach(item=>{
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(value) ? "flex" : "none";
+  });
+});
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>

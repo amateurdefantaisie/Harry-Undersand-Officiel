@@ -1,99 +1,147 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Alice — Assistant IA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>Alice — Assistant IA</title>
 
-  <!-- ===== STYLE GLOBAL ===== -->
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #0b0d12;
-      font-family: Inter, system-ui, sans-serif;
-      overflow: hidden;
-    }
+<!-- MOBILE / PWA -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
 
-    /* Bouton retour */
-    .top-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 48px;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      z-index: 10;
-    }
+<link rel="manifest" href="/manifest.json">
 
-    .top-bar a {
-      color: #8ab4ff;
-      text-decoration: none;
-      font-size: 14px;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    /* Chat plein écran */
-    iframe {
-      position: fixed;
-      top: 48px;
-      left: 0;
-      width: 100%;
-      height: calc(100% - 48px);
-      border: none;
-    }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #0b0d12;
+  font-family: Inter, system-ui, sans-serif;
+  overflow: hidden;
+}
 
-    /* Masqué tant que Firebase n’a pas validé */
-    body.locked iframe {
-      display: none;
-    }
-  </style>
+/* Animation entrée */
+body {
+  opacity: 0;
+}
 
-  <!-- ===== FIREBASE ===== -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+body.ready {
+  animation: enter 0.5s ease-out forwards;
+}
 
-    const firebaseConfig = {
-      apiKey: "TA_API_KEY",
-      authDomain: "TON_PROJET.firebaseapp.com",
-      projectId: "TON_PROJET",
-      appId: "TON_APP_ID"
-    };
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+/* Barre top */
+.top-bar {
+  position: fixed;
+  top: env(safe-area-inset-top);
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 10;
+}
 
-    document.body.classList.add("locked");
+.top-bar a {
+  color: #8ab4ff;
+  text-decoration: none;
+  font-size: 14px;
+}
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        // ❌ pas connecté → redirection
-        window.location.href = "/connexion.html";
-      } else {
-        // ✅ connecté → affichage du chat
-        document.body.classList.remove("locked");
-      }
-    });
-  </script>
+/* Chat */
+.chat-wrapper {
+  position: fixed;
+  top: calc(48px + env(safe-area-inset-top));
+  left: 0;
+  width: 100%;
+  height: calc(100% - 48px - env(safe-area-inset-top));
+  overflow: hidden;
+}
+
+/* Masque barre Botpress */
+.botpress-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 56px;
+  width: 100%;
+  background: #0b0d12;
+  z-index: 2;
+}
+
+/* iframe */
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* MOBILE UI */
+@media (max-width: 768px) {
+  .top-bar {
+    height: 52px;
+    font-size: 15px;
+  }
+}
+</style>
+
+<!-- FIREBASE AUTH -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "TA_API_KEY",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand",
+  appId: "TON_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.replace("/connexion.html");
+  } else {
+    document.body.classList.add("ready");
+  }
+});
+</script>
+
 </head>
 
-<body class="locked">
+<body>
 
-  <!-- BARRE HAUT -->
-  <div class="top-bar">
-    <a href="/">← Retour au site</a>
-  </div>
+<div class="top-bar">
+  <a href="/">← Retour au site</a>
+</div>
 
-  <!-- BOTPRESS SHAREABLE -->
+<div class="chat-wrapper">
+  <div class="botpress-mask"></div>
+
   <iframe
     src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2025/12/10/23/20251210230142-Z03GGRUZ.json"
     allow="microphone; camera"
   ></iframe>
+</div>
 
 </body>
 </html>

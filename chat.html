@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat style WhatsApp</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+    body {
+      margin: 0;
+      background: #e5ddd5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .chat-app {
+      width: 360px;
+      height: 640px;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .chat-header {
+      background: #075e54;
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #e5ddd5;
+    }
+    .message {
+      max-width: 70%;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .message.user {
+      background: #dcf8c6;
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+    }
+    .message.bot {
+      background: white;
+      margin-right: auto;
+      border-bottom-left-radius: 0;
+    }
+    .chat-input {
+      display: flex;
+      padding: 8px;
+      background: #f0f0f0;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    .chat-input button {
+      margin-left: 8px;
+      padding: 0 16px;
+      border: none;
+      border-radius: 20px;
+      background: #075e54;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-app">
+    <div class="chat-header">Discussion</div>
+    <div class="chat-messages" id="messages"></div>
+    <div class="chat-input">
+      <input type="text" id="input" placeholder="Écrire un message..." />
+      <button onclick="sendMessage()">Envoyer</button>
+    </div>
+  </div>
+
+  <script>
+    const messages = document.getElementById('messages');
+    const input = document.getElementById('input');
+
+    function addMessage(text, type) {
+      const msg = document.createElement('div');
+      msg.className = 'message ' + type;
+      msg.textContent = text;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage(text, 'user');
+      input.value = '';
+
+      // Réponse automatique (exemple)
+      setTimeout(() => {
+        addMessage('Message reçu 👍', 'bot');
+      }, 600);
+    }
+
+    input.addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "Alice — Assistant IA",
+  "short_name": "Alice",
+  "start_url": "/alice.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://files.bpcontent.cloud/2025/12/11/13/20251211133410-XE4M25HS.jpeg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://files.bpcontent.cloud/2025/12/11/13/20251211133410-XE4M25HS.jpeg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,122 +1,80 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<title>Alice — Assistant IA</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alice — Assistant IA</title>
 
-<!-- MOBILE / PWA -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b0d12">
+  <!-- SEO minimal -->
+  <meta name="description" content="Discute avec Alice, l’assistante IA intelligente de Harry Undersand." />
 
-<link rel="manifest" href="/manifest.json">
+  <!-- Reset total -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-* {
-  box-sizing: border-box;
-}
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0b0f1a;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background: #0b0d12;
-  font-family: Inter, system-ui, sans-serif;
-  overflow: hidden;
-}
+    /* Container fullscreen */
+    .chatbot-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0b0f1a;
+      animation: fadeIn 0.4s ease-out;
+    }
 
-/* Animation entrée */
-body {
-  opacity: 0;
-}
+    /* Iframe fullscreen */
+    .chatbot-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+    }
 
-body.ready {
-  animation: enter 0.5s ease-out forwards;
-}
+    /* Animation d’entrée */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
 
-@keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    /* Mobile safe */
+    @media (max-width: 600px) {
+      html, body {
+        height: 100dvh;
+      }
 
-/* Barre top */
-.top-bar {
-  position: fixed;
-  top: env(safe-area-inset-top);
-  left: 0;
-  width: 100%;
-  height: 48px;
-  background: rgba(0,0,0,.75);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  z-index: 10;
-}
-
-.top-bar a {
-  color: #8ab4ff;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-/* Chat */
-.chat-wrapper {
-  position: fixed;
-  top: calc(48px + env(safe-area-inset-top));
-  left: 0;
-  width: 100%;
-  height: calc(100% - 48px - env(safe-area-inset-top));
-  overflow: hidden;
-}
-
-/* Masque barre Botpress */
-.botpress-mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 56px;
-  width: 100%;
-  background: #0b0d12;
-  z-index: 2;
-}
-
-/* iframe */
-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* MOBILE UI */
-@media (max-width: 768px) {
-  .top-bar {
-    height: 52px;
-    font-size: 15px;
-  }
-}
-</style>
+      .chatbot-wrapper {
+        height: 100dvh;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
-<div class="top-bar">
-  <a href="/">← Retour au site</a>
-</div>
-
-<div class="chat-wrapper">
-  <div class="botpress-mask"></div>
-
-  <iframe
-    src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2025/12/10/23/20251210230142-Z03GGRUZ.json"
-    allow="microphone; camera"
-  ></iframe>
-</div>
-
+  <div class="chatbot-wrapper">
+    <iframe
+      src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2025/12/10/23/20251210230142-Z03GGRUZ.json"
+      allow="microphone; clipboard-write"
+      loading="eager"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </div>
 </body>
 </html>

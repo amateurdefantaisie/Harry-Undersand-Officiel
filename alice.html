@@ -2,61 +2,70 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Alice — Assistant IA</title>
 
   <!-- SEO minimal -->
-  <meta name="description" content="Discute avec Alice, l’assistante IA intelligente de Harry Undersand." />
+  <meta
+    name="description"
+    content="Discutez avec Alice, l’assistante IA intelligente de Harry Undersand."
+  />
 
-  <!-- Reset total -->
+  <!-- RESET + LAYOUT FULLSCREEN -->
   <style>
-    * {
+    *,
+    *::before,
+    *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
+      background: #ffffff; /* IMPORTANT : fond blanc */
       overflow: hidden;
-      background: #0b0f1a;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
     }
 
-    /* Container fullscreen */
+    /* Wrapper plein écran */
     .chatbot-wrapper {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
-      background: #0b0f1a;
-      animation: fadeIn 0.4s ease-out;
+      background: #ffffff; /* fond neutre */
+      animation: chatbot-enter 0.35s ease-out;
     }
 
-    /* Iframe fullscreen */
+    /* iframe Botpress */
     .chatbot-wrapper iframe {
       width: 100%;
       height: 100%;
       border: none;
+      display: block;
       background: transparent;
     }
 
     /* Animation d’entrée */
-    @keyframes fadeIn {
+    @keyframes chatbot-enter {
       from {
         opacity: 0;
-        transform: scale(0.98);
+        transform: translateY(8px) scale(0.985);
       }
       to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
       }
     }
 
-    /* Mobile safe */
-    @media (max-width: 600px) {
-      html, body {
+    /* Mobile safe (iOS / Android) */
+    @media (max-width: 768px) {
+      html,
+      body {
         height: 100dvh;
       }
 
@@ -68,12 +77,14 @@
 </head>
 
 <body>
+  <!-- OPTION 2 + 4 : iframe AUTONOME Botpress -->
   <div class="chatbot-wrapper">
     <iframe
       src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2025/12/10/23/20251210230142-Z03GGRUZ.json"
       allow="microphone; clipboard-write"
       loading="eager"
       referrerpolicy="no-referrer"
+      title="Chatbot Alice"
     ></iframe>
   </div>
 </body>

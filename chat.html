@@ -2,142 +2,165 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>WhatsApp Clone – Firebase (Final)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat temps réel (type WhatsApp)</title>
   <style>
-    body{margin:0;font-family:Arial;background:#0b141a;color:white;height:100vh;display:flex}
-    .login{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
-    .app{width:100%;display:none}
-    .sidebar{width:30%;background:#111b21;padding:10px;overflow-y:auto}
-    .chat{width:70%;display:flex;flex-direction:column}
-    .chat-header{padding:10px;background:#202c33}
-    .messages{flex:1;padding:10px;overflow-y:auto}
-    .msg{padding:8px;margin:5px 0;border-radius:6px;max-width:60%}
-    .me{background:#005c4b;margin-left:auto}
-    .other{background:#202c33}
-    .input{display:flex;padding:10px;background:#202c33}
-    .input input{flex:1;padding:10px;border-radius:20px;border:none}
-    .input button{margin-left:10px;border:none;border-radius:20px;background:#00a884;color:white;padding:10px 20px}
-    .conv{padding:10px;border-bottom:1px solid #2a3942;cursor:pointer}
-    .conv:hover{background:#202c33}
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+    body {
+      margin: 0;
+      background: #0b141a;
+      height: 100vh;
+      display: flex;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 30%;
+      background: #111b21;
+      color: white;
+      border-right: 1px solid #2a3942;
+    }
+
+    .sidebar-header {
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      border-bottom: 1px solid #2a3942;
+    }
+
+    .chat-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .chat-list li {
+      padding: 12px;
+      border-bottom: 1px solid #2a3942;
+      cursor: pointer;
+    }
+
+    .chat-list li:hover {
+      background: #202c33;
+    }
+
+    /* ===== CHAT AREA ===== */
+    .chat-area {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: #202c33;
+      color: white;
+      padding: 15px;
+      border-bottom: 1px solid #2a3942;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #0b141a;
+    }
+
+    .message {
+      max-width: 60%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .me {
+      background: #005c4b;
+      margin-left: auto;
+      color: white;
+    }
+
+    .other {
+      background: #202c33;
+      color: white;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      background: #202c33;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+    }
+
+    .chat-input button {
+      margin-left: 10px;
+      padding: 0 20px;
+      border: none;
+      border-radius: 20px;
+      background: #00a884;
+      color: white;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login" id="login">
-  <h2>Connexion</h2>
-  <input id="email" placeholder="Email" />
-  <input id="password" type="password" placeholder="Mot de passe" />
-  <button onclick="login()">Connexion</button>
-</div>
-
-<!-- APP -->
-<div class="app" id="app">
   <div class="sidebar">
-    <h3>Discussions</h3>
-    <div id="conversations"></div>
+    <div class="sidebar-header">WhatsApp Web (clone)</div>
+    <ul class="chat-list">
+      <li onclick="openChat('Jean')">Jean</li>
+      <li onclick="openChat('Marie')">Marie</li>
+      <li onclick="openChat('Groupe Test')">Groupe Test</li>
+    </ul>
   </div>
-  <div class="chat">
-    <div class="chat-header" id="chatName">Sélectionne une discussion</div>
+
+  <div class="chat-area">
+    <div class="chat-header" id="chatName">Sélectionnez une discussion</div>
     <div class="messages" id="messages"></div>
-    <div class="input">
-      <input id="text" placeholder="Message..." />
+    <div class="chat-input">
+      <input type="text" id="input" placeholder="Écrire un message..." />
       <button onclick="sendMessage()">Envoyer</button>
     </div>
   </div>
-</div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    let currentChat = null;
+    const messagesDiv = document.getElementById('messages');
+    const chatName = document.getElementById('chatName');
 
-<script>
-const firebaseConfig={
-  apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain:"harry-undersand.firebaseapp.com",
-  projectId:"harry-undersand"
-};
-firebase.initializeApp(firebaseConfig);
+    function openChat(name) {
+      currentChat = name;
+      chatName.textContent = name;
+      messagesDiv.innerHTML = '';
+    }
 
-const auth=firebase.auth();
-const db=firebase.firestore();
-let currentConversation=null;
+    function sendMessage() {
+      const input = document.getElementById('input');
+      if (!input.value || !currentChat) return;
 
-const loginDiv=document.getElementById('login');
-const appDiv=document.getElementById('app');
-const messagesDiv=document.getElementById('messages');
-const convDiv=document.getElementById('conversations');
-const chatName=document.getElementById('chatName');
+      addMessage(input.value, 'me');
+      input.value = '';
 
-auth.onAuthStateChanged(user=>{
-  if(user){loginDiv.style.display='none';appDiv.style.display='flex';saveUser();loadConversations();}
-  else{loginDiv.style.display='flex';appDiv.style.display='none';}
-});
+      // Simulation réponse autre utilisateur
+      setTimeout(() => {
+        addMessage('Réponse de ' + currentChat, 'other');
+      }, 1000);
+    }
 
-function login(){auth.signInWithEmailAndPassword(email.value,password.value)}
+    function addMessage(text, type) {
+      const div = document.createElement('div');
+      div.className = 'message ' + type;
+      div.textContent = text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  </script>
 
-function saveUser(){
-  const u=auth.currentUser;
-  db.collection('users').doc(u.uid).set({
-    email:u.email,
-    online:true
-  },{merge:true});
-}
-
-function loadConversations(){
-  db.collection('conversations')
-    .where('members','array-contains',auth.currentUser.uid)
-    .onSnapshot(snap=>{
-      convDiv.innerHTML='';
-      snap.forEach(doc=>{
-        const c=doc.data();
-        const div=document.createElement('div');
-        div.className='conv';
-        div.textContent=c.lastMessage||'Nouvelle discussion';
-        div.onclick=()=>openConversation(doc.id);
-        convDiv.appendChild(div);
-      });
-    });
-}
-
-function openConversation(id){
-  currentConversation=id;
-  messagesDiv.innerHTML='';
-  listenMessages();
-}
-
-function listenMessages(){
-  db.collection('messages')
-    .where('conversationId','==',currentConversation)
-    .orderBy('created')
-    .onSnapshot(snap=>{
-      messagesDiv.innerHTML='';
-      snap.forEach(doc=>{
-        const m=doc.data();
-        const div=document.createElement('div');
-        div.className='msg '+(m.uid===auth.currentUser.uid?'me':'other');
-        div.textContent=m.text;
-        messagesDiv.appendChild(div);
-      });
-      messagesDiv.scrollTop=messagesDiv.scrollHeight;
-    });
-}
-
-async function sendMessage(){
-  if(!text.value||!currentConversation)return;
-  await db.collection('messages').add({
-    conversationId:currentConversation,
-    uid:auth.currentUser.uid,
-    text:text.value,
-    created:firebase.firestore.FieldValue.serverTimestamp()
-  });
-  await db.collection('conversations').doc(currentConversation).set({
-    lastMessage:text.value,
-    updated:firebase.firestore.FieldValue.serverTimestamp()
-  },{merge:true});
-  text.value='';
-}
-</script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+<script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+
+<script>
+window.botpressWebChat.init({
+  host: "https://cdn.botpress.cloud/webchat/v1",
+  botId: "e4fdf004-40f4-4904-b6a8-53eb475d506e",
+  clientId: "9efd43de-fb4a-4a8a-abf5-42d69fb1b5a7",
+  hideWidget: true,
+  showCloseButton: false,
+  theme: "dark",
+  botName: "Alice",
+  composerPlaceholder: "Parlez à Alice…"
+})
+
+window.botpressWebChat.onEvent(() => {
+  window.botpressWebChat.sendEvent({ type: "show" })
+}, ["LIFECYCLE.LOADED"])
+</script>

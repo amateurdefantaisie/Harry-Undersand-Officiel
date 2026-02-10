@@ -289,6 +289,54 @@ footer{text-align:center;padding:3rem;color:#7a7a9a}
 .order-actions i{
   margin-right:8px;
 }
+
+/* ===== ULTRA PREMIUM UX ===== */
+
+.order-grid button.active {
+  background: linear-gradient(135deg,#8b5cf6,#7c3aed);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(139,92,246,.35);
+}
+
+.order-box.shake {
+  animation: shake .35s;
+}
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-6px)}
+  75%{transform:translateX(6px)}
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.25);
+}
+
+.notice {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: .9rem;
+  display: none;
+}
+
+.notice.error {
+  background: rgba(239,68,68,.12);
+  color: #fecaca;
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+.notice.success {
+  background: rgba(34,197,94,.12);
+  color: #bbf7d0;
+  border: 1px solid rgba(34,197,94,.35);
+}
+
+.order-actions a.disabled {
+  opacity: .45;
+  pointer-events: none;
+}
 </style>
 </head>
   
@@ -467,6 +515,9 @@ Demander un devis
       </a>
     </div>
 
+
+    <div id="notice" class="notice"></div>
+
     <div class="order-trust">
       ✔ Réponse rapide • ✔ Données sécurisées • ✔ Paiement après validation
     </div>
@@ -487,39 +538,91 @@ if(el.isIntersecting)el.target.classList.add("active");
 });
 },{threshold:0.15});
 document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
+</script>
 
+<script>
 let serviceChoisi = "";
+
+const nomInput = document.getElementById("nom");
+const contactInput = document.getElementById("contact");
+const detailsInput = document.getElementById("details");
+const notice = document.getElementById("notice");
+const box = document.querySelector(".order-box");
+
+const btnWhatsapp = document.getElementById("btn-whatsapp");
+const btnEmail = document.getElementById("btn-email");
+
+function isEmailOrPhone(value){
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value) || /^[0-9+\s]{6,}$/.test(value);
+}
+
+function showNotice(type, text){
+  notice.className = "notice " + type;
+  notice.innerText = text;
+  notice.style.display = "block";
+}
+
+function validate(){
+  let valid = true;
+  notice.style.display = "none";
+
+  [nomInput, contactInput].forEach(i => i.classList.remove("input-error"));
+
+  if(!nomInput.value.trim()){
+    nomInput.classList.add("input-error");
+    valid = false;
+  }
+
+  if(!isEmailOrPhone(contactInput.value.trim())){
+    contactInput.classList.add("input-error");
+    valid = false;
+  }
+
+  if(!serviceChoisi){
+    valid = false;
+  }
+
+  btnWhatsapp.classList.toggle("disabled", !valid);
+  btnEmail.classList.toggle("disabled", !valid);
+
+  return valid;
+}
 
 function selectService(service){
   serviceChoisi = service;
-  alert("Service sélectionné : " + service);
+
+  document.querySelectorAll(".order-grid button").forEach(b=>{
+    b.classList.remove("active");
+  });
+
+  event.target.classList.add("active");
+  showNotice("success","Service sélectionné : " + service);
   updateLinks();
 }
 
 function updateLinks(){
-  const nom = document.getElementById("nom").value || "Non précisé";
-  const contact = document.getElementById("contact").value || "Non précisé";
-  const details = document.getElementById("details").value || "Aucun détail";
+  if(!validate()){
+    box.classList.add("shake");
+    setTimeout(()=>box.classList.remove("shake"),350);
+    return;
+  }
 
   const message = `
 📦 NOUVELLE COMMANDE
 -------------------
-👤 Nom : ${nom}
-📞 Contact : ${contact}
+👤 Nom : ${nomInput.value}
+📞 Contact : ${contactInput.value}
 🛠 Service : ${serviceChoisi}
-📝 Détails : ${details}
+📝 Détails : ${detailsInput.value || "—"}
 `;
 
   const encoded = encodeURIComponent(message);
 
-  document.getElementById("btn-whatsapp").href =
-    "https://wa.me/242066973413?text=" + encoded;
-
-  document.getElementById("btn-email").href =
-    "mailto:jeunetransitaireofficiel@gmail.com?subject=Nouvelle commande&body=" + encoded;
+  btnWhatsapp.href = "https://wa.me/242066973413?text=" + encoded;
+  btnEmail.href = "mailto:jeunetransitaireofficiel@gmail.com?subject=Nouvelle commande&body=" + encoded;
 }
 
-document.querySelectorAll("#nom, #contact, #details").forEach(el=>{
+[nomInput, contactInput, detailsInput].forEach(el=>{
   el.addEventListener("input", updateLinks);
 });
 </script>

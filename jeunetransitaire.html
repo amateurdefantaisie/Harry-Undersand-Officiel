@@ -273,6 +273,22 @@ footer{text-align:center;padding:3rem;color:#7a7a9a}
   color: #b3b3d1;
   line-height: 1.6;
 }
+
+.order-actions{
+  display:flex;
+  gap:16px;
+  margin-top:28px;
+  flex-wrap:wrap;
+}
+
+.order-actions .btn{
+  flex:1;
+  text-align:center;
+}
+
+.order-actions i{
+  margin-right:8px;
+}
 </style>
 </head>
   
@@ -421,46 +437,38 @@ Demander un devis
 
     <div class="order-head">
       <h2>🛒 Passer une commande</h2>
-      <p>
-        Choisissez votre service, décrivez votre besoin
-        et nous vous contactons rapidement.
-      </p>
+      <p>Remplissez les informations et envoyez votre demande instantanément.</p>
     </div>
 
     <div class="order-form">
-      <input id="nom" placeholder="Nom ou entreprise">
-      <input id="email" placeholder="Email ou WhatsApp">
-      <textarea id="message" placeholder="Objectif, plateforme, budget…"></textarea>
+      <input id="nom" placeholder="Nom / Entreprise">
+      <input id="contact" placeholder="Email ou WhatsApp">
+      <textarea id="details" placeholder="Objectif, plateforme, budget…"></textarea>
     </div>
 
     <div class="order-services">
+      <h3>📌 Choisir un service</h3>
 
-      <h3>📺 Streaming</h3>
       <div class="order-grid">
-        <button onclick="envoyerCommande('Netflix','Premium')">Netflix Premium</button>
-        <button onclick="envoyerCommande('Crunchyroll','Standard')">Crunchyroll</button>
+        <button onclick="selectService('Chatbot WhatsApp – Business')">Chatbot WhatsApp – Business</button>
+        <button onclick="selectService('Publicité Réseaux Sociaux')">Publicité Réseaux Sociaux</button>
+        <button onclick="selectService('Hébergement Web')">Hébergement Web</button>
+        <button onclick="selectService('Streaming Premium')">Streaming Premium</button>
       </div>
+    </div>
 
-      <h3>🤖 Chatbot</h3>
-      <div class="order-grid">
-        <button onclick="envoyerCommande('Chatbot WhatsApp','Business')">
-          Chatbot WhatsApp – Business
-        </button>
-      </div>
+    <div class="order-actions">
+      <a id="btn-whatsapp" class="btn" target="_blank">
+        <i class="fab fa-whatsapp"></i> Envoyer sur WhatsApp
+      </a>
 
-      <h3>🌐 Hébergement</h3>
-      <div class="order-grid">
-        <button onclick="envoyerCommande('Hébergement','Starter')">
-          Hébergement Starter
-        </button>
-      </div>
-
+      <a id="btn-email" class="btn btn-outline">
+        <i class="fas fa-envelope"></i> Envoyer par Email
+      </a>
     </div>
 
     <div class="order-trust">
-      ✔ Réponse rapide &nbsp;•&nbsp;
-      ✔ Accompagnement personnalisé &nbsp;•&nbsp;
-      ✔ Paiement après validation
+      ✔ Réponse rapide • ✔ Données sécurisées • ✔ Paiement après validation
     </div>
 
   </div>
@@ -479,7 +487,41 @@ if(el.isIntersecting)el.target.classList.add("active");
 });
 },{threshold:0.15});
 document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
-</script>
 
+let serviceChoisi = "";
+
+function selectService(service){
+  serviceChoisi = service;
+  alert("Service sélectionné : " + service);
+  updateLinks();
+}
+
+function updateLinks(){
+  const nom = document.getElementById("nom").value || "Non précisé";
+  const contact = document.getElementById("contact").value || "Non précisé";
+  const details = document.getElementById("details").value || "Aucun détail";
+
+  const message = `
+📦 NOUVELLE COMMANDE
+-------------------
+👤 Nom : ${nom}
+📞 Contact : ${contact}
+🛠 Service : ${serviceChoisi}
+📝 Détails : ${details}
+`;
+
+  const encoded = encodeURIComponent(message);
+
+  document.getElementById("btn-whatsapp").href =
+    "https://wa.me/242066973413?text=" + encoded;
+
+  document.getElementById("btn-email").href =
+    "mailto:contact@tonentreprise.com?subject=Nouvelle commande&body=" + encoded;
+}
+
+document.querySelectorAll("#nom, #contact, #details").forEach(el=>{
+  el.addEventListener("input", updateLinks);
+});
+</script>
 </body>
 </html>

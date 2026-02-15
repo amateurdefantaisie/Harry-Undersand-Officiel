@@ -1001,36 +1001,22 @@ async function loadTodayVisits() {
 ========================= */
 
 window.registerLinkClick = async function () {
-  const clickRef = doc(db, "link_clicks_daily", todayKey());
+
+  const today = todayKey();
+  const clickKey = "clicked_" + today;
+
+  if (localStorage.getItem(clickKey)) return;
+
+  localStorage.setItem(clickKey, "true");
+
+  const clickRef = doc(db, "link_clicks_daily", today);
 
   await setDoc(clickRef, {
     count: increment(1)
   }, { merge: true });
 
   loadTodayClicks();
-}
-
-async function loadTodayClicks() {
-  const ref = doc(db, "link_clicks_daily", todayKey());
-  const snap = await getDoc(ref);
-
-  const value = snap.exists() ? snap.data().count || 0 : 0;
-
-  const el = document.getElementById("todayClicks");
-  if (el) el.textContent = value;
-}
-
-loadTodayClicks();
-
-const today = todayKey();
-const visitKey = "visited_" + today;
-
-if (!localStorage.getItem(visitKey)) {
-  localStorage.setItem(visitKey, "true");
-  registerVisit();
-}
-
-loadTodayVisits();
+};
 
 /* ACTION ADMIN */
 window.toggleBlock = async (uid, blocked) => {

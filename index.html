@@ -996,6 +996,37 @@ async function loadTodayVisits() {
   if (el) el.textContent = value;
 }
 
+/* =========================
+   📊 COMPTEUR DE CLICS LIEN
+========================= */
+
+function todayKey() {
+  const d = new Date();
+  return d.toISOString().slice(0, 10);
+}
+
+async function registerLinkClick() {
+  const clickRef = doc(db, "link_clicks_daily", todayKey());
+
+  await setDoc(clickRef, {
+    count: increment(1)
+  }, { merge: true });
+
+  loadTodayClicks();
+}
+
+async function loadTodayClicks() {
+  const ref = doc(db, "link_clicks_daily", todayKey());
+  const snap = await getDoc(ref);
+
+  const value = snap.exists() ? snap.data().count || 0 : 0;
+
+  const el = document.getElementById("todayClicks");
+  if (el) el.textContent = value;
+}
+
+loadTodayClicks();
+
 const today = todayKey();
 const visitKey = "visited_" + today;
 
@@ -1203,11 +1234,12 @@ searchInput.addEventListener("input", ()=>{
   <p>
     Plateforme spécialisée dans le transit, la logistique et le commerce international.
   </p>
-  <a href="https://jeunetransitaire.vercel.app"
-     target="_blank"
-     style="display:inline-block;padding:12px 25px;background:#2563eb;color:white;border-radius:8px;text-decoration:none;">
-     Voir le projet
-  </a>
+ <a href="https://harry-undersand.vercel.app"
+   target="_blank"
+   onclick="registerLinkClick()"
+   style="display:inline-block;padding:12px 25px;background:#2563eb;color:white;border-radius:8px;text-decoration:none;">
+   Visiter mon site
+ </a>
 </section>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">

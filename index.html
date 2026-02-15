@@ -892,11 +892,6 @@ facebookLogin.onclick = () => signInWithPopup(auth, facebookProvider);
 githubLogin.onclick = () => signInWithPopup(auth, githubProvider);
 logoutBtn.onclick = () => signOut(auth);
 
-// Enregistrer la visite UNE seule fois par jour
-registerVisit().then(() => {
-  loadTodayVisits();
-});
-
 async function loadTodayClicks() {
   const ref = doc(db, "link_clicks_daily", todayKey());
   const snap = await getDoc(ref);
@@ -905,6 +900,17 @@ async function loadTodayClicks() {
 
   console.log("Clics aujourd'hui :", value);
 }
+
+// Enregistrer la visite UNE seule fois par jour
+window.addEventListener("load", async () => {
+  try {
+    await registerVisit();
+    await loadTodayVisits();
+    console.log("Visite enregistrée ✔");
+  } catch (e) {
+    console.error("Erreur visite :", e);
+  }
+});
 
 /* AUTH STATE */
 onAuthStateChanged(auth, async user => {

@@ -690,7 +690,7 @@ crossorigin="anonymous"></script>
   <a href="premium.html" style="--i:4">💎 Premium</a>
   <a href="services.html" style="--i:5">🧩 Services</a>
   <a href="pack-streaming.html" style="--i:6">🎁 Pack Streaming</a>
-  <a href="about.html" style=--i--i:7">💡 A Propos</a>
+  <a href="about.html" style=--i:7">💡 A Propos</a>
   <a href="alice.html" style="--i:6">🗣️ Alice</a>
   <a href="chat.html" style="--i:7">🚀 Méssagerie</a>
 
@@ -1000,12 +1000,7 @@ async function loadTodayVisits() {
    📊 COMPTEUR DE CLICS LIEN
 ========================= */
 
-function todayKey() {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
-}
-
-async function registerLinkClick() {
+window.registerLinkClick = async function () {
   const clickRef = doc(db, "link_clicks_daily", todayKey());
 
   await setDoc(clickRef, {

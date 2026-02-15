@@ -701,11 +701,9 @@ crossorigin="anonymous"></script>
   <a href="amateurbox.html" class="drawer-cta" style="--i:10">💰 Amateur Box 💳</a>
   <a href="jeunetransitaire.html" style="--i:11">⚖️ Jeune Transitaire Officiel ⚓</a>
 
-<li>
-  <a href="https://jeunetransitaire.vercel.app" target="_blank">
-    Jeune Transitaire
-  </a>
-</li>
+<a href="https://jeunetransitaire.vercel.app" target="_blank">
+  Jeune Transitaire
+</a>
 
 </nav>
 </aside>
@@ -930,6 +928,7 @@ function listenTodayVisits() {
 }
 
 // 🚀 3️⃣ Lancement automatique
+window.addEventListener("DOMContentLoaded", () => {
   incrementVisit();
   listenTodayVisits();
 });
@@ -1012,30 +1011,6 @@ async function loadUsers() {
       </tr>
     `;
   });
-}
-
-/* 📊 VISITES */
-function todayKey() {
-  const d = new Date();
-  return d.toISOString().slice(0, 10); // ex: 2026-02-04
-}
-
-async function registerVisit() {
-  const globalRef = doc(db, "stats", "global");
-  const dailyRef = doc(db, "stats_daily", todayKey());
-
-  await setDoc(globalRef, { visits: increment(1) }, { merge: true });
-  await setDoc(dailyRef, { count: increment(1) }, { merge: true });
-}
-
-async function loadTodayVisits() {
-  const ref = doc(db, "stats_daily", todayKey());
-  const snap = await getDoc(ref);
-
-  const value = snap.exists() ? snap.data().count || 0 : 0;
-
-  const el = document.getElementById("todayVisits");
-  if (el) el.textContent = value;
 }
 
 /* =========================

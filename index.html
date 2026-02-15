@@ -898,16 +898,40 @@ async function loadTodayClicks() {
 
   console.log("Clics aujourd'hui :", value);
 }
+  
+/* =========================
+   📊 COMPTEUR VISITES STABLE
+========================= */
 
-// Enregistrer la visite UNE seule fois par jour
-window.addEventListener("load", async () => {
+function todayKey() {
+  const d = new Date();
+  return d.toISOString().slice(0, 10);
+}
+
+const dailyRef = doc(db, "stats_daily", todayKey());
+const globalRef = doc(db, "stats", "global");
+
+// 🔴 1️⃣ Incrémentation simple
+async function incrementVisit() {
   try {
-    await registerVisit();
-    await loadTodayVisits();
-    console.log("Visite enregistrée ✔");
-  } catch (e) {
-    console.error("Erreur visite :", e);
+    await setDoc(globalRef, { visits: increment(1) }, { merge: true });
+    await setDoc(dailyRef, { count: increment(1) }, { merge: true });
+  } catch (err) {
+    console.error("Erreur incrémentation :", err);
   }
+}
+
+// 🟢 2️⃣ Listener temps réel (plus fiable)
+function listenTodayVisits() {
+  onSnapshot(dailyRef, snap => {
+    const value = snap.exists() ? snap.data().count || 0 : 0;
+    document.getElementById("todayVisits").textContent = value;
+  });
+}
+
+// 🚀 3️⃣ Lancement automatique
+  incrementVisit();
+  listenTodayVisits();
 });
 
 /* AUTH STATE */

@@ -893,16 +893,9 @@ githubLogin.onclick = () => signInWithPopup(auth, githubProvider);
 logoutBtn.onclick = () => signOut(auth);
 
 // Enregistrer la visite UNE seule fois par jour
-const visitKey = "visited_" + todayKey();
-
-if (!localStorage.getItem(visitKey)) {
-  localStorage.setItem(visitKey, "true");
-  registerVisit().then(() => {
-    loadTodayVisits();
-  });
-} else {
+registerVisit().then(() => {
   loadTodayVisits();
-}
+});
 
 async function loadTodayClicks() {
   const ref = doc(db, "link_clicks_daily", todayKey());

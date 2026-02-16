@@ -145,23 +145,6 @@ footer{
     position:relative;
     background: linear-gradient(135deg,#ffcc00,#ff9900);
     color:black;
-    padding:14px 32px;
-    border-radius:40px;
-    font-weight:700;
-    letter-spacing:0.5px;
-    text-decoration:none;
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    transition:0.4s ease;
-    box-shadow: 0 0 20px rgba(255,204,0,0.4);
-    overflow:hidden;
-}
-
-.btn-premium{
-    position:relative;
-    background: linear-gradient(135deg,#ffcc00,#ff9900);
-    color:black;
     padding:16px 40px;
     border-radius:50px;
     font-weight:700;
@@ -172,7 +155,6 @@ footer{
     gap:12px;
     transition:0.4s ease;
     box-shadow: 0 0 25px rgba(255,204,0,0.5);
-    overflow:hidden;
 }
 
 /* Hover premium */
@@ -206,16 +188,17 @@ footer{
 /* Badge promo */
 .badge-promo{
     position:absolute;
-    top:-10px;
-    right:-10px;
+    top:-12px;
+    right:-15px;
     background:#ff0000;
     color:white;
-    font-size:12px;
+    font-size:11px;
     font-weight:bold;
-    padding:6px 10px;
+    padding:6px 12px;
     border-radius:20px;
     animation: pulseBadge 1.5s infinite;
     box-shadow:0 0 15px rgba(255,0,0,0.6);
+    z-index:2;
 }
 
 /* Animation badge */
@@ -236,6 +219,20 @@ footer{
 @keyframes floatIcon{
     0%{ transform: translateY(0); }
     50%{ transform: translateY(-4px); }
+    100%{ transform: translateY(0); }
+}
+.icon-svg{
+    width:22px;
+    height:22px;
+    animation: bounceMoney 1.2s infinite;
+}
+
+/* Animation sac */
+@keyframes bounceMoney{
+    0%{ transform: translateY(0); }
+    30%{ transform: translateY(-6px); }
+    50%{ transform: translateY(0); }
+    70%{ transform: translateY(-3px); }
     100%{ transform: translateY(0); }
 }
 </style>
@@ -420,14 +417,14 @@ const countdownFunction = setInterval(function(){
 
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 
-<a href="#" class="btn btn-premium">
+<a href="#paiement" class="btn btn-premium">
     
     <span class="badge-promo">-10%</span>
 
-    <svg class="icon-svg" viewBox="0 0 24 24">
-        <path d="M2 7h20v10H2z" fill="currentColor"/>
-        <path d="M2 10h20" stroke="#000" stroke-width="2"/>
-    </svg>
+<svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C10 2 9 4 9 4h6s-1-2-3-2zm-6 6c0 6 3 12 6 12s6-6 6-12H6z"/>
+</svg>
+
 
     Payer maintenant
 </a>

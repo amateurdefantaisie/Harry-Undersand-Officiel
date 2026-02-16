@@ -235,6 +235,10 @@ footer{
     70%{ transform: translateY(-3px); }
     100%{ transform: translateY(0); }
 }
+button.btn-premium{
+    border:none;
+    cursor:pointer;
+}
 </style>
 </head>
 
@@ -417,18 +421,16 @@ const countdownFunction = setInterval(function(){
 
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 
-<a href="#paiement" class="btn btn-premium">
+<button onclick="makePayment()" class="btn btn-premium">
     
     <span class="badge-promo">-10%</span>
 
-<svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2C10 2 9 4 9 4h6s-1-2-3-2zm-6 6c0 6 3 12 6 12s6-6 6-12H6z"/>
-</svg>
-
+    <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C10 2 9 4 9 4h6s-1-2-3-2zm-6 6c0 6 3 12 6 12s6-6 6-12H6z"/>
+    </svg>
 
     Payer maintenant
-</a>
-
+</button>
 <script>
 function makePayment() {
   FlutterwaveCheckout({

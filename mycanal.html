@@ -321,6 +321,34 @@ const countdownFunction = setInterval(function(){
 }, 1000);
 </script>
 
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+
+<button onclick="makePayment()">Payer maintenant</button>
+
+<script>
+function makePayment() {
+  FlutterwaveCheckout({
+    public_key: "FLWPUBK_TEST-9931cc8c6f73f7fd8193a1a08f197e32-X",
+    tx_ref: "TX-" + Date.now(),
+    amount: 10000,
+    currency: "XAF",
+    payment_options: "card, mobilemoney, mobilemoneyfr, ussd",
+    customer: {
+      email: "jeunetransitaireofficiel@gmail.com",
+      phone_number: "+242064687352",
+      name: "Harry Undersand",
+    },
+    callback: function (data) {
+      console.log(data);
+    },
+    customizations: {
+      title: "⚖️ Jeune Transitaire ⚓",
+      description: "Paiement service transit",
+    },
+  });
+}
+</script>
+
 <footer>
 <p>© 2026 Abonnements MyCanal - Service indépendant</p>
 </footer>

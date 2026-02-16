@@ -274,7 +274,10 @@ button.btn-premium{
 <li>1 appareil connecté</li>
 <li>Installation rapide</li>
 </ul>
-<a href="https://wa.me/242066973413?text=Je%20souhaite%20m'abonner%20au%20Bouquet%20Standard" class="btn btn-primary">S'abonner</a>
+<button class="btn btn-primary"
+onclick="payNow('Standard',7000)">
+S'abonner
+</button>
 </div>
 
 <div class="card">
@@ -289,7 +292,10 @@ button.btn-premium{
 <li>2 appareils connectés</li>
 <li>Support prioritaire</li>
 </ul>
-<a href="https://wa.me/242066973413?text=Je%20souhaite%20m'abonner%20au%20Bouquet%20SteemHD" class="btn btn-primary">S'abonner</a>
+<button class="btn btn-primary"
+onclick="payNow('SteemHD',12000)">
+S'abonner
+</button>
 </div>
 
 <div class="card">
@@ -304,7 +310,10 @@ button.btn-premium{
 <li>Assistance VIP</li>
 <li>Activation prioritaire</li>
 </ul>
-<a href="https://wa.me/242066973413?text=Je%20souhaite%20m'abonner%20au%20Bouquet%20Premium" class="btn btn-primary">S'abonner</a>
+<button class="btn btn-primary"
+onclick="payNow('Premium',18000)">
+S'abonner
+</button>
 </div>
 
 </div>
@@ -432,26 +441,53 @@ const countdownFunction = setInterval(function(){
     Payer maintenant
 </button>
 <script>
-function makePayment() {
+function payNow(planName, planPrice){
+
   FlutterwaveCheckout({
     public_key: "FLWPUBK_TEST-9931cc8c6f73f7fd8193a1a08f197e32-X",
-    tx_ref: "TX-" + Date.now(),
-    amount: 10000,
+    tx_ref: "MYCANAL-" + Date.now(),
+    amount: planPrice,
     currency: "XAF",
     payment_options: "card, mobilemoney, mobilemoneyfr, ussd",
+
     customer: {
-      email: "jeunetransitaireofficiel@gmail.com",
-      phone_number: "+242064687352",
-      name: "Harry Undersand",
+      email: "client@email.com",
+      phone_number: "+242000000000",
+      name: "Client MyCanal",
     },
-    callback: function (data) {
-      console.log(data);
+
+    callback: function (response) {
+
+      if(response.status === "successful"){
+
+        alert("✅ Paiement réussi pour le bouquet " + planName);
+
+        // Message WhatsApp automatique
+        const message = 
+        "Bonjour, j'ai effectué le paiement du bouquet " 
+        + planName + 
+        " (" + planPrice + " FCFA). Voici ma référence : " 
+        + response.transaction_id;
+
+        const whatsappURL =
+        "https://wa.me/242066973413?text=" 
+        + encodeURIComponent(message);
+
+        // Redirection automatique
+        window.location.href = whatsappURL;
+
+      } else {
+        alert("❌ Paiement annulé.");
+      }
     },
+
     customizations: {
-      title: "⚖️ Jeune Transitaire ⚓",
-      description: "Paiement service transit",
+      title: "Abonnement MyCanal",
+      description: "Paiement du bouquet " + planName,
     },
+
   });
+
 }
 </script>
 

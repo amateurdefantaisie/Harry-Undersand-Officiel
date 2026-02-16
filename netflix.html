@@ -158,10 +158,93 @@ footer{
     font-weight:bold;
 }
 
+.cinema-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: black;
+}
+
+.cinema-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Overlay sombre cinéma */
+.cinema-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.6)
+  );
+  z-index: 2;
+}
+
+/* Lumière rouge animée */
+.red-light {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255,0,0,0.6) 0%, transparent 60%);
+  animation: redGlow 6s infinite alternate ease-in-out;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes redGlow {
+  0% {
+    transform: translate(-20%, -20%) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(20%, 20%) scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+/* Contenu */
+.cinema-content {
+  position: relative;
+  z-index: 4;
+  color: white;
+  text-align: center;
+  top: 40%;
+  transform: translateY(-50%);
+}
 </style>
 </head>
 
 <body>
+<div class="cinema-container">
+
+  <!-- Vidéo Background -->
+  <video autoplay muted loop playsinline class="cinema-video">
+    <source src="video/netflix-intro.mp4" type="video/mp4">
+  </video>
+
+  <!-- Overlay sombre -->
+  <div class="cinema-overlay"></div>
+
+  <!-- Effet lumière rouge -->
+  <div class="red-light"></div>
+
+  <!-- Ton contenu -->
+  <div class="cinema-content">
+    <h1>Bienvenue</h1>
+    <p>Expérience Cinéma Premium</p>
+  </div>
+
+</div>
 
 <header>
 <h1>NETFLIX</h1>

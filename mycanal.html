@@ -158,7 +158,30 @@ footer{
     overflow:hidden;
 }
 
-/* Effet lumineux */
+.btn-premium{
+    position:relative;
+    background: linear-gradient(135deg,#ffcc00,#ff9900);
+    color:black;
+    padding:16px 40px;
+    border-radius:50px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    transition:0.4s ease;
+    box-shadow: 0 0 25px rgba(255,204,0,0.5);
+    overflow:hidden;
+}
+
+/* Hover premium */
+.btn-premium:hover{
+    transform: translateY(-5px) scale(1.06);
+    box-shadow: 0 0 40px rgba(255,204,0,0.9);
+}
+
+/* Effet lumière */
 .btn-premium::before{
     content:'';
     position:absolute;
@@ -180,21 +203,39 @@ footer{
     left:130%;
 }
 
-.btn-premium:hover{
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 0 35px rgba(255,204,0,0.8);
+/* Badge promo */
+.badge-promo{
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    background:#ff0000;
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+    padding:6px 10px;
+    border-radius:20px;
+    animation: pulseBadge 1.5s infinite;
+    box-shadow:0 0 15px rgba(255,0,0,0.6);
 }
 
-/* Animation icône */
-.icon{
-    display:inline-block;
+/* Animation badge */
+@keyframes pulseBadge{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.1); }
+    100%{ transform:scale(1); }
+}
+
+/* Icône SVG */
+.icon-svg{
+    width:22px;
+    height:22px;
     animation: floatIcon 1.5s ease-in-out infinite;
 }
 
-/* Mouvement léger */
+/* Animation icône */
 @keyframes floatIcon{
     0%{ transform: translateY(0); }
-    50%{ transform: translateY(-3px); }
+    50%{ transform: translateY(-4px); }
     100%{ transform: translateY(0); }
 }
 </style>
@@ -380,7 +421,14 @@ const countdownFunction = setInterval(function(){
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 
 <a href="#" class="btn btn-premium">
-    <span class="icon">💳</span>
+    
+    <span class="badge-promo">-10%</span>
+
+    <svg class="icon-svg" viewBox="0 0 24 24">
+        <path d="M2 7h20v10H2z" fill="currentColor"/>
+        <path d="M2 10h20" stroke="#000" stroke-width="2"/>
+    </svg>
+
     Payer maintenant
 </a>
 

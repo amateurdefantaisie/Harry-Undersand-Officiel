@@ -13,15 +13,15 @@
 body{
     margin:0;
     font-family:'Poppins', sans-serif;
-    background:#0f0f0f;
+    background: linear-gradient(135deg,#000000,#0f172a,#111827);
+    background-attachment: fixed;
     color:white;
 }
 header{
-    background:linear-gradient(135deg,#000000,#111827);
-    padding:80px 20px;
-    text-align:center;
-}
-header h1{
+    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(15,23,42,0.9)),
+    ('https://images.unsplash.com/photo-1593784991095-a205069470b6');
+    background-size: cover;
+    background-position: center;
     font-size:42px;
     margin-bottom:20px;
 }
@@ -61,14 +61,18 @@ header p{
     gap:30px;
 }
 .card{
-    background:#1a1a1a;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
     padding:30px;
-    border-radius:20px;
-    transition:0.3s;
+    border-radius:25px;
+    transition:0.4s ease;
+    opacity:0;
+    transform:translateY(40px);
 }
 .card:hover{
-    transform:translateY(-10px);
-    background:#222;
+    transform: translateY(-12px) scale(1.02);
+    background: rgba(255,255,255,0.08);
 }
 .price{
     font-size:28px;
@@ -123,6 +127,12 @@ footer{
 <a href="#bouquets" class="btn btn-primary">Voir les bouquets</a>
 <a href="https://wa.me/242066973413" class="btn btn-whatsapp">Commander via WhatsApp</a>
 </header>
+
+<section style="text-align:center;padding:40px 20px;">
+<h2 style="color:#ffcc00;">🔥 Promotion Limitée -10%</h2>
+<p>Offre valable jusqu'à :</p>
+<div id="countdown" style="font-size:28px;font-weight:bold;margin-top:15px;"></div>
+</section>
 
 <section class="section" id="bouquets">
 <h2>📦 Nos Bouquets Disponibles</h2>
@@ -246,6 +256,45 @@ footer{
 <p>Rejoignez des centaines de clients satisfaits dès aujourd'hui.</p>
 <a href="https://wa.me/242066973413" class="btn btn-whatsapp">Commander Maintenant</a>
 </section>
+
+<script>
+const cards = document.querySelectorAll('.card');
+
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+        }
+    });
+}, {threshold:0.2});
+
+cards.forEach(card => observer.observe(card));
+</script>
+
+<script>
+const countdownDate = new Date();
+countdownDate.setDate(countdownDate.getDate() + 3);
+
+const countdownFunction = setInterval(function(){
+    const now = new Date().getTime();
+    const distance = countdownDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerHTML =
+    days + "j " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+
+    if(distance < 0){
+        clearInterval(countdownFunction);
+        document.getElementById("countdown").innerHTML = "Offre expirée";
+    }
+}, 1000);
+</script>
 
 <footer>
 <p>© 2026 Abonnements MyCanal - Service indépendant</p>

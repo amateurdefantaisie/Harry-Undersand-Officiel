@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abonnements Netflix | Standard • Premium • Ultra HD</title>
+
+<meta name="description" content="Abonnez-vous à Netflix : Standard, Premium et Ultra HD. Paiement sécurisé Mobile Money & Carte. Activation rapide.">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:#000;
+    color:white;
+}
+
+header{
+    height:90vh;
+    background:
+    linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95)),
+    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+
+header h1{
+    font-size:50px;
+    font-weight:800;
+    color:#E50914;
+    margin-bottom:15px;
+}
+
+header p{
+    font-size:20px;
+    max-width:600px;
+    opacity:0.9;
+}
+
+.btn-main{
+    background:#E50914;
+    padding:15px 35px;
+    border-radius:5px;
+    color:white;
+    font-weight:700;
+    text-decoration:none;
+    margin-top:25px;
+    display:inline-block;
+    transition:0.3s;
+}
+
+.btn-main:hover{
+    background:#b20710;
+    transform:scale(1.05);
+}
+
+.section{
+    padding:80px 20px;
+    max-width:1100px;
+    margin:auto;
+}
+
+.section h2{
+    text-align:center;
+    font-size:34px;
+    margin-bottom:50px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
+}
+
+.card{
+    background:#141414;
+    padding:30px;
+    border-radius:8px;
+    border:1px solid #222;
+    transition:0.3s;
+    opacity:0;
+    transform:translateY(40px);
+}
+
+.card:hover{
+    border:1px solid #E50914;
+    transform:translateY(-10px);
+}
+
+.price{
+    font-size:28px;
+    color:#E50914;
+    margin:15px 0;
+}
+
+button{
+    background:#E50914;
+    border:none;
+    padding:12px 25px;
+    color:white;
+    font-weight:600;
+    border-radius:4px;
+    cursor:pointer;
+    margin-top:15px;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#b20710;
+}
+
+.badge{
+    background:#E50914;
+    padding:4px 10px;
+    font-size:12px;
+    border-radius:3px;
+    font-weight:bold;
+}
+
+.payment{
+    background:#111;
+    padding:50px 20px;
+    text-align:center;
+}
+
+.countdown{
+    font-size:26px;
+    color:#E50914;
+    font-weight:700;
+    margin-top:10px;
+}
+
+footer{
+    background:#111;
+    text-align:center;
+    padding:30px;
+    margin-top:50px;
+}
+
+.floating-whatsapp{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#25D366;
+    color:white;
+    padding:14px 18px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>NETFLIX</h1>
+<p>Films • Séries • Documentaires • 4K Ultra HD</p>
+<a href="#plans" class="btn-main">Voir les abonnements</a>
+</header>
+
+<section class="section" id="plans">
+<h2>Choisissez votre formule</h2>
+
+<div class="cards">
+
+<div class="card">
+<span class="badge">Standard</span>
+<h3>Netflix Standard</h3>
+<div class="price">5 000 FCFA / mois</div>
+<ul>
+<li>Streaming HD</li>
+<li>2 écrans simultanés</li>
+<li>Catalogue complet</li>
+<li>Support inclus</li>
+</ul>
+<button onclick="payNow('Netflix Standard',5000)">S'abonner</button>
+</div>
+
+<div class="card">
+<span class="badge">🔥 Populaire</span>
+<h3>Netflix Premium</h3>
+<div class="price">8 000 FCFA / mois</div>
+<ul>
+<li>Full HD</li>
+<li>4 écrans simultanés</li>
+<li>Contenu exclusif</li>
+<li>Activation rapide</li>
+</ul>
+<button onclick="payNow('Netflix Premium',8000)">S'abonner</button>
+</div>
+
+<div class="card">
+<span class="badge">👑 Ultra HD</span>
+<h3>Netflix Ultra HD</h3>
+<div class="price">12 000 FCFA / mois</div>
+<ul>
+<li>4K Ultra HD</li>
+<li>5 écrans</li>
+<li>Qualité maximale</li>
+<li>Support VIP</li>
+</ul>
+<button onclick="payNow('Netflix Ultra HD',12000)">S'abonner</button>
+</div>
+
+</div>
+</section>
+
+<section class="payment">
+<h2>🔥 Promotion -10% limitée</h2>
+<div id="countdown" class="countdown"></div>
+
+<h3>Moyens de paiement</h3>
+<p>MTN Mobile Money • Airtel Money • Carte bancaire • Virement</p>
+<p>Activation en moins de 10 minutes</p>
+</section>
+
+<footer>
+<p>© 2026 Abonnements Netflix - Service indépendant</p>
+</footer>
+
+<a href="https://wa.me/242066973413" class="floating-whatsapp">💬 WhatsApp</a>
+
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+
+<script>
+
+function payNow(planName, planPrice){
+
+  let finalPrice = planPrice * 0.9; // promo -10%
+
+  FlutterwaveCheckout({
+    public_key: "FLWPUBK_TEST-9931cc8c6f73f7fd8193a1a08f197e32-X",
+    tx_ref: "NETFLIX-" + Date.now(),
+    amount: finalPrice,
+    currency: "XAF",
+    payment_options: "card, mobilemoney, mobilemoneyfr, ussd",
+
+    customer: {
+      email: "client@email.com",
+      phone_number: "+242000000000",
+      name: "Client Netflix",
+    },
+
+    callback: function (response) {
+
+      if(response.status === "successful"){
+
+        const message =
+        "Bonjour, j'ai payé l'abonnement " +
+        planName +
+        " (" + finalPrice + " FCFA). Référence : " +
+        response.transaction_id;
+
+        window.location.href =
+        "https://wa.me/242066973413?text=" +
+        encodeURIComponent(message);
+
+      } else {
+        alert("Paiement annulé.");
+      }
+
+    },
+
+    customizations: {
+      title: "Abonnement Netflix",
+      description: planName,
+    }
+
+  });
+
+}
+
+/* Animation scroll */
+const cards = document.querySelectorAll('.card');
+
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+        }
+    });
+},{threshold:0.2});
+
+cards.forEach(card => observer.observe(card));
+
+/* Countdown */
+const countdownDate = new Date();
+countdownDate.setDate(countdownDate.getDate() + 3);
+
+setInterval(function(){
+    const now = new Date().getTime();
+    const distance = countdownDate - now;
+
+    const hours = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60))/(1000*60));
+    const seconds = Math.floor((distance % (1000*60))/1000);
+
+    document.getElementById("countdown").innerHTML =
+    hours + "h " + minutes + "m " + seconds + "s";
+},1000);
+
+</script>
+
+</body>
+</html>

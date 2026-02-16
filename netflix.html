@@ -158,92 +158,147 @@ footer{
     font-weight:bold;
 }
 
-.cinema-container {
-  position: relative;
+/* RESET */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: black;
+  overflow-x: hidden;
+}
+
+/* CONTAINER INTRO */
+#cinema-intro {
+  position: fixed;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
+  z-index: 9999;
   background: black;
 }
 
+/* VIDEO */
 .cinema-video {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  filter: brightness(0.6) contrast(1.2);
   z-index: 1;
 }
 
-/* Overlay sombre cinéma */
+/* OVERLAY */
 .cinema-overlay {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.9),
-    rgba(0, 0, 0, 0.6)
-  );
+  background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6));
   z-index: 2;
 }
 
-/* Lumière rouge animée */
+/* LUMIERE ROUGE */
 .red-light {
   position: absolute;
   width: 150%;
   height: 150%;
   background: radial-gradient(circle, rgba(255,0,0,0.6) 0%, transparent 60%);
-  animation: redGlow 6s infinite alternate ease-in-out;
+  animation: redGlow 5s infinite alternate ease-in-out;
   z-index: 3;
-  pointer-events: none;
 }
 
 @keyframes redGlow {
-  0% {
-    transform: translate(-20%, -20%) scale(1);
-    opacity: 0.6;
-  }
-  100% {
-    transform: translate(20%, 20%) scale(1.2);
-    opacity: 0.9;
-  }
+  0% { transform: translate(-20%, -20%) scale(1); opacity: 0.6; }
+  100% { transform: translate(20%, 20%) scale(1.2); opacity: 0.9; }
 }
 
-/* Contenu */
-.cinema-content {
-  position: relative;
+/* SVG LOGO */
+.logo-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 4;
-  color: white;
-  text-align: center;
-  top: 40%;
-  transform: translateY(-50%);
+}
+
+svg text {
+  fill: transparent;
+  stroke: red;
+  stroke-width: 2;
+  font-size: 80px;
+  font-family: Arial, sans-serif;
+  letter-spacing: 8px;
+  animation: drawText 3s ease forwards;
+}
+
+@keyframes drawText {
+  0% { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; fill: red; }
+}
+
+/* RIDEAUX */
+.curtain {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, #3b0000, #800000);
+  z-index: 10;
+  transition: transform 2s ease;
+}
+
+.curtain-left {
+  left: 0;
+  transform: translateX(0);
+}
+
+.curtain-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+/* CONTENU PRINCIPAL */
+#main-content {
+  opacity: 0;
+  transition: opacity 1.5s ease;
 }
 </style>
 </head>
 
 <body>
-<div class="cinema-container">
+<!-- CINEMA EXPERIENCE -->
+<div id="cinema-intro">
+
+  <!-- Rideau gauche -->
+  <div class="curtain curtain-left"></div>
+
+  <!-- Rideau droit -->
+  <div class="curtain curtain-right"></div>
 
   <!-- Vidéo Background -->
-  <video autoplay muted loop playsinline class="cinema-video">
+  <video autoplay muted playsinline class="cinema-video">
     <source src="video/netflix-intro.mp4" type="video/mp4">
   </video>
 
   <!-- Overlay sombre -->
   <div class="cinema-overlay"></div>
 
-  <!-- Effet lumière rouge -->
+  <!-- Lumière rouge -->
   <div class="red-light"></div>
 
-  <!-- Ton contenu -->
-  <div class="cinema-content">
-    <h1>Bienvenue</h1>
-    <p>Expérience Cinéma Premium</p>
+  <!-- Animation SVG Logo -->
+  <div class="logo-container">
+    <svg viewBox="0 0 500 200">
+      <text x="50%" y="50%" text-anchor="middle" dy=".35em">
+        HARRY
+      </text>
+    </svg>
   </div>
 
+</div>
+
+<!-- TON SITE -->
+<div id="main-content">
+  <!-- tout ton site ici -->
 </div>
 
 <header>
@@ -396,5 +451,41 @@ setInterval(function(){
 
 </script>
 
+<script>
+window.addEventListener("load", () => {
+
+  setTimeout(() => {
+
+    // OUVERTURE RIDEAU
+    document.querySelector(".curtain-left")
+      .style.transform = "translateX(-100%)";
+
+    document.querySelector(".curtain-right")
+      .style.transform = "translateX(100%)";
+
+  }, 2500);
+
+  setTimeout(() => {
+
+    // FADE INTRO
+    document.getElementById("cinema-intro").style.opacity = "0";
+    document.getElementById("main-content").style.opacity = "1";
+
+  }, 4500);
+
+  setTimeout(() => {
+
+    // SUPPRESSION INTRO
+    document.getElementById("cinema-intro").remove();
+
+  }, 6000);
+
+});
+
+/* TRANSITION FERMETURE */
+window.addEventListener("beforeunload", function () {
+  document.body.style.opacity = "0";
+});
+</script>
 </body>
 </html>

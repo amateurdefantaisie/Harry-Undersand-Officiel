@@ -721,6 +721,76 @@ canvas{
     grid-template-columns:1fr;
   }
 }
+
+/* ================= HEATMAP ================= */
+
+.heatmap-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:30px;
+  margin-top:60px;
+}
+
+.heatmap-card h3{
+  margin-bottom:25px;
+}
+
+.heatmap-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(22px,1fr));
+  gap:6px;
+}
+
+.heatmap-day{
+  width:22px;
+  height:22px;
+  border-radius:6px;
+  background:#1f2937;
+  transition:.3s;
+}
+
+.heatmap-day:hover{
+  transform:scale(1.2);
+}
+
+.kpi-card{
+  position:relative;
+}
+
+.badge-float{
+  position:absolute;
+  top:15px;
+  right:15px;
+  padding:6px 12px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:.3s;
+}
+
+.badge-float svg{
+  width:14px;
+  height:14px;
+}
+
+.badge-float.up{
+  background:#dcfce7;
+  color:#16a34a;
+}
+
+.badge-float.down{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+.badge-float.neutral{
+  background:#e5e7eb;
+  color:#6b7280;
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -869,20 +939,23 @@ crossorigin="anonymous"></script>
   <!-- KPI CARDS -->
   <div class="kpi-grid">
 
-    <div class="kpi-card">
-      <h4>Aujourd’hui</h4>
-      <p id="todayVisitsCard">0</p>
-    </div>
+<div class="kpi-card">
+  <div class="badge-float neutral" id="todayBadge"></div>
+  <h4>Aujourd’hui</h4>
+  <p id="todayVisitsCard" class="counter">0</p>
+</div>
 
-    <div class="kpi-card">
-      <h4>Ce mois</h4>
-      <p id="monthVisits">0</p>
-    </div>
+<div class="kpi-card">
+  <div class="badge-float neutral" id="monthBadge"></div>
+  <h4>Ce mois</h4>
+  <p id="monthVisits" class="counter">0</p>
+</div>
 
-    <div class="kpi-card">
-      <h4>Cette année</h4>
-      <p id="yearVisits">0</p>
-    </div>
+<div class="kpi-card">
+  <div class="badge-float neutral" id="yearBadge"></div>
+  <h4>Cette année</h4>
+  <p id="yearVisits" class="counter">0</p>
+</div>
 
     <div class="kpi-card">
       <h4>Évolution</h4>
@@ -929,6 +1002,12 @@ crossorigin="anonymous"></script>
 
 </section>
 
+<!-- HEATMAP -->
+<div class="heatmap-card">
+  <h3>🔥 Activité journalière</h3>
+  <div id="heatmap" class="heatmap-grid"></div>
+</div>
+
 <!-- MODALE AUTH -->
 <div class="modal-bg" id="authModal">
 <div class="modal">
@@ -974,6 +1053,9 @@ crossorigin="anonymous"></script>
   </button>
 </div>
 </section>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- FIREBASE -->
 <script type="module">
@@ -1108,40 +1190,148 @@ function listenTodayVisits() {
   });
 }
 
+function animateCounter(id, endValue) {
+  const el = document.getElementById(id);
+  const duration = 1000;
+  const start = 0;
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    const value = Math.floor(progress * endValue);
+    el.textContent = value;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+function updateBadge(current, previous, elementId) {
+
+  const badge = document.getElementById(elementId);
+  if (!badge) return;
+
+  if (previous === 0) {
+    badge.innerHTML = "Nouveau";
+    badge.className = "badge-float neutral";
+    return;
+  }
+
+  const diff = ((current - previous) / previous) * 100;
+  const percent = diff.toFixed(1);
+
+  const arrowUp = `
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 4l6 6h-4v8h-4v-8H6z"/>
+    </svg>
+  `;
+
+  const arrowDown = `
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 20l-6-6h4V6h4v8h4z"/>
+    </svg>
+  `;
+
+  if (diff > 0) {
+    badge.innerHTML = arrowUp + " +" + percent + "%";
+    badge.className = "badge-float up";
+  } else if (diff < 0) {
+    badge.innerHTML = arrowDown + " " + percent + "%";
+    badge.className = "badge-float down";
+  } else {
+    badge.innerHTML = "0%";
+    badge.className = "badge-float neutral";
+  }
+}
+
 async function loadAdvancedStats() {
 
-  const todaySnap = await getDoc(doc(db, "stats_daily", todayKey()));
-  const monthSnap = await getDoc(doc(db, "stats_monthly", monthKey()));
-  const yearSnap  = await getDoc(doc(db, "stats_yearly", yearKey()));
+  const today = todayKey();
 
-  const today = todaySnap.data()?.count || 0;
-  const month = monthSnap.data()?.count || 0;
-  const year  = yearSnap.data()?.count || 0;
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterdayKey = yesterdayDate.toISOString().slice(0,10);
 
-  document.getElementById("monthVisits").textContent = month;
-  document.getElementById("yearVisits").textContent = year;
+  const prevMonthDate = new Date();
+  prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
+  const prevMonthKey = prevMonthDate.toISOString().slice(0,7);
 
-  const daysInMonth = new Date().getDate();
-  const monthsInYear = new Date().getMonth() + 1;
+  const prevYear = (new Date().getFullYear() - 1).toString();
 
-  const avgDay = month / daysInMonth;
-  const avgMonth = year / monthsInYear;
+  const todaySnap = await getDoc(doc(db,"stats_daily",today));
+  const yesterdaySnap = await getDoc(doc(db,"stats_daily",yesterdayKey));
+  const monthSnap = await getDoc(doc(db,"stats_monthly",monthKey()));
+  const prevMonthSnap = await getDoc(doc(db,"stats_monthly",prevMonthKey));
+  const yearSnap = await getDoc(doc(db,"stats_yearly",yearKey()));
+  const prevYearSnap = await getDoc(doc(db,"stats_yearly",prevYear));
 
-  document.getElementById("avgDay").textContent = avgDay.toFixed(1);
-  document.getElementById("avgMonth").textContent = avgMonth.toFixed(1);
+  const todayVal = todaySnap.data()?.count || 0;
+  const yesterdayVal = yesterdaySnap.data()?.count || 0;
+  const monthVal = monthSnap.data()?.count || 0;
+  const prevMonthVal = prevMonthSnap.data()?.count || 0;
+  const yearVal = yearSnap.data()?.count || 0;
+  const prevYearVal = prevYearSnap.data()?.count || 0;
 
-  // 📈 évolution par rapport à la moyenne
-  const percent = avgDay ? ((today - avgDay) / avgDay) * 100 : 0;
+  animateCounter("todayVisitsCard", todayVal);
+  animateCounter("monthVisits", monthVal);
+  animateCounter("yearVisits", yearVal);
 
-  document.getElementById("todayPercent").textContent = percent.toFixed(1);
+  document.getElementById("todayTable").textContent = todayVal;
+  document.getElementById("monthTable").textContent = monthVal;
+  document.getElementById("yearTable").textContent = yearVal;
+
+  updateBadge(todayVal, yesterdayVal, "todayBadge");
+  updateBadge(monthVal, prevMonthVal, "monthBadge");
+  updateBadge(yearVal, prevYearVal, "yearBadge");
 }
 
 // 🚀 3️⃣ Lancement automatique
-window.addEventListener("DOMContentLoaded", () => {
-  incrementVisit();
+window.addEventListener("DOMContentLoaded", async () => {
+  await incrementVisit();
   listenTodayVisits();
-  loadAdvancedStats();
+  await loadAdvancedStats();
+  await loadHeatmap();
+  await loadMonthlyComparison();
 });
+
+/* =========================
+   🔥 HEATMAP JOURNALIÈRE
+========================= */
+
+async function loadHeatmap() {
+
+  const heatmap = document.getElementById("heatmap");
+  heatmap.innerHTML = "";
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for(let day = 1; day <= daysInMonth; day++){
+
+    const date = new Date(year, month, day);
+    const key = date.toISOString().slice(0,10);
+
+    const snap = await getDoc(doc(db, "stats_daily", key));
+    const count = snap.data()?.count || 0;
+
+    const div = document.createElement("div");
+    div.classList.add("heatmap-day");
+
+    // 🎨 Couleur selon intensité
+    let intensity = Math.min(count / 20, 1); 
+    div.style.background = `rgba(139,92,246,${intensity})`;
+
+    div.title = `${key} : ${count} visites`;
+
+    heatmap.appendChild(div);
+  }
+}
 
 /* =========================
    📊 GRAPHIQUES
@@ -1153,13 +1343,8 @@ const realtimeCtx = document.getElementById("realtimeChart");
 const monthlyChart = new Chart(monthlyCtx, {
   type: "bar",
   data: {
-    labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"],
-    datasets: [{
-      label: "Visites mensuelles",
-      data: new Array(12).fill(0),
-      backgroundColor: "rgba(139,92,246,.6)",
-      borderRadius: 8
-    }]
+    labels: [],
+    datasets: []
   },
   options: {
     responsive:true,
@@ -1183,6 +1368,37 @@ const realtimeChart = new Chart(realtimeCtx, {
     animation:false
   }
 });
+
+async function loadMonthlyComparison() {
+
+  const now = new Date();
+  const currentMonthKey = monthKey();
+
+  const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const prevMonthKey = prevDate.toISOString().slice(0,7);
+
+  const currentSnap = await getDoc(doc(db,"stats_monthly",currentMonthKey));
+  const prevSnap = await getDoc(doc(db,"stats_monthly",prevMonthKey));
+
+  const current = currentSnap.data()?.count || 0;
+  const previous = prevSnap.data()?.count || 0;
+
+  const percent = previous ? ((current - previous)/previous)*100 : 0;
+console.log("Évolution mensuelle :", percent.toFixed(1)+"%");
+
+  monthlyChart.data.labels = ["Mois précédent","Mois actuel"];
+  monthlyChart.data.datasets = [{
+      label: "Comparatif visites",
+      data: [previous, current],
+      backgroundColor:[
+        "rgba(100,116,139,.6)",
+        "rgba(139,92,246,.8)"
+      ],
+      borderRadius:12
+  }];
+
+  monthlyChart.update();
+}
 
 /* 🔄 Mise à jour temps réel */
 onSnapshot(dailyRef, snap => {
@@ -1509,8 +1725,6 @@ searchInput.addEventListener("input", ()=>{
    Visiter mon site
  </a>
 </section>
-  
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">
 © 2026 — Amateur De Fantaisie

@@ -142,6 +142,37 @@ margin-top:50px;
 .hero h1{font-size:35px;}
 .plans{flex-direction:column;align-items:center;}
 }
+
+/* SLIDER */
+.slider{
+overflow:hidden;
+position:relative;
+margin-top:40px;
+}
+
+.slide-track{
+display:flex;
+width:calc(250px * 10);
+animation:scroll 25s linear infinite;
+}
+
+.slide-track img{
+width:200px;
+margin:0 25px;
+filter:brightness(0) invert(1);
+opacity:0.8;
+transition:0.3s;
+}
+
+.slide-track img:hover{
+opacity:1;
+transform:scale(1.1);
+}
+
+@keyframes scroll{
+0%{transform:translateX(0);}
+100%{transform:translateX(-50%);}
+}
 </style>
 </head>
 
@@ -156,6 +187,29 @@ margin-top:50px;
 </div>
 </section>
 
+<section class="section">
+<h2>Chaînes Disponibles</h2>
+
+<div class="slider">
+<div class="slide-track">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Netflix_logo.svg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Canal%2B_logo.svg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Prime_Video.png">
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/23/BeIN_Sports_logo.svg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/TF1_logo_2013.svg">
+
+<!-- Duplique pour effet infini -->
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Netflix_logo.svg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Canal%2B_logo.svg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Prime_Video.png">
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/23/BeIN_Sports_logo.svg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/TF1_logo_2013.svg">
+
+</div>
+</div>
+</section>
+
 <!-- PLANS -->
 <section class="section" id="plans">
 <h2>Choisissez votre formule</h2>
@@ -163,19 +217,18 @@ margin-top:50px;
 
 <div class="card">
 <h3>1 Mois</h3>
-<div class="price">8 000 FCFA</div>
+<div class="price" data-base="8000">...</div>
 <p>HD & 4K<br>Support 24/7<br>Activation 5 min</p>
 </div>
 
 <div class="card">
-<h3>6 Mois</h3>
-<div class="price">40 000 FCFA</div>
+<h3>6 Mois</h3><div class="price" data-base="40000">...</div>
 <p>Meilleure offre<br>Ultra HD<br>Priorité support</p>
 </div>
 
 <div class="card">
 <h3>12 Mois</h3>
-<div class="price">70 000 FCFA</div>
+<div class="price" data-base="70000">...</div>
 <p>Premium Max<br>Tout inclus<br>Multi-écran</p>
 </div>
 
@@ -245,6 +298,46 @@ Pays: ${country}%0A
 Formule: ${plan}`;
 
 window.open(`https://wa.me/242066973413?text=${message}`, '_blank');
+});
+</script>
+
+<script>
+/* Détection IP + adaptation prix */
+
+fetch("https://ipapi.co/json/")
+.then(res => res.json())
+.then(data => {
+
+let country = data.country_name;
+let currency = data.currency;
+
+let rates = {
+"EUR": 0.0015,
+"USD": 0.0016,
+"CAD": 0.0022,
+"HTG": 0.21,
+"XAF": 1
+};
+
+let prices = document.querySelectorAll(".price");
+
+prices.forEach(price => {
+
+let base = price.getAttribute("data-base");
+let rate = rates[currency] || 1;
+
+let converted = Math.round(base * rate);
+
+price.innerHTML = converted + " " + currency;
+
+});
+
+/* Pré-remplir automatiquement le pays */
+document.getElementById("country").value = country;
+
+})
+.catch(() => {
+console.log("IP non détectée");
 });
 </script>
 

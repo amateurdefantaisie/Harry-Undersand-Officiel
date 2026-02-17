@@ -147,10 +147,11 @@ margin-top:50px;
 
 .tv-slider{
 display:flex;
-gap:30px;
-overflow-x:auto;
-padding:40px 0;
-scroll-snap-type:x mandatory;
+justify-content:center;
+align-items:center;
+gap:40px;
+width:100%;
+min-height:70vh;
 }
 
 .tv-slider::-webkit-scrollbar{
@@ -159,14 +160,13 @@ display:none;
 
 .tv-card{
 position:relative;
-min-width:300px;
-height:420px;
+width:22%;
+height:500px;
 border-radius:20px;
 overflow:hidden;
-scroll-snap-align:center;
 cursor:pointer;
 transition:0.4s;
-box-shadow:0 0 20px rgba(0,0,0,0.5);
+box-shadow:0 0 25px rgba(0,0,0,0.6);
 }
 
 .tv-card img,
@@ -225,7 +225,7 @@ border-radius:10px;
 <div class="tv-slider">
 
 <div class="tv-card">
-<img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=800">
+<img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=800&fit=crop">
 <video muted loop>
 <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
 </video>
@@ -233,7 +233,7 @@ border-radius:10px;
 </div>
 
 <div class="tv-card">
-<img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=800">
+<img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=800&fit=crop">
 <video muted loop>
 <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
 </video>
@@ -241,11 +241,19 @@ border-radius:10px;
 </div>
 
 <div class="tv-card">
-<img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=800">
+<img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=800&fit=crop">
 <video muted loop>
 <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
 </video>
-<div class="tv-name">Sport Live</div>
+<div class="tv-name">Crunchyrull</div>
+</div>
+
+<div class="tv-card">
+<img src="https://images.unsplash.com/photo-1505685296765-3a2736de412f?q=80&w=600&h=900&fit=crop">
+<video muted loop>
+<source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+</video>
+<div class="tv-name">Prime Video</div>
 </div>
 
 </div>

@@ -484,7 +484,7 @@ background:#b91c1c;
 .drawer{
   position:fixed;
   top:0;
-  right:-0;
+  right:0;
   transform:translateX(100%);
   opacity:0;
   width:340px;
@@ -1176,18 +1176,12 @@ async function incrementVisit() {
     await setDoc(dailyRef, { count: increment(1) }, { merge: true });
     await setDoc(monthRef, { count: increment(1) }, { merge: true });
     await setDoc(yearRef, { count: increment(1) }, { merge: true });
+    
+    document.getElementById("todayVisits").textContent = value;
 
   } catch (err) {
     console.error("Erreur incrémentation :", err);
   }
-}
-
-// 🟢 2️⃣ Listener temps réel (plus fiable)
-function listenTodayVisits() {
-  onSnapshot(dailyRef, snap => {
-    const value = snap.exists() ? snap.data().count || 0 : 0;
-    document.getElementById("todayVisits").textContent = value;
-  });
 }
 
 function animateCounter(id, endValue) {

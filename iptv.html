@@ -3,107 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abonnement IPTV Premium | +10 000 Chaînes & VOD HD</title>
+<title>IPTV Ultra Premium | HD • 4K • Monde entier</title>
 
-<!-- SEO -->
-<meta name="description" content="Abonnement IPTV Premium. +10 000 chaînes TV, Films, Séries, Sport en HD & 4K. Activation rapide via WhatsApp. Compatible Smart TV, Android, PC.">
+<meta name="description" content="IPTV Ultra Premium. +15 000 chaînes, Sport, Netflix, Prime, Canal+, HD & 4K. Activation instantanée via WhatsApp.">
 
-<!-- Open Graph -->
-<meta property="og:title" content="IPTV Premium | Streaming TV HD & 4K">
-<meta property="og:description" content="Accédez à +10 000 chaînes et VOD en qualité HD & 4K. Activation rapide.">
-<meta property="og:image" content="https://images.unsplash.com/photo-1593784991095-a205069470b6?q=80&w=1200">
-<meta property="og:type" content="website">
+<meta property="og:title" content="IPTV Ultra Premium">
+<meta property="og:description" content="Streaming HD & 4K – Activation rapide via WhatsApp">
+<meta property="og:image" content="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=1200">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
 
 <style>
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:#000;
+font-family:'Poppins',sans-serif;
+background:linear-gradient(135deg,#000,#0f0f1a);
 color:white;
+overflow-x:hidden;
 }
 
+/* HERO */
 .hero{
 height:100vh;
-background:url('https://images.unsplash.com/photo-1593784991095-a205069470b6?q=80&w=1600') center/cover no-repeat;
+background:url('https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=1600') center/cover no-repeat;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
 padding:20px;
+position:relative;
+}
+
+.hero::after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+top:0;left:0;
+}
+
+.hero-content{
+position:relative;
+z-index:2;
 }
 
 .hero h1{
-font-size:50px;
-margin-bottom:20px;
-}
-
-.hero p{
-font-size:20px;
-max-width:700px;
+font-size:60px;
+background:linear-gradient(90deg,#00f0ff,#ff00ff);
+-webkit-background-clip:text;
+color:transparent;
 }
 
 .btn{
-background:#00c853;
-padding:15px 30px;
-margin-top:30px;
-border-radius:5px;
-color:white;
+background:linear-gradient(90deg,#00f0ff,#ff00ff);
+padding:15px 35px;
+border-radius:30px;
 text-decoration:none;
+color:white;
 font-weight:bold;
-transition:0.3s;
+display:inline-block;
+margin-top:20px;
+transition:0.4s;
 }
 
 .btn:hover{
-background:#00e676;
+transform:scale(1.1);
 }
 
+/* SECTION */
 .section{
-padding:60px 20px;
+padding:80px 20px;
 text-align:center;
+opacity:0;
+transform:translateY(50px);
+transition:1s;
 }
 
+.section.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* PLANS */
 .plans{
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
-gap:20px;
+gap:30px;
 }
 
 .card{
-background:#111;
-padding:30px;
-border-radius:10px;
-width:280px;
-box-shadow:0 0 15px rgba(0,255,100,0.3);
-transition:0.3s;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+padding:40px;
+border-radius:20px;
+width:300px;
+transition:0.4s;
+border:1px solid rgba(255,255,255,0.1);
 }
 
 .card:hover{
-transform:scale(1.05);
+transform:translateY(-10px);
+box-shadow:0 0 25px #00f0ff;
 }
 
 .price{
-font-size:30px;
+font-size:35px;
 margin:20px 0;
-color:#00e676;
+color:#00f0ff;
+}
+
+/* FORM */
+form{
+max-width:500px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+input, select{
+padding:15px;
+border-radius:10px;
+border:none;
+outline:none;
 }
 
 footer{
+padding:30px;
 text-align:center;
-padding:20px;
-background:#111;
-margin-top:40px;
+background:#0a0a12;
+margin-top:50px;
 }
 
 @media(max-width:768px){
-.hero h1{
-font-size:32px;
-}
-.plans{
-flex-direction:column;
-align-items:center;
-}
+.hero h1{font-size:35px;}
+.plans{flex-direction:column;align-items:center;}
 }
 </style>
 </head>
@@ -112,54 +149,104 @@ align-items:center;
 
 <!-- HERO -->
 <section class="hero">
-<h1>IPTV Premium</h1>
-<p>+10 000 Chaînes TV • Films • Séries • Sport • HD & 4K  
-Compatible Smart TV, Android, PC & iPhone</p>
-<a href="#plans" class="btn">Voir les abonnements</a>
-</section>
-
-<!-- AVANTAGES -->
-<section class="section">
-<h2>Pourquoi choisir notre IPTV ?</h2>
-<p>✔ Activation rapide  
-✔ Qualité HD & 4K  
-✔ Toutes les chaînes sport & cinéma  
-✔ Fonctionne partout dans le monde</p>
+<div class="hero-content">
+<h1>IPTV ULTRA PREMIUM</h1>
+<p>+15 000 Chaînes • Sport • Films • Séries • HD & 4K</p>
+<a href="#plans" class="btn">Voir les offres</a>
+</div>
 </section>
 
 <!-- PLANS -->
 <section class="section" id="plans">
-<h2>Choisissez votre abonnement</h2>
-
+<h2>Choisissez votre formule</h2>
 <div class="plans">
 
 <div class="card">
 <h3>1 Mois</h3>
-<div class="price">5 000 FCFA</div>
-<p>Accès complet<br>Support 24/7<br>Activation rapide</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20je%20veux%20l'abonnement%20IPTV%201%20mois">Commander</a>
+<div class="price">8 000 FCFA</div>
+<p>HD & 4K<br>Support 24/7<br>Activation 5 min</p>
 </div>
 
 <div class="card">
-<h3>3 Mois</h3>
-<div class="price">13 000 FCFA</div>
-<p>Accès complet<br>Support prioritaire<br>Meilleure offre</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20je%20veux%20l'abonnement%20IPTV%203%20mois">Commander</a>
+<h3>6 Mois</h3>
+<div class="price">40 000 FCFA</div>
+<p>Meilleure offre<br>Ultra HD<br>Priorité support</p>
 </div>
 
 <div class="card">
 <h3>12 Mois</h3>
-<div class="price">40 000 FCFA</div>
-<p>Accès complet<br>Ultra HD 4K<br>Meilleur prix annuel</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20je%20veux%20l'abonnement%20IPTV%2012%20mois">Commander</a>
+<div class="price">70 000 FCFA</div>
+<p>Premium Max<br>Tout inclus<br>Multi-écran</p>
 </div>
 
 </div>
 </section>
 
+<!-- FORMULAIRE -->
+<section class="section">
+<h2>Commander maintenant</h2>
+
+<form id="orderForm">
+<input type="text" id="name" placeholder="Votre nom" required>
+<input type="tel" id="phone" placeholder="Votre numéro" required>
+
+<select id="country">
+<option value="France">France</option>
+<option value="Congo">Afrique</option>
+<option value="Canada">Canada</option>
+<option value="Haiti">Haïti</option>
+</select>
+
+<select id="plan">
+<option value="1 Mois">1 Mois</option>
+<option value="6 Mois">6 Mois</option>
+<option value="12 Mois">12 Mois</option>
+</select>
+
+<button type="submit" class="btn">Envoyer sur WhatsApp</button>
+</form>
+
+</section>
+
 <footer>
-© 2026 IPTV Premium | Paiement Mobile Money & WhatsApp
+© 2026 IPTV Ultra Premium | Paiement Mobile Money • Crypto • Carte
 </footer>
+
+<!-- SCRIPT ANIMATION + WHATSAPP -->
+<script>
+
+/* Animation Scroll */
+const sections = document.querySelectorAll('.section');
+
+window.addEventListener('scroll',()=>{
+sections.forEach(sec=>{
+const position = sec.getBoundingClientRect().top;
+const screenPosition = window.innerHeight / 1.3;
+
+if(position < screenPosition){
+sec.classList.add('show');
+}
+});
+});
+
+/* WhatsApp Form */
+document.getElementById('orderForm').addEventListener('submit', function(e){
+e.preventDefault();
+
+let name = document.getElementById('name').value;
+let phone = document.getElementById('phone').value;
+let country = document.getElementById('country').value;
+let plan = document.getElementById('plan').value;
+
+let message = `Bonjour, je souhaite commander IPTV Ultra Premium.%0A
+Nom: ${name}%0A
+Téléphone: ${phone}%0A
+Pays: ${country}%0A
+Formule: ${plan}`;
+
+window.open(`https://wa.me/242066973413?text=${message}`, '_blank');
+});
+</script>
 
 </body>
 </html>

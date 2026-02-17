@@ -1175,12 +1175,12 @@ async function loadAdvancedStats() {
 }
 
 // 🚀 3️⃣ Lancement automatique
-window.addEventListener("DOMContentLoaded", () => {
-  incrementVisit();
+window.addEventListener("DOMContentLoaded", async () => {
+  await incrementVisit();
   listenTodayVisits();
-  loadAdvancedStats();
-  loadHeatmap();
-  loadMonthlyComparison();
+  await loadAdvancedStats();
+  await loadHeatmap();
+  await loadMonthlyComparison();
 });
 
 /* =========================
@@ -1229,13 +1229,8 @@ const realtimeCtx = document.getElementById("realtimeChart");
 const monthlyChart = new Chart(monthlyCtx, {
   type: "bar",
   data: {
-    labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"],
-    datasets: [{
-      label: "Visites mensuelles",
-      data: new Array(12).fill(0),
-      backgroundColor: "rgba(139,92,246,.6)",
-      borderRadius: 8
-    }]
+    labels: [],
+    datasets: []
   },
   options: {
     responsive:true,

@@ -764,6 +764,22 @@ crossorigin="anonymous"></script>
   </p>
 </section>
 
+<section class="container" style="text-align:center;margin-top:30px">
+  <div class="card">
+    <h3>📊 Statistiques</h3>
+
+    <p>📅 Ce mois : <b><span id="monthVisits">0</span></b></p>
+    <p>📆 Cette année : <b><span id="yearVisits">0</span></b></p>
+
+    <hr style="margin:15px 0;border-color:rgba(255,255,255,.1)">
+
+    <p>Moyenne / jour : <b><span id="avgDay">0</span></b></p>
+    <p>Moyenne / mois : <b><span id="avgMonth">0</span></b></p>
+
+    <p>📈 Évolution aujourd’hui : <b><span id="todayPercent">0</span>%</b></p>
+  </div>
+</section>
+
 <!-- MODALE AUTH -->
 <div class="modal-bg" id="authModal">
 <div class="modal">
@@ -896,7 +912,16 @@ async function loadTodayClicks() {
 
   console.log("Clics aujourd'hui :", value);
 }
-  
+
+function monthKey() {
+  const d = new Date();
+  return d.toISOString().slice(0, 7); // 2026-02
+}
+
+function yearKey() {
+  return new Date().getFullYear().toString(); // 2026
+}
+
 /* =========================
    📊 COMPTEUR VISITES STABLE
 ========================= */
@@ -912,8 +937,15 @@ const globalRef = doc(db, "stats", "global");
 // 🔴 1️⃣ Incrémentation simple
 async function incrementVisit() {
   try {
+
+    const monthRef = doc(db, "stats_monthly", monthKey());
+    const yearRef  = doc(db, "stats_yearly", yearKey());
+
     await setDoc(globalRef, { visits: increment(1) }, { merge: true });
     await setDoc(dailyRef, { count: increment(1) }, { merge: true });
+    await setDoc(monthRef, { count: increment(1) }, { merge: true });
+    await setDoc(yearRef, { count: increment(1) }, { merge: true });
+
   } catch (err) {
     console.error("Erreur incrémentation :", err);
   }
@@ -927,10 +959,39 @@ function listenTodayVisits() {
   });
 }
 
+async function loadAdvancedStats() {
+
+  const todaySnap = await getDoc(doc(db, "stats_daily", todayKey()));
+  const monthSnap = await getDoc(doc(db, "stats_monthly", monthKey()));
+  const yearSnap  = await getDoc(doc(db, "stats_yearly", yearKey()));
+
+  const today = todaySnap.data()?.count || 0;
+  const month = monthSnap.data()?.count || 0;
+  const year  = yearSnap.data()?.count || 0;
+
+  document.getElementById("monthVisits").textContent = month;
+  document.getElementById("yearVisits").textContent = year;
+
+  const daysInMonth = new Date().getDate();
+  const monthsInYear = new Date().getMonth() + 1;
+
+  const avgDay = month / daysInMonth;
+  const avgMonth = year / monthsInYear;
+
+  document.getElementById("avgDay").textContent = avgDay.toFixed(1);
+  document.getElementById("avgMonth").textContent = avgMonth.toFixed(1);
+
+  // 📈 évolution par rapport à la moyenne
+  const percent = avgDay ? ((today - avgDay) / avgDay) * 100 : 0;
+
+  document.getElementById("todayPercent").textContent = percent.toFixed(1);
+}
+
 // 🚀 3️⃣ Lancement automatique
 window.addEventListener("DOMContentLoaded", () => {
   incrementVisit();
   listenTodayVisits();
+  loadAdvancedStats();
 });
 
 /* AUTH STATE */

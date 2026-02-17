@@ -32,28 +32,52 @@ body{
     font-family:'Poppins',sans-serif;
     background:#000;
     color:white;
+    overflow-x:hidden;
 }
 
-header{
-    height:90vh;
-    background:
-    linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95)),
-    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba');
+/* IMAGE PRINCIPALE FIXE */
+.theme-background{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:url("https://files.catbox.moe/3iuax0.jpg") no-repeat center center;
     background-size:cover;
-    background-position:center;
+    z-index:0;
+}
+
+/* CONTENU AU DESSUS */
+#main-content{
+    position:relative;
+    z-index:2;
+}
+
+/* SECTIONS AVEC EFFET FLOU */
+header,
+.section,
+.payment,
+footer{
+    backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0.55);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+/* HEADER */
+header{
+    min-height:90vh;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
     text-align:center;
-    padding:20px;
+    padding:40px 20px;
 }
 
 header h1{
-    font-size:50px;
+    font-size:60px;
     font-weight:800;
     color:#E50914;
-    margin-bottom:15px;
 }
 
 header p{
@@ -62,6 +86,119 @@ header p{
     opacity:0.9;
 }
 
+/* BOUTON */
+.btn-main{
+    background:#E50914;
+    padding:15px 35px;
+    border-radius:5px;
+    color:white;
+    font-weight:700;
+    text-decoration:none;
+    margin-top:25px;
+    transition:0.3s;
+}
+
+.btn-main:hover{
+    background:#b20710;
+    transform:scale(1.05);
+}
+
+/* SECTIONS */
+.section{
+    padding:100px 20px;
+    max-width:1100px;
+    margin:auto;
+}
+
+.section h2{
+    text-align:center;
+    font-size:36px;
+    margin-bottom:60px;
+}
+
+/* CARDS */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
+}
+
+.card{
+    padding:30px;
+    border-radius:15px;
+    background:rgba(0,0,0,0.65);
+    backdrop-filter: blur(15px);
+    border:1px solid rgba(255,255,255,0.08);
+    transition:0.4s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 0 30px rgba(229,9,20,0.5);
+}
+
+.price{
+    font-size:30px;
+    color:#E50914;
+    margin:20px 0;
+}
+
+button{
+    background:#E50914;
+    border:none;
+    padding:12px 25px;
+    color:white;
+    font-weight:600;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#b20710;
+}
+
+/* BADGE */
+.badge{
+    background:#E50914;
+    padding:6px 12px;
+    font-size:12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+/* PAYMENT */
+.payment{
+    padding:80px 20px;
+    text-align:center;
+}
+
+.countdown{
+    font-size:26px;
+    color:#E50914;
+    font-weight:700;
+    margin-top:10px;
+}
+
+/* FOOTER */
+footer{
+    padding:40px;
+    text-align:center;
+}
+
+/* WHATSAPP */
+.floating-whatsapp{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#25D366;
+    color:white;
+    padding:14px 18px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:bold;
+    z-index:5;
+}
 .btn-main{
     background:#E50914;
     padding:15px 35px;
@@ -182,27 +319,6 @@ body, html {
   overflow-x: hidden;
 }
 
-/* CONTAINER INTRO */
-#cinema-intro {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 9999;
-  background: black;
-  transition: opacity 1.5s ease;
-}
-
-/* VIDEO */
-.cinema-video {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.6) contrast(1.2);
-  z-index: 1;
-}
-
 /* OVERLAY */
 .cinema-overlay {
   position: absolute;
@@ -212,139 +328,10 @@ body, html {
   z-index: 2;
 }
 
-/* LUMIERE ROUGE */
-.red-light {
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  background: radial-gradient(circle, rgba(255,0,0,0.6) 0%, transparent 60%);
-  animation: redGlow 5s infinite alternate ease-in-out;
-  z-index: 3;
-}
-
-@keyframes redGlow {
-  0% { transform: translate(-20%, -20%) scale(1); opacity: 0.6; }
-  100% { transform: translate(20%, 20%) scale(1.2); opacity: 0.9; }
-}
-
-/* SVG LOGO */
-.logo-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 4;
-}
-
-svg text {
-  fill: transparent;
-  stroke: red;
-  stroke-width: 2;
-  font-size: 80px;
-  font-family: Arial, sans-serif;
-  letter-spacing: 8px;
-  animation: drawText 3s ease forwards;
-}
-
-@keyframes drawText {
-  0% { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
-  100% { stroke-dashoffset: 0; fill: red; }
-}
-
-/* RIDEAUX */
-.curtain {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(to right, #3b0000, #800000);
-  z-index: 10;
-  transition: transform 2s ease;
-}
-
-.curtain-left {
-  left: 0;
-  transform: translateX(0);
-}
-
-.curtain-right {
-  right: 0;
-  transform: translateX(0);
-}
-
 /* CONTENU PRINCIPAL */
 #main-content {
   opacity: 0;
   transition: opacity 1.5s ease;
-}
-    
-/* ============================= */
-/* IMMERSION NETFLIX FULL PAGE  */
-/* ============================= */
-
-/* VIGNETTE SOMBRE CINEMA */
-body::after{
-    content:"";
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-    background:radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.85));
-    z-index:5;
-}
-
-/* GRAIN CINEMA */
-.grain{
-    position:fixed;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-    background:url("https://grainy-gradients.vercel.app/noise.svg");
-    opacity:0.08;
-    z-index:6;
-}
-
-/* FUMÉE ANIMÉE */
-.smoke{
-    position:fixed;
-    width:200%;
-    height:200%;
-    top:-50%;
-    left:-50%;
-    pointer-events:none;
-    background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 40%),
-        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.04), transparent 50%);
-    animation: smokeMove 25s linear infinite;
-    z-index:4;
-}
-
-@keyframes smokeMove{
-    0% { transform:translate(0,0) scale(1); }
-    50% { transform:translate(5%, -5%) scale(1.05); }
-    100% { transform:translate(0,0) scale(1); }
-}
-
-/* LUMIÈRE ROUGE SUBTILE PAGE */
-body::before{
-    content:"";
-    position:fixed;
-    width:120%;
-    height:120%;
-    top:-10%;
-    left:-10%;
-    pointer-events:none;
-    background:radial-gradient(circle, rgba(229,9,20,0.08) 0%, transparent 70%);
-    animation:redPulse 6s ease-in-out infinite alternate;
-    z-index:3;
-}
-
-@keyframes redPulse{
-    from{ opacity:0.3; }
-    to{ opacity:0.7; }
 }
 
 /* CARDS PREMIUM */
@@ -428,43 +415,12 @@ header::after{
 </head>
 
 <body>
-<!-- CINEMA EXPERIENCE -->
-<div id="cinema-intro">
 
-  <!-- Rideau gauche -->
-  <div class="curtain curtain-left"></div>
-
-  <!-- Rideau droit -->
-  <div class="curtain curtain-right"></div>
-
-  <!-- Vidéo Background -->
-  <video autoplay muted playsinline loop preload="auto" class="cinema-video">
-    <source src="https://tonlien.com/netflix.mp4" type="video/mp4">
-  </video>
-
-  <!-- Overlay sombre -->
-  <div class="cinema-overlay"></div>
-
-  <!-- Lumière rouge -->
-  <div class="red-light"></div>
-
-  <!-- Animation SVG Logo -->
-  <div class="logo-container">
-    <svg viewBox="0 0 500 200">
-      <text x="50%" y="50%" text-anchor="middle" dy=".35em">
-        Netflix Box
-      </text>
-    </svg>
-  </div>
-
-</div>
-    
+<div class="theme-background"></div>
+ 
 <!-- TON SITE -->
 <div id="main-content">
   <!-- tout ton site ici -->
-
-<div class="smoke"></div>
-<div class="grain"></div>
 
 <header>
 <h1>NETFLIX</h1>
@@ -616,49 +572,5 @@ setInterval(function(){
 },1000);
 
 </script>
-
-<script>
-window.addEventListener("load", () => {
-
-  setTimeout(() => {
-
-    // OUVERTURE RIDEAU
-    document.querySelector(".curtain-left")
-      .style.transform = "translateX(-100%)";
-
-    document.querySelector(".curtain-right")
-      .style.transform = "translateX(100%)";
-
-  }, 2500);
-
-  setTimeout(() => {
-
-    // FADE INTRO
-    document.getElementById("cinema-intro").style.opacity = "0";
-    document.getElementById("main-content").style.opacity = "1";
-
-  }, 4500);
-
-  setTimeout(() => {
-
-    // SUPPRESSION INTRO
-    document.getElementById("cinema-intro").remove();
-
-  }, 6000);
-
-});
-
-/* TRANSITION FERMETURE */
-window.addEventListener("beforeunload", function () {
-  document.body.style.opacity = "0";
-});
-</script>
-
-<img 
-  src="https://files.catbox.moe/3iuax0.jpg" 
-  alt="Illustration"
-  class="side-image"
-  loading="lazy">
-
 </body>
 </html>

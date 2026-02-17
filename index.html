@@ -721,6 +721,38 @@ canvas{
     grid-template-columns:1fr;
   }
 }
+
+/* ================= HEATMAP ================= */
+
+.heatmap-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:30px;
+  margin-top:60px;
+}
+
+.heatmap-card h3{
+  margin-bottom:25px;
+}
+
+.heatmap-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(22px,1fr));
+  gap:6px;
+}
+
+.heatmap-day{
+  width:22px;
+  height:22px;
+  border-radius:6px;
+  background:#1f2937;
+  transition:.3s;
+}
+
+.heatmap-day:hover{
+  transform:scale(1.2);
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -928,6 +960,12 @@ crossorigin="anonymous"></script>
   </div>
 
 </section>
+
+<!-- HEATMAP -->
+<div class="heatmap-card">
+  <h3>🔥 Activité journalière</h3>
+  <div id="heatmap" class="heatmap-grid"></div>
+</div>
 
 <!-- MODALE AUTH -->
 <div class="modal-bg" id="authModal">
@@ -1141,7 +1179,45 @@ window.addEventListener("DOMContentLoaded", () => {
   incrementVisit();
   listenTodayVisits();
   loadAdvancedStats();
+  loadHeatmap();
+  loadMonthlyComparison();
 });
+
+/* =========================
+   🔥 HEATMAP JOURNALIÈRE
+========================= */
+
+async function loadHeatmap() {
+
+  const heatmap = document.getElementById("heatmap");
+  heatmap.innerHTML = "";
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for(let day = 1; day <= daysInMonth; day++){
+
+    const date = new Date(year, month, day);
+    const key = date.toISOString().slice(0,10);
+
+    const snap = await getDoc(doc(db, "stats_daily", key));
+    const count = snap.data()?.count || 0;
+
+    const div = document.createElement("div");
+    div.classList.add("heatmap-day");
+
+    // 🎨 Couleur selon intensité
+    let intensity = Math.min(count / 20, 1); 
+    div.style.background = `rgba(139,92,246,${intensity})`;
+
+    div.title = `${key} : ${count} visites`;
+
+    heatmap.appendChild(div);
+  }
+}
 
 /* =========================
    📊 GRAPHIQUES
@@ -1183,6 +1259,37 @@ const realtimeChart = new Chart(realtimeCtx, {
     animation:false
   }
 });
+
+async function loadMonthlyComparison() {
+
+  const now = new Date();
+  const currentMonthKey = monthKey();
+
+  const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const prevMonthKey = prevDate.toISOString().slice(0,7);
+
+  const currentSnap = await getDoc(doc(db,"stats_monthly",currentMonthKey));
+  const prevSnap = await getDoc(doc(db,"stats_monthly",prevMonthKey));
+
+  const current = currentSnap.data()?.count || 0;
+  const previous = prevSnap.data()?.count || 0;
+
+  const percent = previous ? ((current - previous)/previous)*100 : 0;
+console.log("Évolution mensuelle :", percent.toFixed(1)+"%");
+
+  monthlyChart.data.labels = ["Mois précédent","Mois actuel"];
+  monthlyChart.data.datasets = [{
+      label: "Comparatif visites",
+      data: [previous, current],
+      backgroundColor:[
+        "rgba(100,116,139,.6)",
+        "rgba(139,92,246,.8)"
+      ],
+      borderRadius:12
+  }];
+
+  monthlyChart.update();
+}
 
 /* 🔄 Mise à jour temps réel */
 onSnapshot(dailyRef, snap => {

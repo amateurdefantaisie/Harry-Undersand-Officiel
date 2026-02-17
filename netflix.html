@@ -384,6 +384,35 @@ header::after{
     height:100%;
     background:linear-gradient(to top, rgba(0,0,0,0.9), transparent);
 }
+
+.side-image {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  max-width: 40%;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+  .side-image {
+    width: 150px;
+    opacity: 0.8;
+  }
+}
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.side-image {
+  animation: float 4s ease-in-out infinite;
+}
 </style>
 </head>
 
@@ -613,5 +642,11 @@ window.addEventListener("beforeunload", function () {
   document.body.style.opacity = "0";
 });
 </script>
+
+<img 
+  src="https://https://files.catbox.moe/3iuax0.jpg" 
+  alt="Illustration"
+  class="side-image">
+
 </body>
 </html>

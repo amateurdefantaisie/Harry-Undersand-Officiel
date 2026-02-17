@@ -623,6 +623,104 @@ background:#b91c1c;
   padding:2px 4px;
   border-radius:4px;
 }
+
+/* ================= DASHBOARD ================= */
+
+.dashboard{
+  margin:100px auto;
+}
+
+.dashboard-title{
+  text-align:center;
+  font-size:2.4rem;
+  margin-bottom:50px;
+  background:linear-gradient(135deg,var(--violet),#a78bfa);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+/* KPI */
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:28px;
+  margin-bottom:50px;
+}
+
+.kpi-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:30px;
+  text-align:center;
+  transition:.35s;
+}
+
+.kpi-card h4{
+  color:var(--muted);
+  margin-bottom:15px;
+}
+
+.kpi-card p{
+  font-size:2rem;
+  font-weight:800;
+  color:var(--violet);
+}
+
+.kpi-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 0 40px rgba(139,92,246,.4);
+}
+
+/* TABLE */
+.stats-table-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:30px;
+  margin-bottom:60px;
+  overflow:auto;
+}
+
+.stats-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.stats-table th,
+.stats-table td{
+  padding:16px;
+  text-align:left;
+}
+
+.stats-table th{
+  color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.stats-table tr:hover{
+  background:rgba(139,92,246,.05);
+}
+
+/* CHARTS */
+.charts-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+}
+
+canvas{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:20px;
+}
+
+@media(max-width:900px){
+  .charts-grid{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -764,20 +862,71 @@ crossorigin="anonymous"></script>
   </p>
 </section>
 
-<section class="container" style="text-align:center;margin-top:30px">
-  <div class="card">
-    <h3>📊 Statistiques</h3>
+<section class="dashboard container">
 
-    <p>📅 Ce mois : <b><span id="monthVisits">0</span></b></p>
-    <p>📆 Cette année : <b><span id="yearVisits">0</span></b></p>
+  <h2 class="dashboard-title">📊 Dashboard Analytics</h2>
 
-    <hr style="margin:15px 0;border-color:rgba(255,255,255,.1)">
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
 
-    <p>Moyenne / jour : <b><span id="avgDay">0</span></b></p>
-    <p>Moyenne / mois : <b><span id="avgMonth">0</span></b></p>
+    <div class="kpi-card">
+      <h4>Aujourd’hui</h4>
+      <p id="todayVisitsCard">0</p>
+    </div>
 
-    <p>📈 Évolution aujourd’hui : <b><span id="todayPercent">0</span>%</b></p>
+    <div class="kpi-card">
+      <h4>Ce mois</h4>
+      <p id="monthVisits">0</p>
+    </div>
+
+    <div class="kpi-card">
+      <h4>Cette année</h4>
+      <p id="yearVisits">0</p>
+    </div>
+
+    <div class="kpi-card">
+      <h4>Évolution</h4>
+      <p id="todayPercent">0%</p>
+    </div>
+
   </div>
+
+  <!-- TABLEAU DETAILLE -->
+  <div class="stats-table-card">
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Période</th>
+          <th>Visites</th>
+          <th>Moyenne</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Aujourd’hui</td>
+          <td id="todayTable">0</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Mois en cours</td>
+          <td id="monthTable">0</td>
+          <td id="avgDay">0</td>
+        </tr>
+        <tr>
+          <td>Année en cours</td>
+          <td id="yearTable">0</td>
+          <td id="avgMonth">0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GRAPHIQUES -->
+  <div class="charts-grid">
+    <canvas id="monthlyChart"></canvas>
+    <canvas id="realtimeChart"></canvas>
+  </div>
+
 </section>
 
 <!-- MODALE AUTH -->
@@ -992,6 +1141,66 @@ window.addEventListener("DOMContentLoaded", () => {
   incrementVisit();
   listenTodayVisits();
   loadAdvancedStats();
+});
+
+/* =========================
+   📊 GRAPHIQUES
+========================= */
+
+const monthlyCtx = document.getElementById("monthlyChart");
+const realtimeCtx = document.getElementById("realtimeChart");
+
+const monthlyChart = new Chart(monthlyCtx, {
+  type: "bar",
+  data: {
+    labels: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"],
+    datasets: [{
+      label: "Visites mensuelles",
+      data: new Array(12).fill(0),
+      backgroundColor: "rgba(139,92,246,.6)",
+      borderRadius: 8
+    }]
+  },
+  options: {
+    responsive:true,
+    animation:{ duration:1500 }
+  }
+});
+
+const realtimeChart = new Chart(realtimeCtx, {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [{
+      label: "Temps réel",
+      data: [],
+      borderColor: "#8b5cf6",
+      tension: .4
+    }]
+  },
+  options:{
+    responsive:true,
+    animation:false
+  }
+});
+
+/* 🔄 Mise à jour temps réel */
+onSnapshot(dailyRef, snap => {
+  const value = snap.data()?.count || 0;
+
+  document.getElementById("todayVisitsCard").textContent = value;
+  document.getElementById("todayTable").textContent = value;
+
+  const now = new Date().toLocaleTimeString();
+  realtimeChart.data.labels.push(now);
+  realtimeChart.data.datasets[0].data.push(value);
+
+  if (realtimeChart.data.labels.length > 15) {
+    realtimeChart.data.labels.shift();
+    realtimeChart.data.datasets[0].data.shift();
+  }
+
+  realtimeChart.update();
 });
 
 /* AUTH STATE */
@@ -1300,6 +1509,8 @@ searchInput.addEventListener("input", ()=>{
    Visiter mon site
  </a>
 </section>
+  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <footer style="text-align:center;padding:40px;color:#6b7280">
 © 2026 — Amateur De Fantaisie

@@ -26,7 +26,6 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
 <meta name="twitter:image" content="https://files.catbox.moe/mmzmk7.jpg">
 
 <style>
-
 body{
     margin:0;
     font-family:'Poppins',sans-serif;
@@ -38,15 +37,11 @@ body{
 /* IMAGE PRINCIPALE FIXE */
 .theme-background{
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:url("https://files.catbox.moe/3iuax0.jpg") no-repeat center center;
-    background-size:cover;
-    z-index:0;
+    inset:0;
+    background:url("https://files.catbox.moe/3iuax0.jpg") center/cover no-repeat;
+    z-index:-1;
 }
-
+    
 /* CONTENU AU DESSUS */
 #main-content{
     position:relative;
@@ -199,217 +194,50 @@ footer{
     font-weight:bold;
     z-index:5;
 }
-.btn-main{
-    background:#E50914;
-    padding:15px 35px;
-    border-radius:5px;
-    color:white;
-    font-weight:700;
-    text-decoration:none;
-    margin-top:25px;
-    display:inline-block;
-    transition:0.3s;
-}
 
-.btn-main:hover{
-    background:#b20710;
-    transform:scale(1.05);
-}
-
-.section{
-    padding:80px 20px;
-    max-width:1100px;
-    margin:auto;
-}
-
-.section h2{
-    text-align:center;
-    font-size:34px;
-    margin-bottom:50px;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:30px;
-}
-
-.card{
-    background:#141414;
-    padding:30px;
-    border-radius:8px;
-    border:1px solid #222;
-    transition:0.3s;
-    opacity:0;
-    transform:translateY(40px);
-}
-
-.card:hover{
-    border:1px solid #E50914;
-    transform:translateY(-10px);
-}
-
-.price{
-    font-size:28px;
-    color:#E50914;
-    margin:15px 0;
-}
-
-button{
-    background:#E50914;
-    border:none;
-    padding:12px 25px;
-    color:white;
-    font-weight:600;
-    border-radius:4px;
-    cursor:pointer;
-    margin-top:15px;
-    transition:0.3s;
-}
-
-button:hover{
-    background:#b20710;
-}
-
-.badge{
-    background:#E50914;
-    padding:4px 10px;
-    font-size:12px;
-    border-radius:3px;
-    font-weight:bold;
-}
-
-.payment{
-    background:#111;
-    padding:50px 20px;
-    text-align:center;
-}
-
-.countdown{
-    font-size:26px;
-    color:#E50914;
-    font-weight:700;
-    margin-top:10px;
-}
-
-footer{
-    background:#111;
-    text-align:center;
-    padding:30px;
-    margin-top:50px;
-}
-
-.floating-whatsapp{
+.dark-overlay{
     position:fixed;
-    bottom:20px;
-    right:20px;
-    background:#25D366;
-    color:white;
-    padding:14px 18px;
-    border-radius:50px;
-    text-decoration:none;
-    font-weight:bold;
+    inset:0;
+    background:rgba(0,0,0,0.65);
+    z-index:0;
 }
 
-/* RESET */
-body, html {
-  margin: 0;
-  padding: 0;
-  background: black;
-  overflow-x: hidden;
+/* RESPONSIVE GLOBAL */
+@media (max-width:1024px){
+    header h1{
+        font-size:40px;
+    }
 }
 
-/* OVERLAY */
-.cinema-overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6));
-  z-index: 2;
-}
+@media (max-width:768px){
 
-/* CONTENU PRINCIPAL */
-#main-content {
-  opacity: 0;
-  transition: opacity 1.5s ease;
-}
+    header{
+        min-height:70vh;
+        padding:30px 15px;
+    }
 
-/* CARDS PREMIUM */
-.card{
-    backdrop-filter: blur(8px);
-    background:rgba(20,20,20,0.7);
-    box-shadow:0 0 30px rgba(0,0,0,0.7);
-    transition:0.4s ease;
-}
+    header h1{
+        font-size:32px;
+    }
 
-.card:hover{
-    box-shadow:
-        0 0 40px rgba(229,9,20,0.6),
-        0 0 80px rgba(229,9,20,0.3);
-}
+    header p{
+        font-size:16px;
+    }
 
-/* BOUTON PREMIUM */
-button{
-    background:linear-gradient(45deg,#E50914,#b20710);
-    box-shadow:0 0 15px rgba(229,9,20,0.5);
-}
+    .section{
+        padding:60px 15px;
+    }
 
-button:hover{
-    box-shadow:
-        0 0 25px rgba(229,9,20,0.8),
-        0 0 50px rgba(229,9,20,0.4);
-    transform:scale(1.07);
-}
-header{
-    position:relative;
-    overflow:hidden;
-}
-header::after{
-    content:"";
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-}
+    .cards{
+        grid-template-columns:1fr;
+    }
 
-.side-image {
-  position: fixed;
-  top: 50%;
-  right: 8%;
-  transform: translateY(-50%);
-  width: 420px;
-  max-width: 38%;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.25;
-  object-fit: contain;
-  filter: brightness(1.1) contrast(1.2);
-}
-
-#main-content {
-  position: relative;
-  z-index: 20;
-}
-
-/* Responsive mobile */
-@media (max-width: 768px) {
-  .side-image {
-    width: 220px;
-    right: 50%;
-    top: 60%;
-    transform: translate(50%, -50%);
-    opacity: 0.15;
-  }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-.side-image {
-  animation: float 4s ease-in-out infinite;
+    .floating-whatsapp{
+        bottom:15px;
+        right:15px;
+        padding:10px 14px;
+        font-size:14px;
+    }
 }
 </style>
 </head>
@@ -417,7 +245,8 @@ header::after{
 <body>
 
 <div class="theme-background"></div>
- 
+<div class="dark-overlay"></div> 
+    
 <!-- TON SITE -->
 <div id="main-content">
   <!-- tout ton site ici -->

@@ -1815,33 +1815,126 @@ searchInput.addEventListener("input", ()=>{
 });
 
 /* =========================
-   🖱️ BADGE DRAGGABLE
+   🟢 BADGE ULTRA DRAG PRO
 ========================= */
 
 const badge = document.getElementById("draggableBadge");
 
 let isDragging = false;
-let offsetX, offsetY;
+let offsetX = 0;
+let offsetY = 0;
 
-badge.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  offsetX = e.clientX - badge.getBoundingClientRect().left;
-  offsetY = e.clientY - badge.getBoundingClientRect().top;
-  badge.style.cursor = "grabbing";
-});
+/* 🔹 RESTORE POSITION */
+function restorePosition() {
+  const saved = localStorage.getItem("badgePosition");
+  if (!saved) return;
 
-document.addEventListener("mousemove", (e) => {
-  if (!isDragging) return;
-
-  badge.style.left = (e.clientX - offsetX) + "px";
-  badge.style.top = (e.clientY - offsetY) + "px";
+  const pos = JSON.parse(saved);
+  badge.style.left = pos.x + "px";
+  badge.style.top = pos.y + "px";
   badge.style.right = "auto";
   badge.style.bottom = "auto";
+}
+
+restorePosition();
+
+/* 🔹 SAVE POSITION */
+function savePosition(x, y) {
+  localStorage.setItem("badgePosition", JSON.stringify({ x, y }));
+}
+
+/* 🔹 START DRAG (MOUSE + TOUCH) */
+function startDrag(clientX, clientY) {
+  isDragging = true;
+
+  const rect = badge.getBoundingClientRect();
+  offsetX = clientX - rect.left;
+  offsetY = clientY - rect.top;
+
+  badge.style.transition = "none";
+  badge.style.cursor = "grabbing";
+}
+
+/* 🔹 MOVE */
+function drag(clientX, clientY) {
+  if (!isDragging) return;
+
+  let x = clientX - offsetX;
+  let y = clientY - offsetY;
+
+  badge.style.left = x + "px";
+  badge.style.top = y + "px";
+  badge.style.right = "auto";
+  badge.style.bottom = "auto";
+}
+
+/* 🔹 STOP DRAG + MAGNETIC SNAP */
+function stopDrag() {
+  if (!isDragging) return;
+  isDragging = false;
+
+  const rect = badge.getBoundingClientRect();
+  const screenW = window.innerWidth;
+  const screenH = window.innerHeight;
+  const magnet = 80; // distance magnétique
+
+  let x = rect.left;
+  let y = rect.top;
+
+  /* AIMANT GAUCHE / DROITE */
+  if (x < magnet) x = 20;
+  else if (x + rect.width > screenW - magnet)
+    x = screenW - rect.width - 20;
+
+  /* AIMANT HAUT / BAS */
+  if (y < magnet) y = 20;
+  else if (y + rect.height > screenH - magnet)
+    y = screenH - rect.height - 20;
+
+  badge.style.transition = "all .35s cubic-bezier(.34,1.56,.64,1)";
+  badge.style.left = x + "px";
+  badge.style.top = y + "px";
+
+  savePosition(x, y);
+
+  badge.style.cursor = "grab";
+}
+
+/* =========================
+   EVENTS
+========================= */
+
+// 🖱️ MOUSE
+badge.addEventListener("mousedown", e => {
+  startDrag(e.clientX, e.clientY);
 });
 
-document.addEventListener("mouseup", () => {
-  isDragging = false;
-  badge.style.cursor = "grab";
+document.addEventListener("mousemove", e => {
+  drag(e.clientX, e.clientY);
+});
+
+document.addEventListener("mouseup", stopDrag);
+
+// 📱 TOUCH
+badge.addEventListener("touchstart", e => {
+  const touch = e.touches[0];
+  startDrag(touch.clientX, touch.clientY);
+}, { passive: true });
+
+document.addEventListener("touchmove", e => {
+  if (!isDragging) return;
+  const touch = e.touches[0];
+  drag(touch.clientX, touch.clientY);
+}, { passive: true });
+
+document.addEventListener("touchend", stopDrag);
+
+/* 🔹 PETITE ANIMATION AU CLIC */
+badge.addEventListener("click", () => {
+  badge.style.transform = "scale(1.1)";
+  setTimeout(() => {
+    badge.style.transform = "scale(1)";
+  }, 150);
 });
 
 /* Curseur initial */

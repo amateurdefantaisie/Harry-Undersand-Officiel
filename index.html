@@ -1810,22 +1810,18 @@ searchInput.addEventListener("input", ()=>{
 });
 
 /* =========================
-   🟢 BADGE DRAGGABLE
+   🖱️ BADGE DRAGGABLE
 ========================= */
 
 const badge = document.getElementById("draggableBadge");
 
 let isDragging = false;
-let offsetX = 0;
-let offsetY = 0;
+let offsetX, offsetY;
 
 badge.addEventListener("mousedown", (e) => {
   isDragging = true;
-
-  offsetX = e.clientX - badge.offsetLeft;
-  offsetY = e.clientY - badge.offsetTop;
-
-  badge.style.transition = "none";
+  offsetX = e.clientX - badge.getBoundingClientRect().left;
+  offsetY = e.clientY - badge.getBoundingClientRect().top;
   badge.style.cursor = "grabbing";
 });
 
@@ -1834,14 +1830,17 @@ document.addEventListener("mousemove", (e) => {
 
   badge.style.left = (e.clientX - offsetX) + "px";
   badge.style.top = (e.clientY - offsetY) + "px";
-  badge.style.bottom = "auto";
   badge.style.right = "auto";
+  badge.style.bottom = "auto";
 });
 
 document.addEventListener("mouseup", () => {
   isDragging = false;
   badge.style.cursor = "grab";
 });
+
+/* Curseur initial */
+badge.style.cursor = "grab";
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>

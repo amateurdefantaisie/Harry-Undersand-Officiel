@@ -932,6 +932,11 @@ crossorigin="anonymous"></script>
   </p>
 </section>
 
+<div class="kpi-card">
+  <h4>En ligne</h4>
+  <p id="onlineUsers">0</p>
+</div>
+
 <section class="dashboard container">
 
   <h2 class="dashboard-title">🚀 ↓ Analyses Utilisateurs ↑ 🚀</h2>
@@ -1295,6 +1300,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadAdvancedStats();
   await loadHeatmap();
   await loadMonthlyComparison();
+  await setUserOnline();
 });
 
 /* =========================
@@ -1399,6 +1405,33 @@ console.log("Évolution mensuelle :", percent.toFixed(1)+"%");
 
   monthlyChart.update();
 }
+
+/* =========================
+   🟢 VISITEURS EN LIGNE
+========================= */
+
+const onlineRef = collection(db, "online_users");
+
+// Crée une session unique
+const sessionId = crypto.randomUUID();
+const userOnlineRef = doc(onlineRef, sessionId);
+
+// Quand quelqu’un arrive
+async function setUserOnline() {
+  await setDoc(userOnlineRef, {
+    createdAt: serverTimestamp()
+  });
+}
+
+// Quand quelqu’un quitte la page
+window.addEventListener("beforeunload", async () => {
+  await deleteDoc(userOnlineRef);
+});
+
+// Listener temps réel
+onSnapshot(onlineRef, snapshot => {
+  document.getElementById("onlineUsers").textContent = snapshot.size;
+});
 
 /* 🔄 Mise à jour temps réel */
 onSnapshot(dailyRef, snap => {

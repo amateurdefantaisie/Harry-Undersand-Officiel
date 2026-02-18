@@ -1511,11 +1511,6 @@ onSnapshot(onlineCollection, (snapshot) => {
   document.getElementById("onlineUsers").textContent = count;
 });
 
-// Listener temps réel
-onSnapshot(onlineRef, snapshot => {
-  document.getElementById("onlineCount").textContent = snapshot.size;
-});
-
 /* 🔄 Mise à jour temps réel */
 const realtimeDailyRef = doc(db, "stats_daily", todayKey());
 

@@ -1242,10 +1242,14 @@ async function incrementVisit() {
 
 // 🟢 2️⃣ Listener temps réel (plus fiable)
 function listenTodayVisits() {
+
+  const dailyRef = doc(db, "stats_daily", todayKey());
+
   onSnapshot(dailyRef, snap => {
     const value = snap.exists() ? snap.data().count || 0 : 0;
     document.getElementById("todayVisits").textContent = value;
   });
+
 }
 
 function animateCounter(id, endValue) {
@@ -1511,8 +1515,12 @@ onSnapshot(onlineRef, snapshot => {
 });
 
 /* 🔄 Mise à jour temps réel */
-onSnapshot(dailyRef, snap => {
-  const value = snap.data()?.count || 0;
+/* 🔄 Mise à jour temps réel */
+const realtimeDailyRef = doc(db, "stats_daily", todayKey());
+
+onSnapshot(realtimeDailyRef, snap => {
+
+  const value = snap.exists() ? snap.data().count || 0 : 0;
 
   document.getElementById("todayVisitsCard").textContent = value;
   document.getElementById("todayTable").textContent = value;

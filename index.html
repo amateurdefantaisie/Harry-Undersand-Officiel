@@ -1215,15 +1215,20 @@ function todayKey() {
   return d.toISOString().slice(0, 10);
 }
 
-const dailyRef = doc(db, "stats_daily", todayKey());
 const globalRef = doc(db, "stats", "global");
 
 // 🔴 1️⃣ Incrémentation simple
 async function incrementVisit() {
   try {
 
-    const monthRef = doc(db, "stats_monthly", monthKey());
-    const yearRef  = doc(db, "stats_yearly", yearKey());
+    const today = todayKey();
+    const month = monthKey();
+    const year = yearKey();
+
+    const dailyRef = doc(db, "stats_daily", today);
+    const monthRef = doc(db, "stats_monthly", month);
+    const yearRef  = doc(db, "stats_yearly", year);
+    const globalRef = doc(db, "stats", "global");
 
     await setDoc(globalRef, { visits: increment(1) }, { merge: true });
     await setDoc(dailyRef, { count: increment(1) }, { merge: true });

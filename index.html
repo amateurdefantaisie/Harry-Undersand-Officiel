@@ -812,6 +812,8 @@ canvas{
   box-shadow:0 0 25px rgba(22,163,74,.6);
   z-index:3000;
   animation:fadeIn .6s ease;
+  cursor:grab;
+
 }
 
 .online-badge .dot{
@@ -1806,6 +1808,40 @@ searchInput.addEventListener("input", ()=>{
     item.innerHTML = highlight(label, value);
   });
 });
+
+/* =========================
+   🟢 BADGE DRAGGABLE
+========================= */
+
+const badge = document.getElementById("draggableBadge");
+
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+badge.addEventListener("mousedown", (e) => {
+  isDragging = true;
+
+  offsetX = e.clientX - badge.offsetLeft;
+  offsetY = e.clientY - badge.offsetTop;
+
+  badge.style.transition = "none";
+  badge.style.cursor = "grabbing";
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+
+  badge.style.left = (e.clientX - offsetX) + "px";
+  badge.style.top = (e.clientY - offsetY) + "px";
+  badge.style.bottom = "auto";
+  badge.style.right = "auto";
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+  badge.style.cursor = "grab";
+});
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>
@@ -1824,8 +1860,8 @@ searchInput.addEventListener("input", ()=>{
  </a>
 </section>
 
-<div id="onlineBadge" class="online-badge">
-  <span class="dot"></span>
+<div class="online-badge" id="draggableBadge">
+  <div class="dot"></div>
   <span id="onlineCount">0</span> en ligne
 </div>
 

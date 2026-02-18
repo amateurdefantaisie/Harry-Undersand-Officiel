@@ -1464,57 +1464,58 @@ console.log("Évolution mensuelle :", percent.toFixed(1)+"%");
 }
 
 /* =========================
-   🟢 VISITEURS EN LIGNE PRO
+   🟢 VISITEURS EN LIGNE ULTRA STABLE
 ========================= */
 
-const onlineRef = collection(db, "online_users");
+const onlineCollection = collection(db, "online_users");
 const sessionId = crypto.randomUUID();
-const userOnlineRef = doc(onlineRef, sessionId);
+const sessionRef = doc(onlineCollection, sessionId);
 
-// Marque utilisateur actif
+// 1️⃣ Marquer actif
 async function setUserOnline() {
-  await setDoc(userOnlineRef, {
+  await setDoc(sessionRef, {
     lastActive: serverTimestamp()
   });
 }
 
-// Supprime quand quitte
-window.addEventListener("beforeunload", async () => {
-  await deleteDoc(userOnlineRef);
-});
-
-// Ping toutes les 20 secondes
-setInterval(async () => {
-  await setDoc(userOnlineRef, {
+// 2️⃣ Ping toutes les 15 sec
+setInterval(() => {
+  setDoc(sessionRef, {
     lastActive: serverTimestamp()
   }, { merge: true });
-}, 20000);
+}, 15000);
 
-// Nettoyage auto (supprime sessions inactives > 60 sec)
+// 3️⃣ Nettoyage automatique intelligent
 async function cleanInactiveUsers() {
-
-  const snapshot = await getDocs(onlineRef);
+  const snapshot = await getDocs(onlineCollection);
   const now = Date.now();
 
-  snapshot.forEach(async docSnap => {
+  snapshot.forEach(async (docSnap) => {
     const data = docSnap.data();
-    const last = data.lastActive?.toDate().getTime();
+    const lastActive = data.lastActive?.toDate()?.getTime();
 
-    if (last && (now - last > 60000)) {
+    if (!lastActive || (now - lastActive > 30000)) {
       await deleteDoc(doc(db, "online_users", docSnap.id));
     }
   });
 }
 
-// Nettoyage toutes les 30 sec
-setInterval(cleanInactiveUsers, 30000);
+// Nettoyage toutes les 20 sec
+setInterval(cleanInactiveUsers, 20000);
+
+// 4️⃣ Listener temps réel
+onSnapshot(onlineCollection, (snapshot) => {
+  const count = snapshot.size;
+
+  document.getElementById("onlineCount").textContent = count;
+  document.getElementById("onlineUsers").textContent = count;
+});
 
 // Listener temps réel
 onSnapshot(onlineRef, snapshot => {
   document.getElementById("onlineCount").textContent = snapshot.size;
 });
 
-/* 🔄 Mise à jour temps réel */
 /* 🔄 Mise à jour temps réel */
 const realtimeDailyRef = doc(db, "stats_daily", todayKey());
 

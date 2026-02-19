@@ -1219,25 +1219,19 @@ const globalRef = doc(db, "stats", "global");
 
 // 🔴 1️⃣ Incrémentation simple
 async function incrementVisit() {
-  try {
 
-    const today = todayKey();
-    const month = monthKey();
-    const year = yearKey();
+  const today = todayKey();
+  const month = monthKey();
+  const year = yearKey();
 
-    const dailyRef = doc(db, "stats_daily", today);
-    const monthRef = doc(db, "stats_monthly", month);
-    const yearRef  = doc(db, "stats_yearly", year);
-    const globalRef = doc(db, "stats", "global");
+  const batch = [
+    setDoc(doc(db, "stats_daily", today), { count: increment(1) }, { merge: true }),
+    setDoc(doc(db, "stats_monthly", month), { count: increment(1) }, { merge: true }),
+    setDoc(doc(db, "stats_yearly", year), { count: increment(1) }, { merge: true }),
+    setDoc(doc(db, "stats", "global"), { visits: increment(1) }, { merge: true })
+  ];
 
-    await setDoc(globalRef, { visits: increment(1) }, { merge: true });
-    await setDoc(dailyRef, { count: increment(1) }, { merge: true });
-    await setDoc(monthRef, { count: increment(1) }, { merge: true });
-    await setDoc(yearRef, { count: increment(1) }, { merge: true });
-
-  } catch (err) {
-    console.error("Erreur incrémentation :", err);
-  }
+  await Promise.all(batch);
 }
 
 // 🟢 2️⃣ Listener temps réel (plus fiable)

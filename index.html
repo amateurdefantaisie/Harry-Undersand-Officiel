@@ -839,17 +839,17 @@ canvas{
 ========================= */
 
 .day-countdown{
-  position:fixed;
-  top:80px;
-  left:50%;
-  transform:translateX(-50%);
+  position:relative;
+  margin:120px auto 40px;
   display:flex;
+  justify-content:center;
   align-items:center;
   gap:12px;
-  z-index:2500;
+  width:max-content;
+
   background:rgba(10,15,25,.85);
   backdrop-filter:blur(15px);
-  padding:14px 24px;
+  padding:16px 28px;
   border-radius:20px;
   border:1px solid rgba(139,92,246,.4);
   box-shadow:0 0 40px rgba(139,92,246,.6);
@@ -1983,16 +1983,14 @@ function startDayCountdown(){
   function updateCountdown(){
 
     const now = new Date();
-
-    // Prochaine minuit
     const tomorrow = new Date();
     tomorrow.setHours(24,0,0,0);
 
     const diff = tomorrow - now;
 
     const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
     document.getElementById("countHours").textContent =
       hours.toString().padStart(2,"0");

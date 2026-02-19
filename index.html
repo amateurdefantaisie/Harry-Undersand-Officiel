@@ -833,6 +833,59 @@ canvas{
   from{opacity:0;transform:translateY(10px)}
   to{opacity:1;transform:translateY(0)}
 }
+
+/* =========================
+   ⏳ COMPTE À REBOURS 24H
+========================= */
+
+.day-countdown{
+  position:fixed;
+  top:80px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  z-index:2500;
+  background:rgba(10,15,25,.85);
+  backdrop-filter:blur(15px);
+  padding:14px 24px;
+  border-radius:20px;
+  border:1px solid rgba(139,92,246,.4);
+  box-shadow:0 0 40px rgba(139,92,246,.6);
+}
+
+.countdown-box{
+  text-align:center;
+  min-width:70px;
+}
+
+.countdown-box span{
+  font-size:1.8rem;
+  font-weight:800;
+  background:linear-gradient(135deg,#8b5cf6,#22d3ee);
+  -webkit-background-clip:text;
+  color:transparent;
+  text-shadow:0 0 20px rgba(139,92,246,.7);
+  display:block;
+}
+
+.countdown-box small{
+  font-size:.7rem;
+  color:#a78bfa;
+  letter-spacing:1px;
+}
+
+.countdown-separator{
+  font-size:1.8rem;
+  font-weight:800;
+  color:#22d3ee;
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{
+  50%{opacity:.3}
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -880,6 +933,24 @@ crossorigin="anonymous"></script>
 </div>
 </div>
 </header>
+
+<!-- ⏳ Compte à rebours journée -->
+<div class="day-countdown">
+  <div class="countdown-box">
+    <span id="countHours">00</span>
+    <small>Heures</small>
+  </div>
+  <div class="countdown-separator">:</div>
+  <div class="countdown-box">
+    <span id="countMinutes">00</span>
+    <small>Minutes</small>
+  </div>
+  <div class="countdown-separator">:</div>
+  <div class="countdown-box">
+    <span id="countSeconds">00</span>
+    <small>Secondes</small>
+  </div>
+</div>
 
 <div class="drawer-overlay" onclick="closeDrawer()"></div>
 
@@ -1904,8 +1975,40 @@ function stopDrag() {
 }
 
 /* =========================
-   EVENTS
+   ⏳ COMPTE À REBOURS FIN JOURNÉE
 ========================= */
+
+function startDayCountdown(){
+
+  function updateCountdown(){
+
+    const now = new Date();
+
+    // Prochaine minuit
+    const tomorrow = new Date();
+    tomorrow.setHours(24,0,0,0);
+
+    const diff = tomorrow - now;
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countHours").textContent =
+      hours.toString().padStart(2,"0");
+
+    document.getElementById("countMinutes").textContent =
+      minutes.toString().padStart(2,"0");
+
+    document.getElementById("countSeconds").textContent =
+      seconds.toString().padStart(2,"0");
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown,1000);
+}
+
+startDayCountdown();
 
 // 🖱️ MOUSE
 badge.addEventListener("mousedown", e => {
@@ -1956,7 +2059,7 @@ badge.addEventListener("click", () => {
    Visiter mon site
  </a>
 </section>
-
+  
 <footer style="text-align:center;padding:40px;color:#6b7280">
 © 2026 — Amateur De Fantaisie
 </footer>

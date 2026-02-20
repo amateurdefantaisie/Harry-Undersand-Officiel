@@ -25,6 +25,21 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
+/* RESET GLOBAL PROPRE */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
 --bg:#0b141a;
@@ -128,8 +143,8 @@ gap:10px
 
 #comments{
 max-width:900px;
-margin:80px auto;
-padding:40px;
+margin:0 auto;
+padding:100px 20px;
 background:linear-gradient(180deg,#0f172a,#020617);
 border:1px solid var(--border);
 border-radius:26px;
@@ -351,8 +366,8 @@ background:#b91c1c;
 ========================= */
 .about{
   max-width:1200px;
-  margin:100px auto;
-  padding:40px 20px;
+  margin:0 auto;
+  padding:100px 20px;
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:50px;
@@ -403,8 +418,8 @@ background:#b91c1c;
 ========================= */
 .services{
   max-width:1200px;
-  margin:80px auto;
-  padding:0 20px;
+  margin:0 auto;
+  padding:100px 20px;
 }
 
 .services h2{
@@ -627,7 +642,8 @@ background:#b91c1c;
 /* ================= DASHBOARD ================= */
 
 .dashboard{
-  margin:100px auto;
+  margin:0 auto;
+  padding:100px 20px;
 }
 
 .dashboard-title{
@@ -841,7 +857,8 @@ canvas{
 
 .day-countdown{
   position:relative;
-  margin:120px auto 5px;
+  margin:0 auto;
+  padding:100px 20px;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -899,8 +916,6 @@ body {
 /* Canvas étoiles */
 #space-bg {
   position: fixed;
-  top: 0;
-  left: 0;;
   inset: 0;
   width: 100vw;
   height: 100vh;
@@ -935,19 +950,31 @@ body {
   }
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
+section {
+  padding: 100px 20px;
+  margin: 0 auto;
+  max-width: 1200px;
 }
 
-body {
+/* Empêche tout espace externe final */
+body > *:last-child {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Si dernière section */
+section:last-of-type {
+  padding-bottom: 60px;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
-/* Supprime marge en bas de la dernière section */
-section:last-of-type,
-div:last-of-type {
-  margin-bottom: 0 !important;
+.main-wrapper > section:last-child {
+  margin-bottom: 0;
 }
 </style>
 
@@ -957,6 +984,8 @@ crossorigin="anonymous"></script>
 
 <body>
 
+<main class="main-wrapper">
+  
 <canvas id="space-bg"></canvas>
   
 <header>
@@ -2235,5 +2264,6 @@ cards.forEach(card => observer.observe(card));
 © 2026 — Amateur De Fantaisie
 </footer>
 
+</main>
 </body>
 </html>

@@ -886,156 +886,6 @@ canvas{
 @keyframes blink{
   50%{opacity:.3}
 }
-
-/* =========================
-   🌌 FOND ESPACE ANIMÉ
-========================= */
-
-body {
-  background: radial-gradient(ellipse at bottom, #090a1a 0%, #000000 100%);
-  overflow-x: hidden;
-}
-
-/* Canvas étoiles */
-#space-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-
-.hero-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 50px;
-  flex-wrap: wrap;
-}
-
-.hero-image img {
-  width: 420px;
-  border-radius: 20px;
-  box-shadow: 0 0 80px rgba(139,92,246,.6);
-  animation: floatHero 6s ease-in-out infinite;
-}
-
-@keyframes floatHero {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-18px); }
-  100% { transform: translateY(0px); }
-}
-
-@media(max-width:900px){
-  .hero-content{
-    flex-direction:column;
-    text-align:center;
-  }
-}
-
-/* =========================
-   🪐 PLANÈTES EN ROTATION
-========================= */
-
-.cosmos-layer{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-1;
-}
-
-.planet{
-  position:absolute;
-  border-radius:50%;
-  filter:blur(.3px);
-  animation:rotatePlanet linear infinite;
-}
-
-.planet-1{
-  width:160px;
-  height:160px;
-  top:15%;
-  left:8%;
-  background:radial-gradient(circle at 30% 30%, #a78bfa, #4c1d95);
-  box-shadow:0 0 60px #8b5cf6;
-  animation-duration:40s;
-}
-
-.planet-2{
-  width:110px;
-  height:110px;
-  bottom:20%;
-  right:10%;
-  background:radial-gradient(circle at 30% 30%, #22d3ee, #0e7490);
-  box-shadow:0 0 50px #22d3ee;
-  animation-duration:60s;
-}
-
-.planet-3{
-  width:70px;
-  height:70px;
-  top:60%;
-  left:40%;
-  background:radial-gradient(circle at 30% 30%, #f472b6, #7e22ce);
-  box-shadow:0 0 40px #f472b6;
-  animation-duration:80s;
-}
-
-@keyframes rotatePlanet{
-  from{transform:rotate(0deg) translateX(40px) rotate(0deg);}
-  to{transform:rotate(360deg) translateX(40px) rotate(-360deg);}
-}
-
-/* =========================
-   🌫️ BROUILLARD COSMIQUE
-========================= */
-
-.cosmic-fog{
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 40%, rgba(139,92,246,.15), transparent 60%),
-    radial-gradient(circle at 70% 60%, rgba(34,211,238,.12), transparent 60%),
-    radial-gradient(circle at 50% 80%, rgba(244,114,182,.12), transparent 60%);
-  animation:fogMove 25s infinite alternate ease-in-out;
-  pointer-events:none;
-  z-index:-1;
-}
-
-@keyframes fogMove{
-  0%{transform:translateX(0) translateY(0) scale(1);}
-  100%{transform:translateX(-40px) translateY(-30px) scale(1.1);}
-}
-
-/* =========================
-   💥 EFFET NÉBULEUSE
-========================= */
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:radial-gradient(circle at center,
-    rgba(139,92,246,.25),
-    transparent 60%);
-  animation:nebulaPulse 6s infinite ease-in-out;
-  z-index:-2;
-}
-
-@keyframes nebulaPulse{
-  0%,100%{opacity:.4; transform:scale(1);}
-  50%{opacity:.7; transform:scale(1.2);}
-}
-
-.cursor{
-  color:#8b5cf6;
-  animation:blinkCursor 1s infinite;
-}
-
-@keyframes blinkCursor{
-  50%{opacity:0}
-}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1044,16 +894,6 @@ crossorigin="anonymous"></script>
 
 <body>
 
-<canvas id="space-bg"></canvas>
-
-<div class="cosmos-layer">
-  <div class="planet planet-1"></div>
-  <div class="planet planet-2"></div>
-  <div class="planet planet-3"></div>
-</div>
-
-<div class="cosmic-fog"></div>
-  
 <header>
 <section class="container" id="adminPanel" style="display:none">
   <div class="card">
@@ -1156,24 +996,8 @@ crossorigin="anonymous"></script>
 </div>
 
 <section class="hero">
-  <div class="hero-content">
-    <div class="hero-text">
-     <h1 id="ai-typing"></h1>
-      <p>
-        Création de solutions intelligentes, plateformes premium,
-        automatisation avancée et expériences digitales futuristes.
-      </p>
-      <div style="margin-top:25px">
-        <button class="btn btn-primary">Explorer</button>
-        <button class="btn btn-outline">Découvrir</button>
-      </div>
-    </div>
-
-    <div class="hero-image">
-      <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564"
-           alt="Univers digital">
-    </div>
-  </div>
+<h1>Harry Undersand<br><span>Développeur & Architecte IA</span></h1>
+<p>Chatbots IA, Streaming Premium, Hébergement Cloud et automatisation digitale.</p>
 </section>
 
 <!-- 🧩 SERVICES -->
@@ -2150,54 +1974,6 @@ function stopDrag() {
   badge.style.cursor = "grab";
 }
 
-<script>
-/* =========================
-   🧠 TYPEWRITER IA
-========================= */
-
-const texts = [
-  "Harry Undersand",
-  "Architecte IA",
-  "Univers Digital Futuriste",
-  "Automatisation & Intelligence"
-];
-
-let index = 0;
-let charIndex = 0;
-let currentText = "";
-let isDeleting = false;
-
-function typeEffect(){
-
-  const element = document.getElementById("ai-typing");
-  const fullText = texts[index];
-
-  if(isDeleting){
-    currentText = fullText.substring(0, charIndex--);
-  } else {
-    currentText = fullText.substring(0, charIndex++);
-  }
-
-  element.innerHTML = currentText + "<span class='cursor'>|</span>";
-
-  let speed = isDeleting ? 40 : 70;
-
-  if(!isDeleting && charIndex === fullText.length){
-    speed = 1200;
-    isDeleting = true;
-  }
-  else if(isDeleting && charIndex === 0){
-    isDeleting = false;
-    index = (index + 1) % texts.length;
-    speed = 500;
-  }
-
-  setTimeout(typeEffect, speed);
-}
-
-typeEffect();
-</script>
-  
 /* =========================
    ⏳ COMPTE À REBOURS FIN JOURNÉE
 ========================= */
@@ -2281,82 +2057,7 @@ badge.addEventListener("click", () => {
    Visiter mon site
  </a>
 </section>
-
-<script>
-const canvas = document.getElementById("space-bg");
-const ctx = canvas.getContext("2d");
-
-let stars = [];
-let shootingStars = [];
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resize);
-resize();
-
-/* ⭐ Création étoiles */
-for (let i = 0; i < 250; i++) {
-  stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 2,
-    speed: Math.random() * 0.5
-  });
-}
-
-/* 🌠 Étoiles filantes */
-function createShootingStar() {
-  shootingStars.push({
-    x: Math.random() * canvas.width,
-    y: 0,
-    length: Math.random() * 80 + 50,
-    speed: Math.random() * 8 + 6,
-    opacity: 1
-  });
-}
-
-setInterval(createShootingStar, 3000);
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  /* ⭐ Petites étoiles */
-  ctx.fillStyle = "white";
-  stars.forEach(star => {
-    star.y += star.speed;
-    if (star.y > canvas.height) star.y = 0;
-
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  /* 🌠 Filantes */
-  shootingStars.forEach((star, index) => {
-    ctx.strokeStyle = "rgba(255,255,255," + star.opacity + ")";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(star.x, star.y);
-    ctx.lineTo(star.x - star.length, star.y + star.length);
-    ctx.stroke();
-
-    star.x += star.speed;
-    star.y += star.speed;
-    star.opacity -= 0.02;
-
-    if (star.opacity <= 0) {
-      shootingStars.splice(index, 1);
-    }
-  });
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-</script>
-
+  
 <footer style="text-align:center;padding:40px;color:#6b7280">
 © 2026 — Amateur De Fantaisie
 </footer>

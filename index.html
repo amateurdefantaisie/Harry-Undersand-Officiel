@@ -895,6 +895,27 @@ crossorigin="anonymous"></script>
 <body>
 
 <header>
+<section class="container" id="adminPanel" style="display:none">
+  <div class="card">
+    <h2>👑 Administration</h2>
+
+    <p>📊 Visites : <b><span id="adminVisits">0</span></b></p>
+
+    <h3>👥 Utilisateurs</h3>
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </div>
+</section>
+
 <div class="navbar">
 <a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
 <div class="menu-btn" onclick="openDrawer()">
@@ -979,27 +1000,6 @@ crossorigin="anonymous"></script>
 <p>Chatbots IA, Streaming Premium, Hébergement Cloud et automatisation digitale.</p>
 </section>
 
-<section class="container" id="adminPanel" style="display:none">
-  <div class="card">
-    <h2>👑 Administration</h2>
-
-    <p>📊 Visites : <b><span id="adminVisits">0</span></b></p>
-
-    <h3>👥 Utilisateurs</h3>
-    <table class="users-table">
-      <thead>
-        <tr>
-          <th>Email</th>
-          <th>Rôle</th>
-          <th>Statut</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="usersTable"></tbody>
-    </table>
-  </div>
-</section>
-
 <!-- 🧩 SERVICES -->
 <section class="services">
   <h2>Mes services</h2>
@@ -1050,6 +1050,11 @@ crossorigin="anonymous"></script>
     📅 Aujourd’hui : <b><span id="todayVisits">0</span></b>
   </p>
 </section>
+
+<div class="kpi-card">
+  <h4>En ligne</h4>
+  <p id="onlineUsers">0</p>
+</div>
 
 <section class="dashboard container">
 
@@ -1174,7 +1179,7 @@ crossorigin="anonymous"></script>
 </section>
 
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- FIREBASE -->
 <script type="module">
@@ -1712,6 +1717,7 @@ const commentInput = document.getElementById("comment");
 const loadMoreBtn = document.getElementById("loadMoreComments");
 
 let commentsLimit = 10;
+let lastVisible = null;
 let selectedRating = 0;
 
 /* Gestion étoiles */
@@ -1848,7 +1854,7 @@ window.openDrawer = function(){
 window.closeDrawer = function(){
   document.querySelector(".drawer").classList.remove("open");
   document.querySelector(".drawer-overlay").classList.remove("show");
-  document.body.style.overflow = "auto";
+  document.body.style.overflow = "";
 };
 
 document.querySelectorAll(".drawer-links a").forEach(link=>{

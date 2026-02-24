@@ -1301,6 +1301,7 @@ async function incrementVisit() {
     setDoc(doc(db, "stats_daily", today), { count: increment(1) }, { merge: true }),
     setDoc(doc(db, "stats_monthly", month), { count: increment(1) }, { merge: true }),
     setDoc(doc(db, "stats_yearly", year), { count: increment(1) }, { merge: true }),
+    setDoc(doc(db, "stats_hourly", todayKey()+"_"+new Date().getHours()), { count: increment(1) }, { merge: true }),
     setDoc(doc(db, "stats", "global"), { visits: increment(1) }, { merge: true })
   ];
 
@@ -1515,11 +1516,15 @@ const hourlyChart = new Chart(hourlyCtx, {
       label: "Connexions par heure",
       data: new Array(24).fill(0),
       borderColor: "#22d3ee",
-      backgroundColor: "rgba(34,211,238,.2)",
-      tension:.4,
-      fill:true
-    }]
-  },
+      backgroundColor: (context)=>{
+        const chart = context.chart;
+        const {ctx, chartArea} = chart;
+        if(!chartArea) return null;
+        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+        gradient.addColorStop(0,"rgba(34,211,238,0)");
+        gradient.addColorStop(1,"rgba(34,211,238,.5)");
+        return gradient;
+},
   options:{
     responsive:true,
     scales:{
@@ -1541,14 +1546,14 @@ const hourlyChart = new Chart(hourlyCtx, {
 async function loadHourlyStats(){
 
   const today = todayKey();
-  const snap = await getDoc(doc(db,"stats_daily",today));
-  const total = snap.data()?.count || 0;
-
-  // Simulation intelligente répartie
   let hourlyData = new Array(24).fill(0);
-  for(let i=0;i<total;i++){
-    const randomHour = Math.floor(Math.random()*24);
-    hourlyData[randomHour]++;
+
+  for(let hour=0; hour<24; hour++){
+
+    const key = today + "_" + hour;
+    const snap = await getDoc(doc(db,"stats_hourly",key));
+
+    hourlyData[hour] = snap.data()?.count || 0;
   }
 
   hourlyChart.data.datasets[0].data = hourlyData;
@@ -1707,6 +1712,18 @@ onSnapshot(realtimeDailyRef, snap => {
   }
 
   realtimeChart.update();
+});
+
+/* 🔄 Mise à jour horaire temps réel */
+const currentHourKey = todayKey()+"_"+new Date().getHours();
+const realtimeHourRef = doc(db,"stats_hourly",currentHourKey);
+
+onSnapshot(realtimeHourRef, snap=>{
+  const hour = new Date().getHours();
+  const value = snap.data()?.count || 0;
+
+  hourlyChart.data.datasets[0].data[hour] = value;
+  hourlyChart.update();
 });
 
 /* AUTH STATE */

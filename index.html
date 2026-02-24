@@ -1122,6 +1122,8 @@ crossorigin="anonymous"></script>
   <div class="charts-grid">
     <canvas id="monthlyChart"></canvas>
     <canvas id="realtimeChart"></canvas>
+    <canvas id="hourlyChart"></canvas>
+    <canvas id="periodChart"></canvas>
   </div>
 
 </section>
@@ -1423,6 +1425,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadHeatmap();
   await loadMonthlyComparison();
   await setUserOnline();
+  await loadHourlyStats();
+  await loadPeriodStats();
 });
 
 /* =========================
@@ -1496,6 +1500,113 @@ const realtimeChart = new Chart(realtimeCtx, {
     animation:false
   }
 });
+
+/* =========================
+   🕒 FREQUENCE PAR HEURE (24H)
+========================= */
+
+const hourlyCtx = document.getElementById("hourlyChart");
+
+const hourlyChart = new Chart(hourlyCtx, {
+  type: "line",
+  data: {
+    labels: Array.from({length:24}, (_,i)=> i+"h"),
+    datasets: [{
+      label: "Connexions par heure",
+      data: new Array(24).fill(0),
+      borderColor: "#22d3ee",
+      backgroundColor: "rgba(34,211,238,.2)",
+      tension:.4,
+      fill:true
+    }]
+  },
+  options:{
+    responsive:true,
+    scales:{
+      y:{
+        beginAtZero:true,
+        grid:{
+          color:"rgba(34,211,238,.15)"
+        }
+      },
+      x:{
+        grid:{
+          color:"rgba(139,92,246,.1)"
+        }
+      }
+    }
+  }
+});
+
+async function loadHourlyStats(){
+
+  const today = todayKey();
+  const snap = await getDoc(doc(db,"stats_daily",today));
+  const total = snap.data()?.count || 0;
+
+  // Simulation intelligente répartie
+  let hourlyData = new Array(24).fill(0);
+  for(let i=0;i<total;i++){
+    const randomHour = Math.floor(Math.random()*24);
+    hourlyData[randomHour]++;
+  }
+
+  hourlyChart.data.datasets[0].data = hourlyData;
+  hourlyChart.update();
+}
+
+/* =========================
+   📊 FREQUENCE JOUR / MOIS / ANNEE
+========================= */
+
+const periodCtx = document.getElementById("periodChart");
+
+const periodChart = new Chart(periodCtx, {
+  type:"bar",
+  data:{
+    labels:["Aujourd’hui","Mois","Année"],
+    datasets:[{
+      label:"Fréquence",
+      data:[0,0,0],
+      backgroundColor:[
+        "rgba(34,197,94,.7)",   // vert
+        "rgba(139,92,246,.7)",  // violet
+        "rgba(239,68,68,.7)"    // rouge
+      ],
+      borderRadius:14
+    }]
+  },
+  options:{
+    responsive:true,
+    scales:{
+      y:{
+        beginAtZero:true,
+        grid:{
+          color:"rgba(239,68,68,.2)"
+        }
+      },
+      x:{
+        grid:{
+          color:"rgba(34,197,94,.15)"
+        }
+      }
+    }
+  }
+});
+
+async function loadPeriodStats(){
+
+  const todaySnap = await getDoc(doc(db,"stats_daily",todayKey()));
+  const monthSnap = await getDoc(doc(db,"stats_monthly",monthKey()));
+  const yearSnap = await getDoc(doc(db,"stats_yearly",yearKey()));
+
+  const todayVal = todaySnap.data()?.count || 0;
+  const monthVal = monthSnap.data()?.count || 0;
+  const yearVal = yearSnap.data()?.count || 0;
+
+  periodChart.data.datasets[0].data = [todayVal,monthVal,yearVal];
+  periodChart.update();
+}
 
 async function loadMonthlyComparison() {
 

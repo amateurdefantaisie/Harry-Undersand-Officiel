@@ -1524,7 +1524,11 @@ const hourlyChart = new Chart(hourlyCtx, {
         gradient.addColorStop(0,"rgba(34,211,238,0)");
         gradient.addColorStop(1,"rgba(34,211,238,.5)");
         return gradient;
-},
+      },
+      fill:true,
+      tension:0.4
+    }]
+  },
   options:{
     responsive:true,
     scales:{

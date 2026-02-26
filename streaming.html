@@ -149,8 +149,8 @@ Abonnement Netflix
 </section>
 
 <section class="container">
-<h2>📡 IPTV & VOD</h2>
 <div class="grid">
+<h2>📡 IPTV & VOD</h2>
 <button class="btn"
 onclick="sendWhatsAppOrder({
   service: 'IPTV',
@@ -259,25 +259,35 @@ Merci de me confirmer la disponibilité et la procédure 🙏
 }
 </script>
 
-<div id="orderModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:999;">
-  <div style="background:#141425; max-width:420px; margin:10% auto; padding:24px; border-radius:16px;">
-    <h3>📦 Détails de la commande</h3>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    <input id="serviceInput" type="text" disabled style="width:100%;margin-top:10px;padding:10px">
+const firebaseConfig = {
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
+};
 
-    <select id="duration" style="width:100%;margin-top:10px;padding:10px">
-      <option>1 mois</option>
-      <option>3 mois</option>
-      <option>6 mois</option>
-    </select>
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    <textarea id="details" placeholder="Ex : nombre d’écrans, urgence, questions..."
-      style="width:100%;margin-top:10px;padding:10px"></textarea>
+onAuthStateChanged(auth, user => {
 
-    <button class="btn" onclick="confirmOrder()">Envoyer sur WhatsApp</button>
-    <button class="btn btn-outline" onclick="closeOrderForm()">Annuler</button>
-  </div>
-</div>
+  if (!user) {
+
+    // On mémorise la page actuelle
+    sessionStorage.setItem(
+      "redirectAfterLogin",
+      window.location.pathname
+    );
+
+    // Redirection vers accueil
+    window.location.href = "/?loginRequired=true";
+  }
+
+});
+</script>
 
 </body>
 </html>

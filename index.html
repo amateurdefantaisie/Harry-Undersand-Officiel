@@ -1431,6 +1431,19 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 /* =========================
+   🔐 REDIRECTION LOGIN AUTO
+========================= */
+
+// Si on arrive avec ?loginRequired=true
+const urlParams = new URLSearchParams(window.location.search);
+const loginRequired = urlParams.get("loginRequired");
+
+if (loginRequired) {
+  // Ouvre automatiquement la modale
+  document.getElementById("authModal").style.display = "flex";
+}
+
+/* =========================
    🔥 HEATMAP JOURNALIÈRE
 ========================= */
 
@@ -1779,6 +1792,14 @@ onAuthStateChanged(auth, async user => {
   isAdmin = false;
   adminPanel.style.display = "none";
 }
+
+  /* 🔁 Redirection après connexion */
+  const redirectPage = sessionStorage.getItem("redirectAfterLogin");
+
+  if (redirectPage) {
+    sessionStorage.removeItem("redirectAfterLogin");
+    window.location.href = redirectPage;
+  }
 });
 
 /* 📊 STATS */

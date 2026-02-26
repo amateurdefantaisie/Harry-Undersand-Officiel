@@ -401,5 +401,36 @@ setInterval(function(){
 },1000);
 
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, user => {
+
+  if (!user) {
+
+    // On mémorise la page actuelle
+    sessionStorage.setItem(
+      "redirectAfterLogin",
+      window.location.pathname
+    );
+
+    // Redirection vers accueil
+    window.location.href = "/?loginRequired=true";
+  }
+
+});
+</script>
+
 </body>
 </html>

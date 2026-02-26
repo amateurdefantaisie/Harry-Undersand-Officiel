@@ -328,17 +328,17 @@ const auth = getAuth(app);
 
 onAuthStateChanged(auth, user => {
 onAuthStateChanged(auth, user => {
-  if (!user) {
+if (!user) {
 
-    // Sauvegarde la page actuelle
-    sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
+// Sauvegarde la page actuelle
+sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
 
-    // Affiche un message avant redirection
-    alert("⚠️ Vous devez être connecté pour accéder à cette page.");
+// Affiche un message avant redirection
+alert("⚠️ Vous devez être connecté pour accéder à cette page.");
 
-    // Redirection vers accueil avec paramètre login
-    window.location.href = "/?loginRequired=true";
-  }
+// Redirection vers accueil avec paramètre login
+window.location.href = "/?loginRequired=true";
+}
 });
 </script>
 

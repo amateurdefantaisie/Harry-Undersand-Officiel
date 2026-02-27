@@ -886,6 +886,31 @@ canvas{
 @keyframes blink{
   50%{opacity:.3}
 }
+
+/* =========================
+   ✅ TOAST CONNEXION
+========================= */
+
+.toast-success{
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  color:white;
+  padding:14px 22px;
+  border-radius:14px;
+  font-weight:600;
+  box-shadow:0 0 30px rgba(34,197,94,.6);
+  opacity:0;
+  transform:translateY(20px);
+  transition:.4s ease;
+  z-index:4000;
+}
+
+.toast-success.show{
+  opacity:1;
+  transform:translateY(0);
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1251,6 +1276,23 @@ const logoutBtn = document.getElementById("logoutBtn");
 const welcomeText = document.getElementById("welcomeText");
 const userPhoto = document.getElementById("userPhoto");
 
+/* =========================
+   🔒 FERMETURE MODALE PROPRE
+========================= */
+
+function closeAuthModal() {
+  authModal.style.display = "none";
+}
+
+function showLoginToast() {
+  const toast = document.getElementById("loginToast");
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+  
 /* BOUTONS */
 loginBtn.onclick = () => authModal.style.display = "flex";
 registerBtn.onclick = () => authModal.style.display = "flex";
@@ -1755,7 +1797,10 @@ onAuthStateChanged(auth, async user => {
 
   authGuest.style.display = "none";
   authUser.style.display = "flex";
-  authModal.style.display = "none";
+
+  closeAuthModal();   // 🔒 ferme la popup
+  showLoginToast();   // 🎉 affiche notification
+  
   welcomeText.textContent = "Bienvenue " + user.displayName;
   userPhoto.src = user.photoURL;
 
@@ -2211,6 +2256,11 @@ badge.addEventListener("click", () => {
    Visiter mon site
  </a>
 </section>
+
+<!-- ✅ TOAST CONNEXION -->
+<div id="loginToast" class="toast-success">
+  ✅ Connexion réussie
+</div>
   
 <footer style="text-align:center;padding:40px;color:#6b7280">
 © 2026 — Amateur De Fantaisie

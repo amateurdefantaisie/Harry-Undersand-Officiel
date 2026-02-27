@@ -1755,6 +1755,7 @@ onAuthStateChanged(auth, async user => {
 
   authGuest.style.display = "none";
   authUser.style.display = "flex";
+  authModal.style.display = "none";
   welcomeText.textContent = "Bienvenue " + user.displayName;
   userPhoto.src = user.photoURL;
 

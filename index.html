@@ -1283,6 +1283,14 @@ const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
+facebookProvider.setCustomParameters({
+  display: "popup"
+});
+
+githubProvider.setCustomParameters({
+  allow_signup: "true"
+});
+
 /* ELEMENTS */
 const authGuest = document.getElementById("authGuest");
 const authUser = document.getElementById("authUser");

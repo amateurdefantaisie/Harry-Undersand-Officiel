@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Abonnements Netflix | Standard • Premium • Ultra HD</title>
 
+<link rel="stylesheet" href="cookies.css">
+
 <meta name="description" content="Abonnez-vous à Netflix : Standard, Premium et Ultra HD. Paiement sécurisé Mobile Money & Carte. Activation rapide.">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -431,6 +433,22 @@ onAuthStateChanged(auth, user => {
 
 });
 </script>
+
+<!-- 🍪 Bandeau Cookies -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <p>
+      🍪 Ce site utilise des cookies pour améliorer votre expérience.
+      En continuant, vous acceptez notre utilisation des cookies.
+    </p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies">Accepter</button>
+      <button id="reject-cookies">Refuser</button>
+    </div>
+  </div>
+</div>
+
+<script src="cookies.js"></script>
 
 </body>
 </html>

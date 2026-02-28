@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chat temps réel (type WhatsApp)</title>
+
+<link rel="stylesheet" href="cookies.css">
+  
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
     body {
@@ -161,6 +164,22 @@
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
   </script>
+
+<!-- 🍪 Bandeau Cookies -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <p>
+      🍪 Ce site utilise des cookies pour améliorer votre expérience.
+      En continuant, vous acceptez notre utilisation des cookies.
+    </p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies">Accepter</button>
+      <button id="reject-cookies">Refuser</button>
+    </div>
+  </div>
+</div>
+
+<script src="cookies.js"></script>
 
 </body>
 </html>

@@ -30,6 +30,8 @@ window.location.href = "/";
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pack Streaming Premium — Amateur De Fantaisie</title>
 
+<link rel="stylesheet" href="cookies.css">
+
 <link rel="icon" type="image/svg+xml"
 href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
 
@@ -268,6 +270,22 @@ alert("✅ Commande envoyée avec succès !");
 window.location.href = "dashboard.html";
 };
 </script>
+
+<!-- 🍪 Bandeau Cookies -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <p>
+      🍪 Ce site utilise des cookies pour améliorer votre expérience.
+      En continuant, vous acceptez notre utilisation des cookies.
+    </p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies">Accepter</button>
+      <button id="reject-cookies">Refuser</button>
+    </div>
+  </div>
+</div>
+
+<script src="cookies.js"></script>
 
 </body>
 </html>

@@ -36,6 +36,8 @@ window.location.href = "/";
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
+<link rel="stylesheet" href="cookies.css">
+  
 <style>
 /* ================= GLOBAL THEME ================= */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -300,6 +302,22 @@ alert("✅ Commande envoyée avec succès !");
 window.location.href = "dashboard.html";
 };
 </script>
+
+<!-- 🍪 Bandeau Cookies -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <p>
+      🍪 Ce site utilise des cookies pour améliorer votre expérience.
+      En continuant, vous acceptez notre utilisation des cookies.
+    </p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies">Accepter</button>
+      <button id="reject-cookies">Refuser</button>
+    </div>
+  </div>
+</div>
+
+<script src="cookies.js"></script>
 
 </body>
 </html>

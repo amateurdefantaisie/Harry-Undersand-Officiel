@@ -2380,36 +2380,28 @@ badge.addEventListener("click", () => {
 </footer>
 
 <script>
-function openMarket() {
+async function openMarket() {
+
+  const user = firebase.auth().currentUser;
+
+  if (!user) {
+    alert("Vous devez être connecté.");
+    return;
+  }
+
+  const token = await user.getIdToken();
+
   const container = document.getElementById("market-container");
 
   container.innerHTML = `
-    <div style="
-      position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:#000;
-      z-index:9999;
-    ">
+    <div style="position:fixed;inset:0;background:#000;z-index:9999;">
       <button onclick="closeMarket()" 
-        style="
-          position:absolute;
-          top:20px;
-          right:20px;
-          padding:10px 20px;
-          background:#ff4444;
-          color:white;
-          border:none;
-          border-radius:8px;
-          cursor:pointer;
-          z-index:10000;
-        ">
+        style="position:absolute;top:20px;right:20px;padding:10px 20px;background:#ff4444;color:white;border:none;border-radius:10px;cursor:pointer;z-index:10000;">
         ✖ Fermer
       </button>
 
       <iframe 
+        id="marketFrame"
         src="https://undersand-market.vercel.app"
         allow="fullscreen"
         style="
@@ -2424,12 +2416,21 @@ function openMarket() {
   `;
 
   container.style.display = "block";
+
+  // envoyer le token après chargement
+  const frame = document.getElementById("marketFrame");
+
+  frame.onload = () => {
+    frame.contentWindow.postMessage({
+      type: "firebase-login",
+      token: token
+    }, "https://undersand-market.vercel.app");
+  };
 }
 
 function closeMarket() {
   document.getElementById("market-container").innerHTML = "";
 }
 </script>
-
 </body>
 </html>

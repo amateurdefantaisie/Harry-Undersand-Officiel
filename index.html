@@ -35,16 +35,6 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <link rel="stylesheet" href="cookies.css">
-
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N696WFVZ8G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-N696WFVZ8G');
-</script>
   
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -932,6 +922,73 @@ canvas{
 .toast-success.show{
   opacity:1;
   transform:translateY(0);
+}
+
+/* =========================
+   🛒 MARKETPLACE BUTTON
+========================= */
+
+.market-btn{
+  display:block;
+  margin:80px auto 40px;
+  padding:16px 38px;
+  font-size:16px;
+  font-weight:700;
+  border-radius:50px;
+  border:none;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+
+  background:linear-gradient(135deg,#8b5cf6,#7c3aed,#22d3ee);
+  background-size:200% 200%;
+  color:white;
+
+  box-shadow:
+    0 0 25px rgba(139,92,246,.6),
+    0 0 60px rgba(34,211,238,.4);
+
+  transition:.4s ease;
+  animation:gradientMove 4s ease infinite;
+}
+
+.market-btn:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:
+    0 0 35px rgba(139,92,246,.9),
+    0 0 80px rgba(34,211,238,.7);
+}
+
+.market-btn:active{
+  transform:scale(.96);
+}
+
+/* effet lumière qui traverse */
+.market-btn::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.4),
+    transparent
+  );
+  transition:.6s;
+}
+
+.market-btn:hover::after{
+  left:100%;
+}
+
+/* animation gradient */
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 </style>
 
@@ -2281,55 +2338,6 @@ badge.addEventListener("click", () => {
 });
 </script>
 
-<script>
-function openMarket() {
-  const container = document.getElementById("market-container");
-
-  container.innerHTML = `
-    <div style="
-      position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:#000;
-      z-index:9999;
-    ">
-      <button onclick="closeMarket()" 
-        style="
-          position:absolute;
-          top:20px;
-          right:20px;
-          padding:10px 20px;
-          background:#ff4444;
-          color:white;
-          border:none;
-          border-radius:8px;
-          cursor:pointer;
-          z-index:10000;
-        ">
-        ✖ Fermer
-      </button>
-
-      <iframe 
-        src="https://undersand-market.vercel.app"
-        style="
-          width:100%;
-          height:100%;
-          border:none;
-        ">
-      </iframe>
-    </div>
-  `;
-
-  container.style.display = "block";
-}
-
-function closeMarket() {
-  document.getElementById("market-container").innerHTML = "";
-}
-</script>
-
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>
 <script src="https://files.bpcontent.cloud/2025/12/10/23/20251210230142-FSLKPSBI.js" defer></script>
 
@@ -2366,6 +2374,58 @@ function closeMarket() {
 <footer style="text-align:center;padding:40px;color:#6b7280">
 © 2026 — Amateur De Fantaisie
 </footer>
+
+<script>
+function openMarket() {
+  const container = document.getElementById("market-container");
+
+  container.innerHTML = `
+    <div style="
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:#000;
+      z-index:9999;
+    ">
+      <button onclick="closeMarket()" 
+        style="
+          position:absolute;
+          top:20px;
+          right:20px;
+          padding:10px 20px;
+          background:#ff4444;
+          color:white;
+          border:none;
+          border-radius:8px;
+          cursor:pointer;
+          z-index:10000;
+        ">
+        ✖ Fermer
+      </button>
+
+      <iframe 
+        src="https://undersand-market.vercel.app"
+        allow="fullscreen"
+        style="
+          width:100%;
+          height:100%;
+          border:none;
+          border-radius:16px;
+          box-shadow:0 20px 50px rgba(0,0,0,0.3);
+        ">
+      </iframe>
+    </div>
+  `;
+
+  container.style.display = "block";
+}
+
+function closeMarket() {
+  document.getElementById("market-container").innerHTML = "";
+}
+</script>
 
 </body>
 </html>

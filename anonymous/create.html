@@ -4,103 +4,65 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width">
 
-<title>Créer ton lien</title>
-
-<link rel="stylesheet" href="style.css">
+<title>Créer ton lien anonyme</title>
 
 <style>
 
 body{
 
-background: linear-gradient(135deg,#ff0066,#ff7a00);
-
-font-family: Arial;
-
 margin:0;
-
-color:white;
-
-}
-
-.hero{
-
-text-align:center;
-
-padding:120px 20px;
-
-}
-
-.btn-main{
-
-background:black;
-
-padding:15px 40px;
-
-border-radius:30px;
-
-color:white;
-
-text-decoration:none;
+font-family:Arial;
+background:linear-gradient(135deg,#ff0066,#ff7a00);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
 
 }
 
 .card{
 
 background:white;
-
-color:black;
-
-width:400px;
-
-padding:30px;
-
-margin:auto;
-
+padding:40px;
 border-radius:20px;
-
+width:400px;
 text-align:center;
-
-margin-top:100px;
 
 }
 
-textarea{
+input{
 
 width:100%;
-
-height:120px;
-
+padding:12px;
 border-radius:10px;
-
-padding:10px;
+border:none;
+background:#eee;
+margin-top:20px;
 
 }
 
 button{
 
-background:black;
-
-color:white;
-
-border:none;
-
+margin-top:20px;
 padding:15px;
-
+border:none;
+background:black;
+color:white;
 border-radius:30px;
-
-margin-top:10px;
-
+width:100%;
 cursor:pointer;
 
 }
 
-.feature{
+#result{
 
-margin:40px;
+margin-top:20px;
+word-break:break-all;
 
 }
+
 </style>
 
 </head>
@@ -113,25 +75,44 @@ margin:40px;
 
 <p>
 
-Choisis un pseudo unique. Ce pseudo sera utilisé pour générer ton lien personnel que tu pourras partager sur internet.
-
-Exemple :
-
-https://tonsite.com/anonymous/ask.html?user=tonpseudo
+Choisis un pseudo pour générer ton lien personnel.
 
 </p>
 
 <input id="username" placeholder="Ton pseudo">
 
 <button onclick="createLink()">
+
 Créer mon lien
+
 </button>
 
-<p id="result"></p>
+<div id="result"></div>
 
 </div>
 
-<script src="app.js"></script>
+
+<script>
+
+function createLink(){
+
+let username=document.getElementById("username").value;
+
+let link=window.location.origin+"/anonymous/ask.html?u="+username;
+
+document.getElementById("result").innerHTML=
+
+`Ton lien :
+
+<br><br>
+
+<a href="${link}">${link}</a>
+
+`;
+
+}
+
+</script>
 
 </body>
 </html>

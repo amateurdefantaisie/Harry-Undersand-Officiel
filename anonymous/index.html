@@ -1,129 +1,109 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Messages Anonymes — Undersand</title>
-
-<link rel="stylesheet" href="style.css">
 
 <style>
 
 body{
-
-background: linear-gradient(135deg,#ff0066,#ff7a00);
-
-font-family: Arial;
-
 margin:0;
-
+font-family:Arial;
+background:linear-gradient(135deg,#ff0066,#ff7a00);
 color:white;
-
+overflow-x:hidden;
 }
 
 .hero{
-
 text-align:center;
-
 padding:120px 20px;
-
 }
 
-.btn-main{
-
-background:black;
-
-padding:15px 40px;
-
-border-radius:30px;
-
-color:white;
-
-text-decoration:none;
-
+.hero h1{
+font-size:50px;
+text-shadow:0 0 20px #fff;
+animation:glow 3s infinite;
 }
 
-.card{
-
-background:white;
-
-color:black;
-
-width:400px;
-
-padding:30px;
-
+.hero p{
+max-width:800px;
 margin:auto;
-
-border-radius:20px;
-
-text-align:center;
-
-margin-top:100px;
-
+line-height:1.7;
+font-size:18px;
 }
 
-textarea{
+.main-btn{
 
-width:100%;
-
-height:120px;
-
-border-radius:10px;
-
-padding:10px;
-
-}
-
-button{
-
+display:inline-block;
+margin-top:40px;
 background:black;
-
+padding:16px 40px;
+border-radius:40px;
 color:white;
+text-decoration:none;
+font-size:18px;
+transition:.3s;
+}
 
-border:none;
+.main-btn:hover{
+transform:scale(1.1);
+}
 
-padding:15px;
+.features{
 
-border-radius:30px;
-
-margin-top:10px;
-
-cursor:pointer;
-
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+padding:80px 20px;
+gap:40px;
 }
 
 .feature{
 
-margin:40px;
+background:rgba(255,255,255,0.1);
+padding:30px;
+border-radius:20px;
+width:300px;
+backdrop-filter:blur(10px);
+}
+
+@keyframes glow{
+
+0%{opacity:1}
+
+50%{opacity:.7}
+
+100%{opacity:1}
 
 }
+
 </style>
-  
+
 </head>
 
 <body>
 
 <section class="hero">
 
-<h1>💬 Reçois des messages anonymes</h1>
+<h1>💬 Messages anonymes</h1>
 
-<p class="description">
+<p>
 
-Découvre ce que les gens pensent réellement de toi grâce à notre système de messages anonymes sécurisé.
+Crée ton propre lien pour recevoir des messages anonymes.
+Partage ce lien dans tes stories WhatsApp, Instagram, Facebook ou Telegram.
 
-Crée ton propre lien personnalisé et partage-le facilement sur tes réseaux sociaux comme WhatsApp, Instagram, Facebook, Telegram ou Snapchat.
+Les gens pourront t'envoyer des questions anonymes, des compliments ou des secrets.
 
-Les personnes pourront t'envoyer des messages totalement anonymes, poser des questions, partager leurs pensées ou te dire ce qu'ils n'oseraient jamais dire directement.
-
-Tu peux ensuite consulter ces messages dans ton tableau de bord privé, répondre à certaines questions et même partager tes réponses directement dans tes stories.
+Ensuite tu peux répondre aux messages et partager les réponses dans tes stories pour créer des interactions virales.
 
 </p>
 
-<a href="create.html" class="btn-main">
-Créer mon lien anonyme
+<a href="create.html" class="main-btn">
+Créer mon lien
 </a>
 
 </section>
@@ -132,24 +112,41 @@ Créer mon lien anonyme
 <section class="features">
 
 <div class="feature">
-<h3>🔗 Ton lien unique</h3>
+
+<h3>🔗 Lien unique</h3>
+
 <p>
-Chaque utilisateur reçoit un lien personnalisé qu’il peut partager partout sur internet. Ce lien permet aux autres personnes d’envoyer des messages anonymes facilement.
+
+Chaque utilisateur possède un lien personnel qu'il peut partager partout sur internet.
+
 </p>
+
 </div>
 
+
 <div class="feature">
+
 <h3>💬 Messages anonymes</h3>
+
 <p>
-Les messages envoyés sont totalement anonymes. L’expéditeur ne sera jamais visible sauf si tu actives certaines options premium.
+
+Les visiteurs peuvent envoyer des messages anonymes sans créer de compte.
+
 </p>
+
 </div>
 
+
 <div class="feature">
-<h3>📲 Partage en story</h3>
+
+<h3>📲 Stories virales</h3>
+
 <p>
-Réponds aux questions directement et transforme-les en images stylées pour les partager dans tes stories Instagram, WhatsApp ou Snapchat.
+
+Transforme les questions reçues en stories stylées pour les réseaux sociaux.
+
 </p>
+
 </div>
 
 </section>

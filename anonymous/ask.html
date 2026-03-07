@@ -174,7 +174,7 @@ Chargement...
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import { getDatabase,ref,push } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+import { getDatabase,ref,push,get,child } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -192,26 +192,32 @@ const db = getDatabase(app);
 
 const auth = getAuth(app);
 
+
 const randomQuestions = [
+
 "Quel est ton plus grand secret ?",
 "Qui est ton crush ?",
 "Quelle est ta pire honte ?",
 "Qui t'attire ?",
 "Note-moi sur 10"
+
 ];
-  
+
+
 let params = new URLSearchParams(window.location.search);
 
 let user = params.get("u");
 
 if(!user){
-showToast("Lien invalide");
-document.querySelector(".card").innerHTML =
-"<h2>Lien invalide</h2>";
+
+document.querySelector(".card").innerHTML="<h2>Lien invalide</h2>";
 throw new Error("Paramètre manquant");
+
 }
 
-document.getElementById("username").innerText = "@"+user;
+document.getElementById("username").innerText="@"+user;
+
+
 
 function showToast(msg){
 
@@ -222,7 +228,9 @@ toast.innerText=msg;
 toast.classList.add("show");
 
 setTimeout(()=>{
+
 toast.classList.remove("show")
+
 },3000)
 
 }
@@ -234,45 +242,46 @@ document.getElementById("message").value=el.innerText
 
 }
 
-let lastMessageTime = 0;
-  
-window.sendMessage = () => {
 
-let now = Date.now();
+let lastMessageTime=0;
 
-let btn = document.getElementById("sendBtn");
-btn.disabled = true;
-btn.innerText = "Envoi...";
 
-btn.innerText = "Envoyé ✔";
+window.sendMessage=()=>{
 
-if(now - lastMessageTime < 5000){
-showToast("Attends 5 secondes");
+let message=document.getElementById("message").value.trim();
+
+let btn=document.getElementById("sendBtn");
+
+let now=Date.now();
+
+
+if(message.length<3){
+
+showToast("Message trop court");
+
 return;
+
 }
 
-lastMessageTime = now;
 
-push(ref(db,"messages"),{
+if(now-lastMessageTime<5000){
 
-to:user,
-message:message,
-time:Date.now()
+showToast("Attends 5 secondes");
 
-})
+return;
 
-window.addEventListener("load",()=>{
+}
 
-document.getElementById("message").placeholder =
-randomQuestions[Math.floor(Math.random()*randomQuestions.length)];
+lastMessageTime=now;
 
-});
-  
-.then(()=>{
 
-push(ref(db,"messages"),{
+btn.disabled=true;
 
-to:user,
+btn.innerText="Envoi...";
+
+
+push(ref(db,"messages/"+user),{
+
 message:message,
 time:Date.now()
 
@@ -280,12 +289,14 @@ time:Date.now()
 
 .then(()=>{
 
-showToast("Message envoyé ✔")
+btn.innerText="Envoyé ✔";
+
+showToast("Message envoyé ✔");
+
 
 setTimeout(()=>{
 
-window.location.href=
-"/anonymous/create.html?sent=true"
+window.location.href="/anonymous/create.html?sent=true"
 
 },1500)
 
@@ -293,14 +304,49 @@ window.location.href=
 
 .catch((error)=>{
 
-console.error(error)
+console.error(error);
 
-showToast("Erreur d'envoi")
+showToast("Erreur d'envoi");
 
-btn.disabled=false
-btn.innerText="Envoyer anonymement"
+btn.disabled=false;
+
+btn.innerText="Envoyer anonymement";
 
 });
+
+}
+
+
+
+// question aléatoire
+window.addEventListener("load",()=>{
+
+document.getElementById("message").placeholder=
+
+randomQuestions[Math.floor(Math.random()*randomQuestions.length)];
+
+});
+
+
+
+// compteur viral
+
+const dbRef=ref(db);
+
+get(child(dbRef,"messages")).then((snapshot)=>{
+
+if(snapshot.exists()){
+
+let count=Object.keys(snapshot.val()).length;
+
+document.getElementById("viralCount").innerText=
+
+"👇 "+count+" personnes ont déjà envoyé un message";
+
+}
+
+});
+
 
 
 onAuthStateChanged(auth,user=>{
@@ -313,25 +359,7 @@ console.log("Utilisateur connecté");
 
 });
 
-import { get,child } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
-
-const dbRef = ref(db);
-
-get(child(dbRef,"messages")).then((snapshot)=>{
-
-if(snapshot.exists()){
-
-let count = Object.keys(snapshot.val()).length;
-
-document.getElementById("viralCount").innerText =
-"👇 "+count+" personnes ont déjà envoyé un message";
-
-}
-
-});
-
 </script>
-
 </body>
 
 </html>

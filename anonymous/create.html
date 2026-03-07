@@ -11,40 +11,42 @@
 <style>
 
 body{
-
 margin:0;
-font-family:Arial;
+font-family: 'Segoe UI', Arial;
 background:linear-gradient(135deg,#ff0066,#ff7a00);
 height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-
+color:#333;
 }
 
 .card{
-
-background:white;
+background:rgba(255,255,255,0.9);
 padding:40px;
-border-radius:20px;
-width:400px;
+border-radius:25px;
+width:420px;
 text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+animation:fade 0.7s ease;
+}
 
+h2{
+margin-top:0;
 }
 
 input{
-
 width:100%;
-padding:12px;
-border-radius:10px;
+padding:14px;
+border-radius:12px;
 border:none;
-background:#eee;
+background:#f2f2f2;
 margin-top:20px;
-
+font-size:15px;
 }
 
 button{
-
 margin-top:20px;
 padding:15px;
 border:none;
@@ -53,14 +55,78 @@ color:white;
 border-radius:30px;
 width:100%;
 cursor:pointer;
+font-size:16px;
+transition:0.3s;
+}
 
+button:hover{
+transform:scale(1.05);
 }
 
 #result{
-
-margin-top:20px;
+margin-top:25px;
 word-break:break-all;
+}
 
+.share{
+margin-top:20px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+}
+
+.share button{
+width:auto;
+padding:10px 20px;
+border-radius:25px;
+font-size:14px;
+}
+
+.copy{
+background:#444;
+}
+
+.whatsapp{
+background:#25D366;
+}
+
+.telegram{
+background:#2AABEE;
+}
+
+.instagram{
+background:#C13584;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.toast{
+
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:black;
+color:white;
+padding:15px 25px;
+border-radius:30px;
+opacity:0;
+transition:0.4s;
+
+}
+
+.toast.show{
+opacity:1;
 }
 
 </style>
@@ -89,26 +155,119 @@ Créer mon lien
 
 <div id="result"></div>
 
+<div class="share" id="shareButtons" style="display:none;">
+
+<button class="copy" onclick="copyLink()">📋 Copier</button>
+
+<button class="whatsapp" onclick="shareWhatsApp()">WhatsApp</button>
+
+<button class="telegram" onclick="shareTelegram()">Telegram</button>
+
+<button class="instagram" onclick="shareInstagram()">Instagram</button>
+
 </div>
 
+<div class="toast" id="toast">Lien copié !</div>
+
+</div>
 
 <script>
 
+let generatedLink="";
+
 function createLink(){
 
-let username=document.getElementById("username").value;
+let username=document.getElementById("username").value.trim();
 
-let link=window.location.origin+"/anonymous/ask.html?u="+username;
+if(username===""){
+alert("Entre un pseudo");
+return;
+}
+
+generatedLink=window.location.origin+"/anonymous/ask.html?u="+username;
 
 document.getElementById("result").innerHTML=
 
-`Ton lien :
+`
+<b>Ton lien :</b>
 
 <br><br>
 
-<a href="${link}">${link}</a>
+<a href="${generatedLink}" target="_blank">
+${generatedLink}
+</a>
 
 `;
+
+document.getElementById("shareButtons").style.display="flex";
+
+}
+
+
+
+function copyLink(){
+
+navigator.clipboard.writeText(generatedLink);
+
+showToast("Lien copié !");
+
+}
+
+
+
+function shareWhatsApp(){
+
+let text="Pose moi une question anonyme 👇 "+generatedLink;
+
+window.open(
+
+"https://wa.me/?text="+encodeURIComponent(text),
+
+"_blank"
+
+);
+
+}
+
+
+
+function shareTelegram(){
+
+let text="Pose moi une question anonyme 👇 "+generatedLink;
+
+window.open(
+
+"https://t.me/share/url?url="+encodeURIComponent(generatedLink)+"&text="+encodeURIComponent(text),
+
+"_blank"
+
+);
+
+}
+
+
+
+function shareInstagram(){
+
+showToast("Copie le lien et colle le dans ta story Instagram");
+
+}
+
+
+
+function showToast(msg){
+
+let toast=document.getElementById("toast");
+
+toast.innerText=msg;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+},3000);
 
 }
 

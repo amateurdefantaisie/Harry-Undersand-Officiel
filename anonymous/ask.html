@@ -1,45 +1,51 @@
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Envoyer message anonyme</title>
+<title>Message anonyme</title>
 
 <style>
 
 body{
-
 margin:0;
-font-family:Arial;
+font-family:'Segoe UI',sans-serif;
 background:linear-gradient(135deg,#ff0066,#ff7a00);
 height:100vh;
 display:flex;
-justify-content:center;
 align-items:center;
-
+justify-content:center;
+color:#333;
 }
 
 .card{
 
 background:white;
+width:420px;
 padding:40px;
-border-radius:20px;
-width:400px;
+border-radius:25px;
 text-align:center;
+box-shadow:0 30px 70px rgba(0,0,0,0.3);
+animation:fade .6s;
 
+}
+
+h2{
+margin-top:0;
 }
 
 textarea{
 
 width:100%;
-height:120px;
+height:130px;
 border:none;
-background:#eee;
-border-radius:10px;
-padding:10px;
+background:#f2f2f2;
+border-radius:15px;
+padding:15px;
+font-size:15px;
 
 }
 
@@ -53,12 +59,80 @@ color:white;
 border-radius:30px;
 width:100%;
 cursor:pointer;
+font-size:16px;
+transition:.3s;
+
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.suggestions{
+
+margin-top:15px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+
+}
+
+.suggestions span{
+
+background:#eee;
+padding:8px 14px;
+border-radius:20px;
+font-size:13px;
+cursor:pointer;
+
+}
+
+.viral{
+
+margin-top:15px;
+font-size:14px;
+color:#666;
+
+}
+
+.toast{
+
+position:fixed;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
+background:black;
+color:white;
+padding:15px 25px;
+border-radius:30px;
+opacity:0;
+transition:.3s;
+
+}
+
+.toast.show{
+opacity:1;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(30px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
 
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -68,60 +142,129 @@ cursor:pointer;
 
 <p>Envoie un message anonyme</p>
 
-<textarea id="message"
-placeholder="Écris ton message...">
-</textarea>
+<textarea id="message" placeholder="Écris ton message..."></textarea>
 
-<button onclick="sendMessage()">
+<div class="suggestions">
 
-Envoyer anonymement
+<span onclick="autoMsg(this)">Qui est ton crush ?</span>
 
-</button>
+<span onclick="autoMsg(this)">Note-moi sur 10</span>
+
+<span onclick="autoMsg(this)">Quel est ton secret ?</span>
+
+<span onclick="autoMsg(this)">Qui t'attire ?</span>
 
 </div>
 
-<script>
+<button onclick="sendMessage()">
+Envoyer anonymement
+</button>
 
-const firebaseURL="https://TONFIREBASE.firebaseio.com/messages.json";
+<div class="viral">
+👇 274 personnes ont déjà envoyé un message
+</div>
 
-let params=new URLSearchParams(window.location.search);
+</div>
 
-let user=params.get("u");
+<div class="toast" id="toast"></div>
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import { getDatabase,ref,push } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+authDomain:"harry-undersand.firebaseapp.com",
+projectId:"harry-undersand",
+databaseURL:"https://harry-undersand-default-rtdb.firebaseio.com"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+const auth = getAuth(app);
+
+
+let params = new URLSearchParams(window.location.search);
+
+let user = params.get("u");
 
 document.getElementById("username").innerText="@"+user;
 
 
-function sendMessage(){
+function showToast(msg){
+
+let toast=document.getElementById("toast");
+
+toast.innerText=msg;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show")
+},3000)
+
+}
+
+
+window.autoMsg=(el)=>{
+
+document.getElementById("message").value=el.innerText
+
+}
+
+
+window.sendMessage=()=>{
 
 let message=document.getElementById("message").value;
 
-fetch(firebaseURL,{
+if(message.length<3){
+showToast("Message trop court");
+return;
+}
 
-method:"POST",
+push(ref(db,"messages"),{
 
-body:JSON.stringify({
-
-user:user,
-
+to:user,
 message:message,
-
 time:Date.now()
-
-})
 
 })
 
 .then(()=>{
 
-alert("Message envoyé !")
+showToast("Message envoyé ✔")
 
-window.location.href="create.html"
+setTimeout(()=>{
+
+window.location.href="/anonymous/create.html"
+
+},1500)
 
 })
 
 }
 
+
+onAuthStateChanged(auth,user=>{
+
+if(user){
+
+console.log("Utilisateur connecté");
+
+}
+
+});
+
 </script>
 
 </body>
+
 </html>

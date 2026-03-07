@@ -142,7 +142,8 @@ transform:translateY(0);
 
 <p>Envoie un message anonyme</p>
 
-<textarea id="message" placeholder="Écris ton message..."></textarea>
+<textarea id="message" maxlength="600"
+placeholder="Écris ton message..."></textarea>
 
 <div class="suggestions">
 
@@ -156,12 +157,12 @@ transform:translateY(0);
 
 </div>
 
-<button onclick="sendMessage()">
+<button id="sendBtn" onclick="sendMessage()">
 Envoyer anonymement
 </button>
 
-<div class="viral">
-👇 274 personnes ont déjà envoyé un message
+<div class="viral" id="viralCount">
+Chargement...
 </div>
 
 </div>
@@ -191,13 +192,26 @@ const db = getDatabase(app);
 
 const auth = getAuth(app);
 
-
+const randomQuestions = [
+"Quel est ton plus grand secret ?",
+"Qui est ton crush ?",
+"Quelle est ta pire honte ?",
+"Qui t'attire ?",
+"Note-moi sur 10"
+];
+  
 let params = new URLSearchParams(window.location.search);
 
 let user = params.get("u");
 
-document.getElementById("username").innerText="@"+user;
+if(!user){
+showToast("Lien invalide");
+document.querySelector(".card").innerHTML =
+"<h2>Lien invalide</h2>";
+throw new Error("Paramètre manquant");
+}
 
+document.getElementById("username").innerText = "@"+user;
 
 function showToast(msg){
 
@@ -220,15 +234,41 @@ document.getElementById("message").value=el.innerText
 
 }
 
+let lastMessageTime = 0;
+  
+window.sendMessage = () => {
 
-window.sendMessage=()=>{
+let now = Date.now();
 
-let message=document.getElementById("message").value;
+let btn = document.getElementById("sendBtn");
+btn.disabled = true;
+btn.innerText = "Envoi...";
 
-if(message.length<3){
-showToast("Message trop court");
+btn.innerText = "Envoyé ✔";
+
+if(now - lastMessageTime < 5000){
+showToast("Attends 5 secondes");
 return;
 }
+
+lastMessageTime = now;
+
+push(ref(db,"messages"),{
+
+to:user,
+message:message,
+time:Date.now()
+
+})
+
+window.addEventListener("load",()=>{
+
+document.getElementById("message").placeholder =
+randomQuestions[Math.floor(Math.random()*randomQuestions.length)];
+
+});
+  
+.then(()=>{
 
 push(ref(db,"messages"),{
 
@@ -244,13 +284,23 @@ showToast("Message envoyé ✔")
 
 setTimeout(()=>{
 
-window.location.href="/anonymous/create.html"
+window.location.href=
+"/anonymous/create.html?sent=true"
 
 },1500)
 
 })
 
-}
+.catch((error)=>{
+
+console.error(error)
+
+showToast("Erreur d'envoi")
+
+btn.disabled=false
+btn.innerText="Envoyer anonymement"
+
+});
 
 
 onAuthStateChanged(auth,user=>{
@@ -258,6 +308,23 @@ onAuthStateChanged(auth,user=>{
 if(user){
 
 console.log("Utilisateur connecté");
+
+}
+
+});
+
+import { get,child } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+const dbRef = ref(db);
+
+get(child(dbRef,"messages")).then((snapshot)=>{
+
+if(snapshot.exists()){
+
+let count = Object.keys(snapshot.val()).length;
+
+document.getElementById("viralCount").innerText =
+"👇 "+count+" personnes ont déjà envoyé un message";
 
 }
 

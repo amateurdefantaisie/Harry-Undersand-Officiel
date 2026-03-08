@@ -905,23 +905,26 @@ canvas{
 
 .toast-success{
   position:fixed;
-  bottom:30px;
-  right:30px;
+  bottom:40px;
+  left:50%;
+  transform:translate(-50%,20px);
+
   background:linear-gradient(135deg,#16a34a,#22c55e);
   color:white;
-  padding:14px 22px;
+  padding:14px 26px;
   border-radius:14px;
   font-weight:600;
+
   box-shadow:0 0 30px rgba(34,197,94,.6);
+
   opacity:0;
-  transform:translateY(20px);
   transition:.4s ease;
   z-index:4000;
 }
 
 .toast-success.show{
   opacity:1;
-  transform:translateY(0);
+  transform:translate(-50%,0);
 }
 
 /* =========================

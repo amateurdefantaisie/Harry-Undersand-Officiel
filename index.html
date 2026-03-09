@@ -1451,6 +1451,21 @@ crossorigin="anonymous"></script>
 <div class="modal">
 <h2>Connexion</h2>
 <p>Choisis un moyen pour continuer</p>
+<hr style="margin:16px 0;opacity:.2">
+
+<input id="emailInput" type="email" placeholder="Email"
+style="width:100%;padding:12px;margin-top:10px;border-radius:10px;border:none">
+
+<input id="passwordInput" type="password" placeholder="Mot de passe"
+style="width:100%;padding:12px;margin-top:10px;border-radius:10px;border:none">
+
+<button class="auth-btn" id="emailLogin">
+Se connecter avec Email
+</button>
+
+<button class="auth-btn" id="emailRegister">
+Créer un compte
+</button>
 <button class="auth-btn google" id="googleLogin"><i class="fab fa-google"></i> Google</button>
 <button class="auth-btn facebook" id="facebookLogin"><i class="fab fa-facebook"></i> Facebook</button>
 <button class="auth-btn github" id="githubLogin"><i class="fab fa-github"></i> GitHub</button>
@@ -1509,7 +1524,10 @@ import {
   GithubAuthProvider,
   signInWithPopup,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -1575,6 +1593,11 @@ const logoutBtn = document.getElementById("logoutBtn");
 const welcomeText = document.getElementById("welcomeText");
 const userPhoto = document.getElementById("userPhoto");
 
+const emailLogin = document.getElementById("emailLogin");
+const emailRegister = document.getElementById("emailRegister");
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+
 /* =========================
    🔒 FERMETURE MODALE PROPRE
 ========================= */
@@ -1620,6 +1643,39 @@ function yearKey() {
   return new Date().getFullYear().toString(); // 2026
 }
 
+emailLogin.onclick = async () => {
+
+  const email = emailInput.value;
+  const password = passwordInput.value;
+
+  try{
+
+    await signInWithEmailAndPassword(auth, email, password);
+
+  }catch(err){
+    alert(err.message);
+  }
+
+};
+
+emailRegister.onclick = async () => {
+
+  const email = emailInput.value;
+  const password = passwordInput.value;
+
+  try{
+
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
+    await sendEmailVerification(userCred.user);
+
+    alert("Compte créé ! Vérifie ton email 📧");
+
+  }catch(err){
+    alert(err.message);
+  }
+
+};
 /* =========================
    📊 COMPTEUR VISITES STABLE
 ========================= */

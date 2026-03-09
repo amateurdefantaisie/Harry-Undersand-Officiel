@@ -2239,12 +2239,18 @@ commentForm.addEventListener("submit", async e => {
     return;
   }
 
-  await addDoc(collection(db, "comments"), {
-    name: usernameInput.value,
-    comment: commentInput.value,
-    rating: selectedRating,
-    createdAt: serverTimestamp()
-  });
+const username = usernameInput.value;
+
+await addDoc(collection(db, "comments"), {
+  name: username,
+  comment: commentInput.value,
+  rating: selectedRating,
+  createdAt: serverTimestamp()
+});
+
+// 🔔 Notification
+showToast(username + " a posté un commentaire","info");
+addNotification(username + " a posté un commentaire");
 
   commentForm.reset();
   selectedRating = 0;
@@ -2473,6 +2479,36 @@ function stopDrag() {
   badge.style.cursor = "grab";
 }
 
+let notifications = [];
+
+function addNotification(message){
+
+  notifications.unshift(message);
+
+  const count = document.getElementById("notifCount");
+  const panel = document.getElementById("notifPanel");
+
+  count.textContent = notifications.length;
+
+  const div = document.createElement("div");
+  div.className = "notificationItem";
+  div.textContent = message;
+
+  panel.prepend(div);
+
+}
+
+function toggleNotifications(){
+
+  const panel = document.getElementById("notifPanel");
+
+  panel.style.display =
+  panel.style.display === "block"
+  ? "none"
+  : "block";
+
+}
+  
 /* =========================
    ⏳ COMPTE À REBOURS FIN JOURNÉE
 ========================= */

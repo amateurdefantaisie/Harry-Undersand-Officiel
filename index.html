@@ -2148,26 +2148,6 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-function showToast(message,type="info",duration=4000){
-
-  const container = document.getElementById("toastContainer");
-
-  const toast = document.createElement("div");
-  toast.className = "toast " + type;
-
-  toast.innerHTML = message;
-
-  toast.style.animationDuration = duration+"ms";
-
-  container.appendChild(toast);
-
-  setTimeout(()=>{
-    toast.style.animation="toastOut .4s forwards";
-    setTimeout(()=>toast.remove(),400);
-  },duration);
-
-}
-  
 /* 📊 STATS */
 async function loadStats() {
   const ref = doc(db, "stats", "global");
@@ -2259,18 +2239,12 @@ commentForm.addEventListener("submit", async e => {
     return;
   }
 
-const username = usernameInput.value;
-
-await addDoc(collection(db, "comments"), {
-  name: username,
-  comment: commentInput.value,
-  rating: selectedRating,
-  createdAt: serverTimestamp()
-});
-
-// 🔔 Notification
-showToast(username + " a posté un commentaire","info");
-addNotification(username + " a posté un commentaire");
+  await addDoc(collection(db, "comments"), {
+    name: usernameInput.value,
+    comment: commentInput.value,
+    rating: selectedRating,
+    createdAt: serverTimestamp()
+  });
 
   commentForm.reset();
   selectedRating = 0;
@@ -2499,36 +2473,6 @@ function stopDrag() {
   badge.style.cursor = "grab";
 }
 
-let notifications = [];
-
-function addNotification(message){
-
-  notifications.unshift(message);
-
-  const count = document.getElementById("notifCount");
-  const panel = document.getElementById("notifPanel");
-
-  count.textContent = notifications.length;
-
-  const div = document.createElement("div");
-  div.className = "notificationItem";
-  div.textContent = message;
-
-  panel.prepend(div);
-
-}
-
-function toggleNotifications(){
-
-  const panel = document.getElementById("notifPanel");
-
-  panel.style.display =
-  panel.style.display === "block"
-  ? "none"
-  : "block";
-
-}
-  
 /* =========================
    ⏳ COMPTE À REBOURS FIN JOURNÉE
 ========================= */
@@ -2669,36 +2613,6 @@ const panel=document.getElementById("notifPanel");
 
 panel.style.display =
 panel.style.display==="block" ? "none" : "block";
-
-}
-
-let notifications=[];
-
-function addNotification(message){
-
-notifications.unshift(message);
-
-const count=document.getElementById("notifCount");
-const panel=document.getElementById("notifPanel");
-
-count.textContent=notifications.length;
-
-const div=document.createElement("div");
-div.className="notificationItem";
-div.textContent=message;
-
-panel.prepend(div);
-
-}
-
-function toggleNotifications(){
-
-const panel=document.getElementById("notifPanel");
-
-panel.style.display=
-panel.style.display==="block"
-? "none"
-: "block";
 
 }
 </script>

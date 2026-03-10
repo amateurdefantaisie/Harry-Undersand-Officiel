@@ -1487,6 +1487,8 @@ style="width:100%;padding:12px;margin-top:10px;border-radius:10px;border:none">
 <input id="passwordInput" type="password" placeholder="Mot de passe"
 style="width:100%;padding:12px;margin-top:10px;border-radius:10px;border:none">
 
+<button id="resendVerification">Renvoyer l'email de vérification</button>
+
 <button class="auth-btn" id="emailLogin">
 Se connecter avec Email
 </button>
@@ -1667,6 +1669,26 @@ async function checkIfUserExists(email){
 
   return exists;
 }
+
+const resendBtn = document.getElementById("resendVerification");
+
+resendBtn.onclick = async () => {
+
+const user = auth.currentUser;
+
+if(user){
+
+await sendEmailVerification(user);
+
+showToast("Email envoyé 📧","success");
+
+}else{
+
+showToast("Connecte-toi d'abord","warning");
+
+}
+
+}
   
 /* =========================
    🔒 FERMETURE MODALE PROPRE
@@ -1722,52 +1744,68 @@ function yearKey() {
 
 emailLogin.onclick = async () => {
 
-  const email = emailInput.value;
-  const password = passwordInput.value;
+const email = emailInput.value;
+const password = passwordInput.value;
 
-  const exists = await checkIfUserExists(email);
+try{
 
-  if(!exists){
-    showToast("Ce compte n'existe pas. Crée un compte.","error");
-    return;
-  }
+const userCred = await signInWithEmailAndPassword(auth,email,password);
 
-  try{
-    await signInWithEmailAndPassword(auth,email,password);
-  }
-  catch(err){
-    showToast(err.message,"error");
-  }
+if(!userCred.user.emailVerified){
 
-};
+showToast("Vérifie ton email avant de te connecter 📧","warning");
+
+auth.signOut();
+
+return;
+
+}
+
+showToast("Connexion réussie","success");
+
+}
+catch(err){
+showToast(err.message,"error");
+}
+
+}
 
 emailRegister.onclick = async () => {
 
-  const email = emailInput.value;
-  const password = passwordInput.value;
+const email = emailInput.value;
+const password = passwordInput.value;
 
-  const exists = await checkIfUserExists(email);
+try{
 
-  if(exists){
-    showToast("Ce compte existe déjà. Connecte-toi.","warning");
-    return;
-  }
+const userCred = await createUserWithEmailAndPassword(auth,email,password);
 
-  try{
+await sendEmailVerification(userCred.user);
 
-    const userCred = await createUserWithEmailAndPassword(auth,email,password);
+showToast("Compte créé ! Vérifie ton email pour activer ton compte 📧","success");
 
-    await sendEmailVerification(userCred.user);
+auth.signOut();
 
-    showToast("Compte créé ! Vérifie ton email 📧","success");
+}
+catch(err){
+showToast(err.message,"error");
+}
 
-  }
-  catch(err){
-    showToast(err.message,"error");
-  }
+}
 
-};
+onAuthStateChanged(auth,(user)=>{
 
+if(user){
+
+if(!user.emailVerified){
+
+showToast("Ton email n'est pas encore vérifié","warning");
+
+}
+
+}
+
+});
+  
 /* =========================
    📊 COMPTEUR VISITES STABLE
 ========================= */

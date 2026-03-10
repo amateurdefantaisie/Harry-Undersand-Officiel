@@ -1183,6 +1183,34 @@ font-size:14px;
 .notificationItem:last-child{
 border:none;
 }
+
+.modal h2{
+font-size:1.6rem;
+margin-bottom:8px;
+}
+
+.modal p{
+color:var(--muted);
+margin-bottom:14px;
+}
+
+.modal input{
+background:#020617;
+border:1px solid rgba(255,255,255,.08);
+border-radius:12px;
+padding:14px;
+color:white;
+margin-top:10px;
+}
+
+.auth-btn{
+transition:.25s;
+}
+
+.auth-btn:hover{
+transform:scale(1.02);
+box-shadow:0 0 20px rgba(139,92,246,.4);
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1449,8 +1477,8 @@ crossorigin="anonymous"></script>
 <!-- MODALE AUTH -->
 <div class="modal-bg" id="authModal">
 <div class="modal">
-<h2>Connexion</h2>
-<p>Choisis un moyen pour continuer</p>
+<h2 id="authTitle">Connexion</h2>
+<p id="authSubtitle">Connecte-toi à ton compte</p>
 <hr style="margin:16px 0;opacity:.2">
 
 <input id="emailInput" type="email" placeholder="Email"
@@ -1598,6 +1626,48 @@ const emailRegister = document.getElementById("emailRegister");
 const emailInput = document.getElementById("emailInput");
 const passwordInput = document.getElementById("passwordInput");
 
+let authMode = "login";
+
+function setAuthMode(mode){
+
+  authMode = mode;
+
+  const title = document.getElementById("authTitle");
+  const subtitle = document.getElementById("authSubtitle");
+
+  if(mode === "login"){
+    title.textContent = "Connexion";
+    subtitle.textContent = "Connecte-toi à ton compte";
+
+    emailLogin.style.display = "block";
+    emailRegister.style.display = "none";
+  }
+
+  if(mode === "register"){
+    title.textContent = "Inscription";
+    subtitle.textContent = "Créer un nouveau compte";
+
+    emailLogin.style.display = "none";
+    emailRegister.style.display = "block";
+  }
+
+}
+
+async function checkIfUserExists(email){
+
+  const snap = await getDocs(collection(db,"users"));
+
+  let exists = false;
+
+  snap.forEach(doc=>{
+    if(doc.data().email === email){
+      exists = true;
+    }
+  });
+
+  return exists;
+}
+  
 /* =========================
    🔒 FERMETURE MODALE PROPRE
 ========================= */
@@ -1616,8 +1686,15 @@ function showLoginToast() {
 }
   
 /* BOUTONS */
-loginBtn.onclick = () => authModal.style.display = "flex";
-registerBtn.onclick = () => authModal.style.display = "flex";
+loginBtn.onclick = () => {
+  setAuthMode("login");
+  authModal.style.display = "flex";
+}
+
+registerBtn.onclick = () => {
+  setAuthMode("register");
+  authModal.style.display = "flex";
+}
 closeModal.onclick = () => authModal.style.display = "none";
 
 googleLogin.onclick = () => signInWithPopup(auth, googleProvider);
@@ -1648,12 +1725,18 @@ emailLogin.onclick = async () => {
   const email = emailInput.value;
   const password = passwordInput.value;
 
+  const exists = await checkIfUserExists(email);
+
+  if(!exists){
+    showToast("Ce compte n'existe pas. Crée un compte.","error");
+    return;
+  }
+
   try{
-
-    await signInWithEmailAndPassword(auth, email, password);
-
-  }catch(err){
-    alert(err.message);
+    await signInWithEmailAndPassword(auth,email,password);
+  }
+  catch(err){
+    showToast(err.message,"error");
   }
 
 };
@@ -1663,19 +1746,28 @@ emailRegister.onclick = async () => {
   const email = emailInput.value;
   const password = passwordInput.value;
 
+  const exists = await checkIfUserExists(email);
+
+  if(exists){
+    showToast("Ce compte existe déjà. Connecte-toi.","warning");
+    return;
+  }
+
   try{
 
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    const userCred = await createUserWithEmailAndPassword(auth,email,password);
 
     await sendEmailVerification(userCred.user);
 
-    alert("Compte créé ! Vérifie ton email 📧");
+    showToast("Compte créé ! Vérifie ton email 📧","success");
 
-  }catch(err){
-    alert(err.message);
+  }
+  catch(err){
+    showToast(err.message,"error");
   }
 
 };
+
 /* =========================
    📊 COMPTEUR VISITES STABLE
 ========================= */

@@ -1568,7 +1568,7 @@ Se connecter avec Email
 Créer un compte
 </button>
 
-<button class=uth-btn google" id="googleLogin"><i class="fab fa-google"></i> Google</button>
+<button class="auth-btn google" id="googleLogin"><i class="fab fa-google"></i> Google</button>
 <button class="auth-btn facebook" id="facebookLogin"><i class="fab fa-facebook"></i> Facebook</button>
 <button class="auth-btn github" id="githubLogin"><i class="fab fa-github"></i> GitHub</button>
 <button class="close-btn" id="closeModal">Fermer</button>
@@ -1613,6 +1613,8 @@ Créer un compte
   <span class="icon">✔️</span>
   Connexion réussie
 </div>
+
+<div id="adminPanel" style="display:none"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -1805,17 +1807,15 @@ try{
 const exists = await checkIfUserExists(email);
 
 if(!exists){
-
 showToast("Compte inexistant. Crée un compte.","warning");
 return;
-
 }
 
-showToast("Connexion réussie","success");
+await signInWithEmailAndPassword(auth,email,password);
 
 }
 catch(err){
-showToast(err.message,"error");
+showToast("Email ou mot de passe incorrect","error");
 }
 
 }
@@ -1837,6 +1837,9 @@ return;
 }
 
 const userCred = await createUserWithEmailAndPassword(auth,email,password);
+
+await sendEmailVerification(userCred.user);
+showVerifyScreen();
 
 function showVerifyScreen(){
 
@@ -2908,46 +2911,7 @@ panel.style.display =
 panel.style.display==="block" ? "none" : "block";
 
 }
-</script>
 
-<script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>
-<script src="https://files.bpcontent.cloud/2025/12/10/23/20251210230142-FSLKPSBI.js" defer></script>
-
-<section id="projet-transitaire" style="padding:60px 20px; text-align:center;">
-  <h2>🚢 Projet : Jeune Transitaire</h2>
-  <p>
-    Plateforme spécialisée dans le transit, la logistique et le commerce international.
-  </p>
- <a href="https://jeunetransitaire.vercel.app"
-   target="_blank"
-   onclick="registerLinkClick()"
-   style="display:inline-block;padding:12px 25px;background:#2563eb;color:white;border-radius:8px;text-decoration:none;">
-   Visiter mon site
- </a>
-</section>
-  
-<!-- 🍪 Bandeau Cookies -->
-<div id="cookie-banner" class="cookie-banner">
-  <div class="cookie-content">
-    <p>
-      🍪 Ce site utilise des cookies pour améliorer votre expérience.
-      En continuant, vous acceptez notre utilisation des cookies.
-    </p>
-    <div class="cookie-buttons">
-      <button id="accept-cookies">Accepter</button>
-      <button id="reject-cookies">Refuser</button>
-    </div>
-  </div>
-</div>
-
-<script src="cookies.js"></script>
-
-<script src="cookies.js"></script>
-<footer style="text-align:center;padding:40px;color:#6b7280">
-© 2026 — Amateur De Fantaisie
-</footer>
-
-<script>
 async function openMarket() {
 
   const user = firebase.auth().currentUser;
@@ -2999,6 +2963,24 @@ async function openMarket() {
 function closeMarket() {
   document.getElementById("market-container").innerHTML = "";
 }
+
+function showToast(message,type="info"){
+
+const container=document.getElementById("toastContainer");
+
+const toast=document.createElement("div");
+
+toast.className="toast "+type;
+toast.innerHTML="🔔 "+message;
+
+container.appendChild(toast);
+
+setTimeout(()=>{
+toast.style.animation="toastOut .4s forwards";
+setTimeout(()=>toast.remove(),400);
+},3000);
+
+}
 </script>
   
 <div id="notifPanel">
@@ -3010,6 +2992,45 @@ Aucune notification
 </div>
 
 </div>
+
+<script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>
+<script src="https://files.bpcontent.cloud/2025/12/10/23/20251210230142-FSLKPSBI.js" defer></script>
+
+<section id="projet-transitaire" style="padding:60px 20px; text-align:center;">
+  <h2>🚢 Projet : Jeune Transitaire</h2>
+  <p>
+    Plateforme spécialisée dans le transit, la logistique et le commerce international.
+  </p>
+ <a href="https://jeunetransitaire.vercel.app"
+   target="_blank"
+   onclick="registerLinkClick()"
+   style="display:inline-block;padding:12px 25px;background:#2563eb;color:white;border-radius:8px;text-decoration:none;">
+   Visiter mon site
+ </a>
+</section>
+  
+<!-- 🍪 Bandeau Cookies -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <p>
+      🍪 Ce site utilise des cookies pour améliorer votre expérience.
+      En continuant, vous acceptez notre utilisation des cookies.
+    </p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies">Accepter</button>
+      <button id="reject-cookies">Refuser</button>
+    </div>
+  </div>
+</div>
+
+<script src="cookies.js"></script>
+
+<script src="cookies.js"></script>
+<footer style="text-align:center;padding:40px;color:#6b7280">
+© 2026 — Amateur De Fantaisie
+</footer>
+
+<script>
   
 <div id="toastContainer"></div>
   

@@ -111,19 +111,7 @@ padding:30px;
 border-radius:20px;
 max-width:420px;width:100%
 }
-.auth-btn{
-width:100%;
-padding:14px;
-margin-top:12px;
-border-radius:12px;
-border:none;
-cursor:pointer;
-font-weight:600;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:10px
-}
+
 .auth-btn.google{background:#fff;color:#000}
 .auth-btn.facebook{background:#1877f2;color:#fff}
 .auth-btn.github{background:#0f172a;color:#fff}
@@ -132,6 +120,24 @@ gap:10px
 .stars-display{
   margin:6px 0 10px;
   color:#facc15;
+}
+
+.modal{
+animation:popup .35s ease;
+}
+
+@keyframes popup{
+
+from{
+opacity:0;
+transform:scale(.9);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
 }
 
 /* =========================
@@ -1561,8 +1567,8 @@ Se connecter avec Email
 <button class="auth-btn" id="emailRegister">
 Créer un compte
 </button>
-<h
-<button class="auth-btn google" id="googleLogin"><i class="fab fa-google"></i> Google</button>
+
+<button class=uth-btn google" id="googleLogin"><i class="fab fa-google"></i> Google</button>
 <button class="auth-btn facebook" id="facebookLogin"><i class="fab fa-facebook"></i> Facebook</button>
 <button class="auth-btn github" id="githubLogin"><i class="fab fa-github"></i> GitHub</button>
 <button class="close-btn" id="closeModal">Fermer</button>
@@ -1694,32 +1700,42 @@ const emailRegister = document.getElementById("emailRegister");
 const emailInput = document.getElementById("emailInput");
 const passwordInput = document.getElementById("passwordInput");
 
-let authMode = "login";
+const authTitle = document.getElementById("authTitle");
+const authSubtitle = document.getElementById("authSubtitle");
+const verifyScreen = document.getElementById("verifyScreen");
 
-function setAuthMode(mode){
+function openLogin(){
 
-  authMode = mode;
+authModal.style.display="flex";
 
-  const title = document.getElementById("authTitle");
-  const subtitle = document.getElementById("authSubtitle");
+authTitle.textContent="Connexion";
+authSubtitle.textContent="Connecte-toi à ton compte";
 
-  if(mode === "login"){
-    title.textContent = "Connexion";
-    subtitle.textContent = "Connecte-toi à ton compte";
+emailLogin.style.display="block";
+emailRegister.style.display="none";
 
-    emailLogin.style.display = "block";
-    emailRegister.style.display = "none";
-  }
-
-  if(mode === "register"){
-    title.textContent = "Inscription";
-    subtitle.textContent = "Créer un nouveau compte";
-
-    emailLogin.style.display = "none";
-    emailRegister.style.display = "block";
-  }
+verifyScreen.style.display="none";
 
 }
+
+function openRegister(){
+
+authModal.style.display="flex";
+
+authTitle.textContent="Créer un compte";
+authSubtitle.textContent="Inscris-toi pour commencer";
+
+emailLogin.style.display="none";
+emailRegister.style.display="block";
+
+verifyScreen.style.display="none";
+
+}
+
+loginBtn.onclick = openLogin;
+registerBtn.onclick = openRegister;
+
+let authMode = "login";
 
 async function checkIfUserExists(email){
 
@@ -1734,26 +1750,6 @@ async function checkIfUserExists(email){
   });
 
   return exists;
-}
-
-const resendBtn = document.getElementById("resendVerification");
-
-resendBtn.onclick = async () => {
-
-const user = auth.currentUser;
-
-if(user){
-
-await sendEmailVerification(user);
-
-showToast("Email envoyé 📧","success");
-
-}else{
-
-showToast("Connecte-toi d'abord","warning");
-
-}
-
 }
   
 /* =========================
@@ -1774,15 +1770,6 @@ function showLoginToast() {
 }
   
 /* BOUTONS */
-loginBtn.onclick = () => {
-  setAuthMode("login");
-  authModal.style.display = "flex";
-}
-
-registerBtn.onclick = () => {
-  setAuthMode("register");
-  authModal.style.display = "flex";
-}
 closeModal.onclick = () => authModal.style.display = "none";
 
 googleLogin.onclick = () => signInWithPopup(auth, googleProvider);
@@ -1815,14 +1802,11 @@ const password = passwordInput.value;
 
 try{
 
-const userCred = await signInWithEmailAndPassword(auth,email,password);
+const exists = await checkIfUserExists(email);
 
-if(!userCred.user.emailVerified){
+if(!exists){
 
-showToast("Vérifie ton email avant de te connecter 📧","warning");
-
-auth.signOut();
-
+showToast("Compte inexistant. Crée un compte.","warning");
 return;
 
 }
@@ -1843,18 +1827,16 @@ const password = passwordInput.value;
 
 try{
 
+const exists = await checkIfUserExists(email);
+
+if(exists){
+
+showToast("Ce compte existe déjà. Connecte-toi.","warning");
+return;
+
+}
+
 const userCred = await createUserWithEmailAndPassword(auth,email,password);
-
-await sendEmailVerification(userCred.user);
-
-showVerifyScreen();
-
-}
-catch(err){
-showToast(err.message,"error");
-}
-
-}
 
 function showVerifyScreen(){
 
@@ -1916,34 +1898,6 @@ startResendTimer();
 }
 
 };
-
-function openLogin(){
-
-authModal.style.display="flex";
-
-authTitle.textContent="Connexion";
-
-emailLogin.style.display="block";
-
-emailRegister.style.display="none";
-
-verifyScreen.style.display="none";
-
-}
-
-function openRegister(){
-
-authModal.style.display="flex";
-
-authTitle.textContent="Créer un compte";
-
-emailLogin.style.display="none";
-
-emailRegister.style.display="block";
-
-verifyScreen.style.display="none";
-
-}
 
 onAuthStateChanged(auth,(user)=>{
 

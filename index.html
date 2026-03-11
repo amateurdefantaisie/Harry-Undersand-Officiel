@@ -65,6 +65,7 @@ body{
 font-family:Inter,Arial,sans-serif;
 background:var(--bg);
 color:var(--text);
+min-height:100vh;
 }
 header{
 position:fixed;
@@ -372,6 +373,17 @@ background:#b91c1c;
   }
 }
 
+.fade-up{
+opacity:0;
+transform:translateY(40px);
+transition:all .8s ease;
+}
+
+.fade-up.visible{
+opacity:1;
+transform:translateY(0);
+}
+  
 /* =========================
    🧠 SECTION DESCRIPTION
 ========================= */
@@ -1892,6 +1904,19 @@ async function loadHeatmap() {
   }
 }
 
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("visible")
+}
+})
+})
+
+document.querySelectorAll(".card, section, .hero").forEach(el=>{
+el.classList.add("fade-up")
+observer.observe(el)
+})
+  
 /* =========================
    📊 GRAPHIQUES
 ========================= */

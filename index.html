@@ -14,7 +14,7 @@
 
   gtag('config', 'G-N696WFVZ8G');
 </script>
-  
+
 <!-- Open Graph (WhatsApp, Facebook, Telegram, Discord) -->
 <meta property="og:title" content="Harry Undersand — Développeur & Architecte IA">
 <meta property="og:description" content="Chatbots IA, Streaming Premium, Hébergement Cloud et solutions digitales modernes.">
@@ -38,7 +38,6 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
   
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 :root{
 --bg:#0b141a;
 --card:#111b21;
@@ -48,15 +47,10 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
 --text:#e9edef;
 --muted:#8696a0;
 }
-  
 body{
 font-family:Inter,Arial,sans-serif;
-background:
-radial-gradient(circle at 20% 20%, rgba(139,92,246,0.15), transparent 40%),
-radial-gradient(circle at 80% 30%, rgba(124,58,237,0.15), transparent 40%),
-#0b141a;
+background:var(--bg);
 color:var(--text);
-min-height:100vh;
 }
 header{
 position:fixed;
@@ -85,73 +79,20 @@ align-items:center;
 .hero h1{font-size:3rem}
 .hero span{color:var(--violet)}
 .hero p{margin:20px auto;max-width:780px;color:var(--muted)}
-
-.btn{
-padding:14px 26px;
-border-radius:40px;
-border:none;
-cursor:pointer;
-font-weight:600;
-font-size:15px;
-transition:all .3s ease;
-display:inline-flex;
-align-items:center;
-gap:8px;
-}
-
-.btn-primary{
-background:linear-gradient(135deg,var(--violet),var(--violet-dark));
-color:white;
-box-shadow:0 10px 25px rgba(139,92,246,.35);
-}
-
-.btn-primary:hover{
-transform:translateY(-3px);
-box-shadow:0 15px 40px rgba(139,92,246,.55);
-}
-
-.btn-outline{
-background:none;
-border:1px solid var(--border);
-color:white;
-}
-
-.btn-outline:hover{
-background:rgba(139,92,246,.15);
-border-color:var(--violet);
-}
-  
+.btn{padding:12px 22px;border-radius:30px;border:none;cursor:pointer;font-weight:600}
 .btn-primary{background:linear-gradient(135deg,var(--violet),var(--violet-dark));color:#fff}
 .btn-outline{background:none;border:1px solid var(--border);color:#fff}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;margin-top:40px}
 .card{
-background:linear-gradient(145deg,#111b21,#0f171c);
-border:1px solid rgba(139,92,246,.25);
+background:var(--card);
+border:1px solid var(--border);
 border-radius:20px;
-padding:28px;
-transition:all .35s ease;
-position:relative;
-overflow:hidden;
+padding:26px;
+transition:.3s;
 }
+.card:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(139,92,246,.35)}
 
-.card::before{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(120deg,transparent,rgba(139,92,246,.15),transparent);
-opacity:0;
-transition:.4s;
-}
-
-.card:hover::before{
-opacity:1;
-}
-
-.card:hover{
-transform:translateY(-8px) scale(1.02);
-box-shadow:0 20px 40px rgba(0,0,0,.4);
-}
 .auth-actions{display:flex;gap:10px;align-items:center}
 .auth-actions img{width:32px;height:32px;border-radius:50%}
 
@@ -191,84 +132,6 @@ gap:10px
 .stars-display{
   margin:6px 0 10px;
   color:#facc15;
-}
-
-@media (max-width:768px){
-
-.hero h1{
-font-size:2rem;
-}
-
-.nav-links{
-display:none;
-flex-direction:column;
-position:absolute;
-top:70px;
-left:0;
-width:100%;
-background:#0b141a;
-padding:20px;
-}
-
-.nav-links.active{
-display:flex;
-}
-
-.burger{
-display:block;
-}
-
-.grid{
-grid-template-columns:1fr;
-}
-
-.container{
-padding:16px;
-}
-
-}
-
-.footer{
-margin-top:80px;
-padding:60px 20px;
-text-align:center;
-border-top:1px solid var(--border);
-background:#0a1217;
-}
-
-.footer-social{
-margin:20px 0;
-display:flex;
-gap:20px;
-justify-content:center;
-}
-
-.footer-social a{
-color:var(--muted);
-font-size:20px;
-transition:.3s;
-}
-
-.footer-social a:hover{
-color:var(--violet);
-}
-
-body::after{
-content:"";
-position:fixed;
-top:-50%;
-left:-50%;
-width:200%;
-height:200%;
-background:radial-gradient(circle,rgba(139,92,246,.08),transparent 60%);
-animation:moveBg 20s linear infinite;
-pointer-events:none;
-}
-
-@keyframes moveBg{
-0%{transform:translate(0,0)}
-50%{transform:translate(10%,10%)}
-100%{transform:translate(0,0)}
 }
 
 /* =========================
@@ -632,7 +495,7 @@ background:#b91c1c;
 .drawer{
   position:fixed;
   top:0;
-  right:0;
+  right:-0;
   transform:translateX(100%);
   opacity:0;
   width:340px;
@@ -941,36 +804,6 @@ canvas{
   color:#6b7280;
 }
 
-.fade-up{
-opacity:0;
-transform:translateY(40px);
-transition:all .8s ease;
-}
-
-.fade-up.show{
-opacity:1;
-transform:translateY(0);
-}
-
-.nav-links a{
-position:relative;
-}
-
-.nav-links a::after{
-content:"";
-position:absolute;
-bottom:-6px;
-left:0;
-width:0;
-height:2px;
-background:var(--violet);
-transition:.3s;
-}
-
-.nav-links a:hover::after{
-width:100%;
-}
-  
 /* =========================
    🟢 BADGE VISITEURS EN LIGNE
 ========================= */
@@ -1350,34 +1183,6 @@ font-size:14px;
 .notificationItem:last-child{
 border:none;
 }
-
-html, body{
-height:100%;
-overflow-x:hidden;
-}
-
-body{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-}
-
-main{
-flex:1;
-}
-
-const observer = new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("visible")
-}
-})
-})
-
-document.querySelectorAll(".card, section, .hero").forEach(el=>{
-el.classList.add("fade-up")
-observer.observe(el)
-}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1385,7 +1190,7 @@ crossorigin="anonymous"></script>
 </head>
 
 <body>
-  
+
 <header>
 <section class="container" id="adminPanel" style="display:none">
   <div class="card">
@@ -1407,7 +1212,7 @@ crossorigin="anonymous"></script>
     </table>
   </div>
 </section>
-  
+
 <div class="navbar">
 <a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
 <div class="menu-btn" onclick="openDrawer()">
@@ -1431,7 +1236,7 @@ crossorigin="anonymous"></script>
 </header>
 
 <main>
-  
+
 <!-- ⏳ Compte à rebours journée -->
 <div class="day-countdown">
   <div class="countdown-box">
@@ -1503,153 +1308,6 @@ crossorigin="anonymous"></script>
 <p>Chatbots IA, Streaming Premium, Hébergement Cloud et automatisation digitale.</p>
 </section>
 
-<section class="container">
-
-<h2>Plateforme Digitale Complète</h2>
-
-<p>
-La plateforme Harry Undersand est un écosystème digital complet qui propose plusieurs services technologiques avancés permettant aux utilisateurs
-d'accéder à des outils modernes tels que l'intelligence artificielle, les systèmes de messagerie, les solutions d'hébergement cloud, les
-services de streaming premium. les systèmes d'automatisation, système et d'outils interactifs.
-</p>
-
-<p>
-Notre objectif est de fournir un écosystème complet permettant
-aux utilisateurs de gérer leurs activités numériques,
-leurs contenus et leurs services à partir d'une seule plateforme.
-</p>
-
-<div class="grid">
-
-<div class="card">
-<h3>🤖 Intelligence Artificielle</h3>
-<p>
-Création de chatbots intelligents capables de répondre automatiquement
-aux utilisateurs, d'assister les clients et d'automatiser des services
-en ligne.
-</p>
-<a href="chatbot.html">Découvrir</a>
-</div>
-
-<div class="card">
-<h3>💬 Chat en ligne</h3>
-<p>
-Un système de messagerie permettant aux utilisateurs de discuter,
-collaborer et échanger en temps réel directement sur la plateforme.
-</p>
-<a href="chat.html">Accéder au chat</a>
-</div>
-
-<div class="card">
-<h3>☁️ Hébergement Cloud</h3>
-<p>
-Solutions d'hébergement modernes pour sites web, applications et
-services numériques avec performance et sécurité.
-</p>
-<a href="hosting.html">Voir l'hébergement</a>
-</div>
-
-<div class="card">
-<h3>🎬 Streaming Premium</h3>
-<p>
-Accès à différents services de streaming et packs premium
-pour profiter de contenus exclusifs.
-</p>
-<a href="streaming.html">Voir les offres</a>
-</div>
-
-</div>
-
-</section>
-
-<section class="container">
-
-<h2>Outils disponibles sur la plateforme</h2>
-
-<div class="grid">
-
-<div class="card">
-<h3>📊 Dashboard utilisateur</h3>
-<p>
-Chaque utilisateur dispose d'un tableau de bord personnel
-permettant de gérer ses services, ses commandes et ses paramètres.
-</p>
-<a href="dashboard.html">Voir le dashboard</a>
-</div>
-
-<div class="card">
-<h3>📩 Messages anonymes</h3>
-<p>
-Un système permettant aux utilisateurs de recevoir
-des messages anonymes et d'interagir avec leur communauté.
-</p>
-<a href="anonymous/index.html">Essayer</a>
-</div>
-
-<div class="card">
-<h3>🛒 Commandes en ligne</h3>
-<p>
-Un système simple permettant de commander
-des services et produits directement sur la plateforme.
-</p>
-<a href="commande.html">Commander</a>
-</div>
-
-<div class="card">
-<h3>👤 Gestion de compte</h3>
-<p>
-Les utilisateurs peuvent créer un compte, se connecter,
-gérer leurs données et accéder à leurs services premium.
-</p>
-<a href="login.html">Connexion</a>
-</div>
-
-</div>
-
-</section>
-
-<section class="container">
-
-<h2>Pourquoi choisir notre plateforme ?</h2>
-
-<div class="grid">
-
-<div class="card">
-<h3>⚡ Performance</h3>
-<p>
-Infrastructure optimisée pour offrir rapidité,
-fiabilité et stabilité aux utilisateurs.
-</p>
-</div>
-
-<div class="card">
-<h3>🔐 Sécurité</h3>
-<p>
-Protection des données, authentification sécurisée
-et respect de la confidentialité.
-</p>
-</div>
-
-<div class="card">
-<h3>🌍 Accessibilité mondiale</h3>
-<p>
-Nos services sont accessibles partout dans le monde
-avec une disponibilité permanente.
-</p>
-</div>
-
-<div class="card">
-<h3>🚀 Innovation</h3>
-<p>
-Nous développons constamment de nouvelles solutions
-basées sur l'intelligence artificielle et l'automatisation.
-</p>
-</div>
-
-</div>
-
-</section>
-
 <!-- 🧩 SERVICES -->
 <section class="services">
   <h2>Mes services</h2>
@@ -1658,17 +1316,19 @@ basées sur l'intelligence artificielle et l'automatisation.
 
     <div class="service-card">
       <i class="fas fa-robot"></i>
-      <h3>IA & Automatisation</h3>
+      <h3>Chatbots IA</h3>
       <p>
-        Développement de chatbots intelligents et systèmes automatisés capables d’optimiser la relation client, d’automatiser les tâches répétitives et d'améliorer la productivité.
+        Conception de chatbots intelligents capables de dialoguer,
+        automatiser le support client et améliorer l’expérience utilisateur.
       </p>
     </div>
 
     <div class="service-card">
       <i class="fas fa-cloud"></i>
-      <h3>Hébergement & Cloud</h3>
+      <h3>Hébergement Cloud</h3>
       <p>
-        Déploiement d’infrastructures cloud modernes pour héberger vos projets avec performance, sécurité et évolutivité.
+        Infrastructure sécurisée, rapide et scalable pour vos
+        applications web et plateformes professionnelles.
       </p>
     </div>
 
@@ -1676,7 +1336,8 @@ basées sur l'intelligence artificielle et l'automatisation.
       <i class="fas fa-video"></i>
       <h3>Streaming Premium</h3>
       <p>
-        Mise en place de plateformes de streaming performantes, sécurisées et optimisées pour offrir une expérience fluide et professionnelle.
+        Développement de plateformes de streaming modernes,
+        optimisées pour la performance et la confidentialité.
       </p>
     </div>
 
@@ -2412,8 +2073,8 @@ async function setUserOnline() {
   await setDoc(sessionRef, {
     lastActive: serverTimestamp()
   });
-  }
-  
+}
+
 // 2️⃣ Ping toutes les 15 sec
 setInterval(() => {
   setDoc(sessionRef, {
@@ -2784,21 +2445,6 @@ searchInput.addEventListener("input", ()=>{
   });
 });
 
-const elements = document.querySelectorAll(".card, .service-card, .about");
-
-const scrollObserver = new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("show")
-}
-})
-})
-
-elements.forEach(el=>{
-el.classList.add("fade-up")
-scrollObserver.observe(el)
-})
-  
 /* =========================
    🟢 BADGE ULTRA DRAG PRO
 ========================= */
@@ -3027,31 +2673,6 @@ panel.style.display =
 panel.style.display==="block" ? "none" : "block";
 
 }
-
-const observer = new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("visible")
-}
-})
-})
-
-document.querySelectorAll(".card, section, .hero").forEach(el=>{
-el.classList.add("fade-up")
-observer.observe(el)
-})
-
-const observer = new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("show")
-}
-})
-})
-
-document.querySelectorAll(".service-card").forEach(el=>{
-observer.observe(el)
-})
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>
@@ -3085,6 +2706,14 @@ observer.observe(el)
 </div>
 
 <script src="cookies.js"></script>
+
+<script src="cookies.js"></script>
+
+</main>
+  
+<footer style="text-align:center;padding:40px;color:#6b7280">
+© 2026 — Amateur De Fantaisie
+</footer>
 
 <script>
 async function openMarket() {
@@ -3151,63 +2780,6 @@ Aucune notification
 </div>
   
 <div id="toastContainer"></div>
-
-</main>
-
-<footer style="margin-top:80px;padding:60px 20px;background:#070c10;border-top:1px solid rgba(255,255,255,0.1)">
-
-<div class="container">
-
-<div class="grid">
-
-<div>
-<h3>Harry Undersand</h3>
-<p>
-Plateforme digitale spécialisée dans l'intelligence artificielle,
-le streaming premium, l'automatisation et les solutions web modernes.
-</p>
-</div>
-
-<div>
-<h4>Navigation</h4>
-<ul>
-<li><a href="index.html">Accueil</a></li>
-<li><a href="about.html">À propos</a></li>
-<li><a href="services.html">Services</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</div>
-
-<div>
-<h4>Services</h4>
-<ul>
-<li><a href="chatbot.html">Chatbot IA</a></li>
-<li><a href="hosting.html">Hébergement</a></li>
-<li><a href="streaming.html">Streaming</a></li>
-<li><a href="pack-streaming.html">Packs premium</a></li>
-</ul>
-</div>
-
-<div>
-<h4>Plateforme</h4>
-<ul>
-<li><a href="dashboard.html">Dashboard</a></li>
-<li><a href="login.html">Connexion</a></li>
-<li><a href="admin.html">Admin</a></li>
-<li><a href="anonymous/index.html">Messages anonymes</a></li>
-</ul>
-</div>
-
-</div>
-
-<hr style="margin:40px 0;border:0;border-top:1px solid rgba(255,255,255,0.1)">
-
-<p style="text-align:center;color:#777">
-© 2026 Harry Undersand — Tous droits réservés
-</p>
-
-</div>
-
-</footer>
+  
 </body>
 </html>

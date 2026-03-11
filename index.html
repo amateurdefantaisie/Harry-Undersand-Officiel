@@ -87,6 +87,24 @@ align-items:center;
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
 .burger{display:none;font-size:22px;cursor:pointer}
+.nav-links a{
+position:relative;
+}
+
+.nav-links a::after{
+content:"";
+position:absolute;
+bottom:-6px;
+left:0;
+width:0;
+height:2px;
+background:var(--violet);
+transition:.3s;
+}
+
+.nav-links a:hover::after{
+width:100%;
+}
 
 .container{max-width:1200px;margin:auto;padding:20px}
 .hero{padding-top:160px;text-align:center}
@@ -528,7 +546,7 @@ background:#b91c1c;
 .drawer{
   position:fixed;
   top:0;
-  right:-0;
+  right:0;
   transform:translateX(100%);
   opacity:0;
   width:340px;
@@ -2878,6 +2896,20 @@ entry.target.classList.add("visible")
 
 document.querySelectorAll(".card, section, .hero").forEach(el=>{
 el.classList.add("fade-up")
+observer.observe(el)
+})
+</script>
+
+<script>
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show")
+}
+})
+})
+
+document.querySelectorAll(".service-card").forEach(el=>{
 observer.observe(el)
 })
 </script>

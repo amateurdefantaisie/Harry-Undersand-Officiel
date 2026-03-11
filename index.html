@@ -1283,37 +1283,88 @@ padding:16px;
 
 }
 
-.footer{
-margin-top:80px;
-padding:60px 20px;
-text-align:center;
-border-top:1px solid rgba(255,255,255,0.1);
-background:#0a1217;
+/* --- Styles du Footer --- */
+.footer {
+  margin-top: 80px;
+  padding: 60px 20px 20px; /* Padding ajusté pour équilibrer le bas */
+  background: #0a1217;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #888; /* Couleur de texte par défaut pour le footer */
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-.footer-social{
-margin:20px 0;
-display:flex;
-gap:20px;
-justify-content:center;
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.footer-social a{
-color:var(--muted);
-font-size:20px;
-transition:.3s;
+/* Grille responsive : s'adapte automatiquement sur mobile et PC */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  text-align: left;
 }
 
-.footer-social a:hover{
-color:var(--violet);
+/* Styles des titres et textes */
+.footer h3, 
+.footer h4 {
+  color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
-.footer-bottom{
+.footer p {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
 
-margin-top:40px;
-text-align:center;
-color:#666;
+/* Styles des listes et des liens */
+.footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
+.footer ul li {
+  margin-bottom: 12px;
+}
+
+.footer ul a {
+  color: #888;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer ul a:hover {
+  color: var(--violet, #8b5cf6); /* Fallback si --violet n'est pas défini globalement */
+}
+
+/* Réseaux sociaux */
+.footer-social {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-social a {
+  color: var(--muted, #666);
+  font-size: 20px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-social a:hover {
+  color: var(--violet, #8b5cf6);
+  transform: translateY(-3px); /* Petit effet de soulèvement au survol */
+}
+
+/* Bas du footer (Copyright) */
+.footer-bottom {
+  margin-top: 60px;
+  padding-top: 20px;
+  text-align: center;
+  color: #666;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 </style>
 
@@ -3077,77 +3128,58 @@ Aucune notification
 </main>
 
 <footer class="footer">
-  
-<div class="container">
+  <div class="footer-container">
+    
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>Harry Undersand</h3>
+        <p>
+          Plateforme digitale spécialisée dans l'intelligence artificielle, 
+          le streaming premium, l'automatisation et les solutions web modernes.
+        </p>
+        <div class="footer-social">
+          <a href="#" aria-label="Github"><i class="fab fa-github"></i></a>
+          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
 
-<div class="grid">
+      <div class="footer-links">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
 
-<div>
-<h3>Harry Undersand</h3>
-<p>
-Plateforme digitale spécialisée dans l'intelligence artificielle,
-le streaming premium, l'automatisation et les solutions web modernes.
-</p>
-</div>
+      <div class="footer-links">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="chatbot.html">Chatbot IA</a></li>
+          <li><a href="hosting.html">Hébergement</a></li>
+          <li><a href="streaming.html">Streaming</a></li>
+          <li><a href="pack-streaming.html">Packs premium</a></li>
+        </ul>
+      </div>
 
-<div>
-<h4>Navigation</h4>
-<ul>
-<li><a href="index.html">Accueil</a></li>
-<li><a href="about.html">À propos</a></li>
-<li><a href="services.html">Services</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</div>
+      <div class="footer-links">
+        <h4>Plateforme</h4>
+        <ul>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="login.html">Connexion</a></li>
+          <li><a href="admin.html">Admin</a></li>
+          <li><a href="anonymous/index.html">Messages anonymes</a></li>
+        </ul>
+      </div>
+    </div>
 
-<div>
-<h4>Services</h4>
-<ul>
-<li><a href="chatbot.html">Chatbot IA</a></li>
-<li><a href="hosting.html">Hébergement</a></li>
-<li><a href="streaming.html">Streaming</a></li>
-<li><a href="pack-streaming.html">Packs premium</a></li>
-</ul>
-</div>
+    <div class="footer-bottom">
+      <p>© 2026 Harry Undersand — Tous droits réservés.</p>
+    </div>
 
-<div>
-<h4>Plateforme</h4>
-<ul>
-<li><a href="dashboard.html">Dashboard</a></li>
-<li><a href="login.html">Connexion</a></li>
-<li><a href="admin.html">Admin</a></li>
-<li><a href="anonymous/index.html">Messages anonymes</a></li>
-</ul>
-</div>
-
-</div>
-
-<div class="footer-content">
-<ul>
-<h3>Harry Undersand</h3>
-
-<p>
-Solutions digitales modernes : IA, Cloud, Automatisation et plateformes web performantes.
-</p>
-
-<div class="footer-social">
-<a href="#"><i class="fab fa-github"></i></a>
-<a href="#"><i class="fab fa-discord"></i></a>
-<a href="#"><i class="fab fa-twitter"></i></a>
-</div>
-</ul>
-</div>
-
-<div class="footer-bottom">
-
-<hr style="margin:40px 0;border:0;border-top:1px solid rgba(255,255,255,0.1)">
-
-<p style="text-align:center;color:#777">
-© 2026 Harry Undersand — Tous droits réservés
-</p>
-
-</div>
-
+  </div>
 </footer>
 </body>
 </html>

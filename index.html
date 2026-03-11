@@ -87,14 +87,32 @@ align-items:center;
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;margin-top:40px}
 .card{
-background:var(--card);
-border:1px solid var(--border);
+background:linear-gradient(145deg,#111b21,#0f171c);
+border:1px solid rgba(139,92,246,.25);
 border-radius:20px;
-padding:26px;
-transition:.3s;
+padding:28px;
+transition:all .35s ease;
+position:relative;
+overflow:hidden;
 }
-.card:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(139,92,246,.35)}
 
+.card::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(120deg,transparent,rgba(139,92,246,.15),transparent);
+opacity:0;
+transition:.4s;
+}
+
+.card:hover::before{
+opacity:1;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.02);
+box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
 .auth-actions{display:flex;gap:10px;align-items:center}
 .auth-actions img{width:32px;height:32px;border-radius:50%}
 
@@ -134,6 +152,84 @@ gap:10px
 .stars-display{
   margin:6px 0 10px;
   color:#facc15;
+}
+
+@media (max-width:768px){
+
+.hero h1{
+font-size:2rem;
+}
+
+.nav-links{
+display:none;
+flex-direction:column;
+position:absolute;
+top:70px;
+left:0;
+width:100%;
+background:#0b141a;
+padding:20px;
+}
+
+.nav-links.active{
+display:flex;
+}
+
+.burger{
+display:block;
+}
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.container{
+padding:16px;
+}
+
+}
+
+.footer{
+margin-top:80px;
+padding:60px 20px;
+text-align:center;
+border-top:1px solid var(--border);
+background:#0a1217;
+}
+
+.footer-social{
+margin:20px 0;
+display:flex;
+gap:20px;
+justify-content:center;
+}
+
+.footer-social a{
+color:var(--muted);
+font-size:20px;
+transition:.3s;
+}
+
+.footer-social a:hover{
+color:var(--violet);
+}
+
+body::after{
+content:"";
+position:fixed;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background:radial-gradient(circle,rgba(139,92,246,.08),transparent 60%);
+animation:moveBg 20s linear infinite;
+pointer-events:none;
+}
+
+@keyframes moveBg{
+0%{transform:translate(0,0)}
+50%{transform:translate(10%,10%)}
+100%{transform:translate(0,0)}
 }
 
 /* =========================
@@ -1185,6 +1281,34 @@ font-size:14px;
 .notificationItem:last-child{
 border:none;
 }
+
+html, body{
+height:100%;
+overflow-x:hidden;
+}
+
+body{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+main{
+flex:1;
+}
+
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("visible")
+}
+})
+})
+
+document.querySelectorAll(".card, section, .hero").forEach(el=>{
+el.classList.add("fade-up")
+observer.observe(el)
+})
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1237,6 +1361,8 @@ crossorigin="anonymous"></script>
 </div>
 </header>
 
+<main>
+  
 <!-- ⏳ Compte à rebours journée -->
 <div class="day-countdown">
   <div class="countdown-box">
@@ -2820,6 +2946,19 @@ panel.style.display =
 panel.style.display==="block" ? "none" : "block";
 
 }
+
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("visible")
+}
+})
+})
+
+document.querySelectorAll(".card, section, .hero").forEach(el=>{
+el.classList.add("fade-up")
+observer.observe(el)
+})
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>
@@ -2919,6 +3058,8 @@ Aucune notification
 </div>
   
 <div id="toastContainer"></div>
+
+</main>
 
 <footer style="margin-top:80px;padding:60px 20px;background:#070c10;border-top:1px solid rgba(255,255,255,0.1)">
 

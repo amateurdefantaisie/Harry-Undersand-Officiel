@@ -14,8 +14,6 @@
 
   gtag('config', 'G-N696WFVZ8G');
 </script>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
   
 <!-- Open Graph (WhatsApp, Facebook, Telegram, Discord) -->
 <meta property="og:title" content="Harry Undersand — Développeur & Architecte IA">
@@ -40,6 +38,7 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
   
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
 :root{
 --bg:#0b141a;
 --card:#111b21;
@@ -49,6 +48,7 @@ href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
 --text:#e9edef;
 --muted:#8696a0;
 }
+  
 body{
 font-family:Inter,Arial,sans-serif;
 background:
@@ -85,7 +85,42 @@ align-items:center;
 .hero h1{font-size:3rem}
 .hero span{color:var(--violet)}
 .hero p{margin:20px auto;max-width:780px;color:var(--muted)}
-.btn{padding:12px 22px;border-radius:30px;border:none;cursor:pointer;font-weight:600}
+
+.btn{
+padding:14px 26px;
+border-radius:40px;
+border:none;
+cursor:pointer;
+font-weight:600;
+font-size:15px;
+transition:all .3s ease;
+display:inline-flex;
+align-items:center;
+gap:8px;
+}
+
+.btn-primary{
+background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+color:white;
+box-shadow:0 10px 25px rgba(139,92,246,.35);
+}
+
+.btn-primary:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 40px rgba(139,92,246,.55);
+}
+
+.btn-outline{
+background:none;
+border:1px solid var(--border);
+color:white;
+}
+
+.btn-outline:hover{
+background:rgba(139,92,246,.15);
+border-color:var(--violet);
+}
+  
 .btn-primary{background:linear-gradient(135deg,var(--violet),var(--violet-dark));color:#fff}
 .btn-outline{background:none;border:1px solid var(--border);color:#fff}
 
@@ -597,7 +632,7 @@ background:#b91c1c;
 .drawer{
   position:fixed;
   top:0;
-  right:-0;
+  right:0;
   transform:translateX(100%);
   opacity:0;
   width:340px;
@@ -906,6 +941,36 @@ canvas{
   color:#6b7280;
 }
 
+.fade-up{
+opacity:0;
+transform:translateY(40px);
+transition:all .8s ease;
+}
+
+.fade-up.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.nav-links a{
+position:relative;
+}
+
+.nav-links a::after{
+content:"";
+position:absolute;
+bottom:-6px;
+left:0;
+width:0;
+height:2px;
+background:var(--violet);
+transition:.3s;
+}
+
+.nav-links a:hover::after{
+width:100%;
+}
+  
 /* =========================
    🟢 BADGE VISITEURS EN LIGNE
 ========================= */
@@ -1312,7 +1377,7 @@ entry.target.classList.add("visible")
 document.querySelectorAll(".card, section, .hero").forEach(el=>{
 el.classList.add("fade-up")
 observer.observe(el)
-})
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1320,7 +1385,7 @@ crossorigin="anonymous"></script>
 </head>
 
 <body>
-
+  
 <header>
 <section class="container" id="adminPanel" style="display:none">
   <div class="card">
@@ -1342,7 +1407,7 @@ crossorigin="anonymous"></script>
     </table>
   </div>
 </section>
-
+  
 <div class="navbar">
 <a class="logo" href="/">彡『𝐀𝐦𝐚𝐭𝐞𝐮𝐫 𝐃𝐞 𝐅𝐚𝐧𝐭𝐚𝐢𝐬𝐢𝐞 』彡</a>
 <div class="menu-btn" onclick="openDrawer()">
@@ -1593,19 +1658,17 @@ basées sur l'intelligence artificielle et l'automatisation.
 
     <div class="service-card">
       <i class="fas fa-robot"></i>
-      <h3>Chatbots IA</h3>
+      <h3>IA & Automatisation</h3>
       <p>
-        Conception de chatbots intelligents capables de dialoguer,
-        automatiser le support client et améliorer l’expérience utilisateur.
+        Développement de chatbots intelligents et systèmes automatisés capables d’optimiser la relation client, d’automatiser les tâches répétitives et d'améliorer la productivité.
       </p>
     </div>
 
     <div class="service-card">
       <i class="fas fa-cloud"></i>
-      <h3>Hébergement Cloud</h3>
+      <h3>Hébergement & Cloud</h3>
       <p>
-        Infrastructure sécurisée, rapide et scalable pour vos
-        applications web et plateformes professionnelles.
+        Déploiement d’infrastructures cloud modernes pour héberger vos projets avec performance, sécurité et évolutivité.
       </p>
     </div>
 
@@ -1613,8 +1676,7 @@ basées sur l'intelligence artificielle et l'automatisation.
       <i class="fas fa-video"></i>
       <h3>Streaming Premium</h3>
       <p>
-        Développement de plateformes de streaming modernes,
-        optimisées pour la performance et la confidentialité.
+        Mise en place de plateformes de streaming performantes, sécurisées et optimisées pour offrir une expérience fluide et professionnelle.
       </p>
     </div>
 
@@ -2350,8 +2412,8 @@ async function setUserOnline() {
   await setDoc(sessionRef, {
     lastActive: serverTimestamp()
   });
-}
-
+  }
+  
 // 2️⃣ Ping toutes les 15 sec
 setInterval(() => {
   setDoc(sessionRef, {
@@ -2722,6 +2784,21 @@ searchInput.addEventListener("input", ()=>{
   });
 });
 
+const elements = document.querySelectorAll(".card, .service-card, .about");
+
+const scrollObserver = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show")
+}
+})
+})
+
+elements.forEach(el=>{
+el.classList.add("fade-up")
+scrollObserver.observe(el)
+})
+  
 /* =========================
    🟢 BADGE ULTRA DRAG PRO
 ========================= */
@@ -2961,6 +3038,18 @@ entry.target.classList.add("visible")
 
 document.querySelectorAll(".card, section, .hero").forEach(el=>{
 el.classList.add("fade-up")
+observer.observe(el)
+})
+
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show")
+}
+})
+})
+
+document.querySelectorAll(".service-card").forEach(el=>{
 observer.observe(el)
 })
 </script>

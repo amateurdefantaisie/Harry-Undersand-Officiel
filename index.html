@@ -99,13 +99,32 @@ align-items:center;
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;margin-top:40px}
 .card{
-background:var(--card);
-border:1px solid var(--border);
+background:linear-gradient(145deg,#111b21,#0f171c);
+border:1px solid rgba(139,92,246,.25);
 border-radius:20px;
-padding:26px;
-transition:.3s;
+padding:28px;
+transition:all .35s ease;
+position:relative;
+overflow:hidden;
 }
-.card:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(139,92,246,.35)}
+
+.card::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(120deg,transparent,rgba(139,92,246,.15),transparent);
+opacity:0;
+transition:.4s;
+}
+
+.card:hover::before{
+opacity:1;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.02);
+box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
 
 .auth-actions{display:flex;gap:10px;align-items:center}
 .auth-actions img{width:32px;height:32px;border-radius:50%}
@@ -1196,6 +1215,17 @@ font-size:14px;
 
 .notificationItem:last-child{
 border:none;
+}
+
+.fade-up{
+opacity:0;
+transform:translateY(40px);
+transition:all .8s ease;
+}
+
+.fade-up.visible{
+opacity:1;
+transform:translateY(0);
 }
 </style>
 
@@ -2775,6 +2805,21 @@ async function openMarket() {
 function closeMarket() {
   document.getElementById("market-container").innerHTML = "";
 }
+</script>
+
+<script>
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("visible")
+}
+})
+})
+
+document.querySelectorAll(".card, section, .hero").forEach(el=>{
+el.classList.add("fade-up")
+observer.observe(el)
+})
 </script>
   
 <div id="notifPanel">

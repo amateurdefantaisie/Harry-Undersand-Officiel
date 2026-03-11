@@ -1904,19 +1904,6 @@ async function loadHeatmap() {
   }
 }
 
-const observer = new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("visible")
-}
-})
-})
-
-document.querySelectorAll(".card, section, .hero").forEach(el=>{
-el.classList.add("fade-up")
-observer.observe(el)
-})
-  
 /* =========================
    📊 GRAPHIQUES
 ========================= */
@@ -2800,6 +2787,19 @@ async function openMarket() {
 function closeMarket() {
   document.getElementById("market-container").innerHTML = "";
 }
+
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("visible")
+}
+})
+})
+
+document.querySelectorAll(".card, section, .hero").forEach(el=>{
+el.classList.add("fade-up")
+observer.observe(el)
+})
 </script>
   
 <div id="notifPanel">

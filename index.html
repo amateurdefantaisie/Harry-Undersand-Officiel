@@ -1227,6 +1227,66 @@ transition:all .8s ease;
 opacity:1;
 transform:translateY(0);
 }
+
+@media (max-width:768px){
+
+.hero h1{
+font-size:2rem;
+}
+
+.nav-links{
+display:none;
+flex-direction:column;
+position:absolute;
+top:70px;
+left:0;
+width:100%;
+background:#0b141a;
+padding:20px;
+}
+
+.nav-links.active{
+display:flex;
+}
+
+.burger{
+display:block;
+}
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.container{
+padding:16px;
+}
+
+}
+
+.footer{
+margin-top:80px;
+padding:60px 20px;
+text-align:center;
+border-top:1px solid var(--border);
+background:#0a1217;
+}
+
+.footer-social{
+margin:20px 0;
+display:flex;
+gap:20px;
+justify-content:center;
+}
+
+.footer-social a{
+color:var(--muted);
+font-size:20px;
+transition:.3s;
+}
+
+.footer-social a:hover{
+color:var(--violet);
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -2836,8 +2896,28 @@ Aucune notification
 
 </main>
   
-<footer style="text-align:center;padding:40px;color:#6b7280">
-© 2026 — Amateur De Fantaisie
+<footer class="footer">
+
+<div class="footer-content">
+
+<h3>Harry Undersand</h3>
+
+<p>
+Solutions digitales modernes : IA, Cloud, Automatisation et plateformes web performantes.
+</p>
+
+<div class="footer-social">
+<a href="#"><i class="fab fa-github"></i></a>
+<a href="#"><i class="fab fa-discord"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+</div>
+
+<p class="copyright">
+© 2026 Harry Undersand — Tous droits réservés
+</p>
+
+</div>
+
 </footer>
   
 </body>

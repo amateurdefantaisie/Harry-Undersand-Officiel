@@ -2829,8 +2829,8 @@ const commentInput = document.getElementById("comment");
 const loadMoreBtn = document.getElementById("loadMoreComments");
 
 let commentsLimit = 10;
+let lastVisible = null;
 let selectedRating = 0;
-let totalComments = 0;
 
 /* Gestion étoiles */
 document.querySelectorAll(".stars span").forEach(star => {
@@ -2905,13 +2905,12 @@ function loadComments() {
       ? (total / snap.size).toFixed(1)
       : "0.0";
 
-    const remaining = totalComments - commentsLimit;
-
-if (remaining <= 0) {
-  loadMoreBtn.style.display = "none";
-} else {
-  loadMoreBtn.style.display = "inline-block";
-  loadMoreBtn.textContent = `Voir ${remaining} message(s) de plus`;
+    if (snap.size < commentsLimit) {
+      loadMoreBtn.style.display = "none";
+    } else {
+      loadMoreBtn.style.display = "inline-block";
+    }
+  });
 }
 
 loadMoreBtn.addEventListener("click", () => {
@@ -2919,14 +2918,6 @@ loadMoreBtn.addEventListener("click", () => {
   loadComments();
 });
 
-async function getTotalComments() {
-  const q = query(collection(db, "comments"));
-  const snap = await getDocs(q);
-  totalComments = snap.size;
-  ratingCount.textContent = totalComments;
-}
-
-getTotalComments();
 loadComments();
 
 document.addEventListener("click", async e => {
@@ -2951,7 +2942,7 @@ function updateDrawerShadow(){
 drawerLinks.addEventListener("scroll", updateDrawerShadow);
 window.addEventListener("resize", updateDrawerShadow);
 
-updateDrawerShadow(); 
+updateDrawerShadow();
 
 /* ✨ ANIMATION AU SCROLL */
 const observer = new IntersectionObserver(entries => {

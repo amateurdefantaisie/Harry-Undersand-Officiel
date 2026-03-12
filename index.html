@@ -1479,19 +1479,20 @@ crossorigin="anonymous"></script>
 <aside class="drawer" id="drawerMenu">
   <div class="drawer-header">
     <span>Menu Principal</span>
-    <button onclick="closeDrawer()">✕</button>
+    <button onclick="closeDrawer()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
   </div>
-  
-<div class="drawer-search">
-  <input type="text" id="drawerSearch" placeholder="Rechercher un service...">
-</diviv>
 
-<div class="auth-actions" id="authGuest" style="flex-direction: column; gap: 10px; margin-bottom: 20px;">
+  <div class="drawer-search">
+    <input type="text" id="drawerSearch" placeholder="Rechercher un service..." style="width:100%; padding:10px; border-radius:8px; background:var(--bg); border:1px solid var(--border); color:white; margin-bottom:15px;">
+  </div>
+
+  <div class="auth-actions" id="authGuest" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
     <button class="btn btn-outline" id="loginBtn" style="width: 100%;">Connexion</button>
     <button class="btn btn-primary" id="registerBtn" style="width: 100%;">Inscription</button>
   </div>
+
   <div class="auth-actions" id="authUser" style="display:none; flex-direction: column; align-items: center; margin-bottom: 20px; padding: 15px; background: var(--bg); border-radius: 12px;">
-    <img id="userPhoto" src="https://via.placeholder.com/40" alt="Avatar">
+    <img id="userPhoto" src="https://via.placeholder.com/40" alt="Avatar" style="border-radius:50%; margin-bottom:10px;">
     <span id="welcomeText" style="font-weight: 600;"></span>
     <button class="btn btn-outline" id="logoutBtn" style="width: 100%; margin-top: 10px; font-size: 0.8rem;">Déconnexion</button>
   </div>
@@ -1516,15 +1517,11 @@ crossorigin="anonymous"></script>
   <a href="mycanal.html" class="drawer-cta" style="--i:17">📡 MyCanal 📡</a>
   <a href="anonymous/index.html" style="--i:18">📬 Message Anonyme 📵</a>
 
-<a href="https://undersand-market.vercel.app" target="_blank">
-  🛍️ Undersand Market shop 🛒
-</a>
-  
-<a href="https://jeunetransitaire.vercel.app" target="_blank">
-  ⚖️ Jeune Transitaire Officiel ⚓
-</a>
-
-</nav>
+<div style="border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px;">
+      <a href="https://undersand-market.vercel.app" target="_blank" style="color: var(--violet);">🛍️ Undersand Market shop 🛒</a>
+      <a href="https://jeunetransitaire.vercel.app" target="_blank" style="color: var(--violet);">⚖️ Jeune Transitaire Officiel ⚓</a>
+    </div>
+  </nav>
 </aside>
 
 <div class="online-badge" id="draggableBadge">

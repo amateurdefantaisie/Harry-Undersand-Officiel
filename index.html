@@ -1442,14 +1442,14 @@ crossorigin="anonymous"></script>
   <input type="text" id="drawerSearch" placeholder="Rechercher un service...">
 </diviv>
 
-<div class="auth-actions" id="authGuest" style="flex-direction: column; gap: 10px; margin-bottom: 20px;">
-<button class="btn btn-outline" id="loginBtn" style="width: 100%;">Connexion</button>
-<button class="btn btn-primary" id="registerBtn" style="width: 100%;">Inscription</button>
+<div class="auth-actions" id="authGuest">
+<button class="btn btn-outline" id="loginBtn">Connexion</button>
+<button class="btn btn-primary" id="registerBtn">Inscription</button>
 </div>
-<div class="auth-actions" id="authUser" style="display:none; flex-direction: column; align-items: center; margin-bottom: 20px; padding: 15px; background: var(--bg); border-radius: 12px;">
-<img id="userPhoto" src="https://via.placeholder.com/40" alt="Avatar">
-<span id="welcomeText" style="font-weight: 600;"></span>
-<button class="btn btn-outline" id="logoutBtn" style="width: 100%; margin-top: 10px; font-size: 0.8rem;">Déconnexion</button>
+<div class="auth-actions" id="authUser" style="display:none">
+<span id="welcomeText"></span>
+<img id="userPhoto">
+<button class="btn btn-outline" id="logoutBtn">Déconnexion</button>
 </div>
 
 <nav class="drawer-links">

@@ -2905,12 +2905,13 @@ function loadComments() {
       ? (total / snap.size).toFixed(1)
       : "0.0";
 
-    if (snap.size < commentsLimit) {
-      loadMoreBtn.style.display = "none";
-    } else {
-      loadMoreBtn.style.display = "inline-block";
-    }
-  });
+    const remaining = totalComments - commentsLimit;
+
+if (remaining <= 0) {
+  loadMoreBtn.style.display = "none";
+} else {
+  loadMoreBtn.style.display = "inline-block";
+  loadMoreBtn.textContent = `Voir ${remaining} message(s) de plus`;
 }
 
 loadMoreBtn.addEventListener("click", () => {

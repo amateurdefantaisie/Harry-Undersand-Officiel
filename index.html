@@ -2087,7 +2087,7 @@ const adminVisits = document.getElementById("adminVisits");
 
 const authModal = document.getElementById("authModal");
 
-const loginBtn = document.getElementById("loginBtn");
+const loginBtn = document.getElementById("loginBtn") || null;
 const registerBtn = document.getElementById("registerBtn");
 const closeModal = document.getElementById("closeModal");
 const googleLogin = document.getElementById("googleLogin");
@@ -3209,12 +3209,10 @@ panel.style.display==="block" ? "none" : "block";
 
 <script src="cookies.js"></script>
 
-<script src="cookies.js"></script>
-
 <script>
 async function openMarket() {
 
-  const user = firebase.auth().currentUser;
+  const user = auth.currentUser;
 
   if (!user) {
     alert("Vous devez être connecté.");
@@ -3300,21 +3298,7 @@ el.classList.add("fade-up")
 observer.observe(el)
 })
 </script>
-
-<script>
-const observer = new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("show")
-}
-})
-})
-
-document.querySelectorAll(".service-card").forEach(el=>{
-observer.observe(el)
-})
-</script>
-  
+ 
 <div id="notifPanel">
 
 <h3>🔔 Notifications</h3>

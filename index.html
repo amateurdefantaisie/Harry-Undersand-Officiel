@@ -3178,6 +3178,23 @@ panel.style.display =
 panel.style.display==="block" ? "none" : "block";
 
 }
+
+function openLogin(){
+document.getElementById("loginModal").style.display="flex"
+}
+
+function closeLogin(){
+document.getElementById("loginModal").style.display="none"
+}
+
+function openRegister(){
+document.getElementById("loginModal").style.display="none"
+document.getElementById("registerModal").style.display="flex"
+}
+
+function closeRegister(){
+document.getElementById("registerModal").style.display="none"
+}
 </script>
 
 <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" defer></script>
@@ -3266,27 +3283,6 @@ function closeMarket() {
 }
 </script>
 
-<script>
-
-function openLogin(){
-document.getElementById("loginModal").style.display="flex"
-}
-
-function closeLogin(){
-document.getElementById("loginModal").style.display="none"
-}
-
-function openRegister(){
-document.getElementById("loginModal").style.display="none"
-document.getElementById("registerModal").style.display="flex"
-}
-
-function closeRegister(){
-document.getElementById("registerModal").style.display="none"
-}
-
-</script>
-  
 <script>
 const observer = new IntersectionObserver(entries=>{
 entries.forEach(entry=>{

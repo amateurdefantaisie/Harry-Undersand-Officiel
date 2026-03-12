@@ -1368,6 +1368,50 @@ padding:16px;
   color: #666;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* Le conteneur principal du menu */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+  width: 320px;
+  height: 100%; /* Toute la hauteur de l'écran */
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2000;
+  
+  /* C'EST ICI QUE CA SE PASSE : */
+  display: flex;
+  flex-direction: column; /* Aligne les éléments verticalement */
+}
+
+/* La partie qui contient les liens doit être la seule à scroller */
+.drawer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  /* Gestion du scroll */
+  overflow-y: auto; /* Active le scroll vertical si nécessaire */
+  flex: 1;          /* Prend tout l'espace restant dans le menu */
+  padding-right: 5px; /* Petit espace pour ne pas coller à la barre de scroll */
+  
+  /* Masquer la barre de scroll sur certains navigateurs (optionnel) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--violet) transparent;
+}
+
+/* Design de la barre de scroll pour Chrome/Safari */
+.drawer-links::-webkit-scrollbar {
+  width: 5px;
+}
+.drawer-links::-webkit-scrollbar-thumb {
+  background: var(--violet);
+  border-radius: 10px;
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1442,15 +1486,15 @@ crossorigin="anonymous"></script>
   <input type="text" id="drawerSearch" placeholder="Rechercher un service...">
 </diviv>
 
-<div class="auth-actions" id="authGuest">
-<button class="btn btn-outline" id="loginBtn">Connexion</button>
-<button class="btn btn-primary" id="registerBtn">Inscription</button>
-</div>
-<div class="auth-actions" id="authUser" style="display:none">
-<span id="welcomeText"></span>
-<img id="userPhoto">
-<button class="btn btn-outline" id="logoutBtn">Déconnexion</button>
-</div>
+<div class="auth-actions" id="authGuest" style="flex-direction: column; gap: 10px; margin-bottom: 20px;">
+    <button class="btn btn-outline" id="loginBtn" style="width: 100%;">Connexion</button>
+    <button class="btn btn-primary" id="registerBtn" style="width: 100%;">Inscription</button>
+  </div>
+  <div class="auth-actions" id="authUser" style="display:none; flex-direction: column; align-items: center; margin-bottom: 20px; padding: 15px; background: var(--bg); border-radius: 12px;">
+    <img id="userPhoto" src="https://via.placeholder.com/40" alt="Avatar">
+    <span id="welcomeText" style="font-weight: 600;"></span>
+    <button class="btn btn-outline" id="logoutBtn" style="width: 100%; margin-top: 10px; font-size: 0.8rem;">Déconnexion</button>
+  </div>
 
 <nav class="drawer-links">
   <a href="harry-undersand.html" class="drawer-cta" style="--i:1">👤 Harry Undersand</a>

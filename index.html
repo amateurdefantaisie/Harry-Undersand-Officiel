@@ -149,21 +149,117 @@ box-shadow:0 20px 40px rgba(0,0,0,.4);
 .auth-actions{display:flex;gap:10px;align-items:center}
 .auth-actions img{width:32px;height:32px;border-radius:50%}
 
+/* =========================
+   MODALES AUTH
+========================= */
+
 .modal-bg{
-position:fixed;inset:0;
-background:rgba(0,0,0,.65);
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+backdrop-filter:blur(6px);
 display:none;
 align-items:center;
 justify-content:center;
-z-index:2000
+z-index:3000;
+animation:fadeIn .3s ease;
 }
+
 .modal{
-background:var(--card);
-border:1px solid var(--border);
-padding:30px;
-border-radius:20px;
-max-width:420px;width:100%
+background:linear-gradient(145deg,#111b21,#0b141a);
+border:1px solid rgba(139,92,246,.35);
+padding:35px;
+border-radius:24px;
+max-width:440px;
+width:92%;
+box-shadow:0 25px 60px rgba(0,0,0,.6);
+animation:modalPop .35s ease;
 }
+
+.modal h2{
+text-align:center;
+margin-bottom:20px;
+color:var(--violet);
+}
+
+.modal p{
+text-align:center;
+color:var(--muted);
+margin-bottom:20px;
+font-size:14px;
+}
+
+.input-group{
+margin-bottom:14px;
+}
+
+.input-group input{
+width:100%;
+padding:13px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,.08);
+background:#0b141a;
+color:#fff;
+font-size:14px;
+outline:none;
+transition:.3s;
+}
+
+.input-group input:focus{
+border-color:var(--violet);
+box-shadow:0 0 10px rgba(139,92,246,.4);
+}
+
+.auth-submit{
+width:100%;
+padding:14px;
+margin-top:10px;
+border-radius:12px;
+border:none;
+cursor:pointer;
+font-weight:600;
+background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+color:#fff;
+}
+
+.auth-switch{
+margin-top:18px;
+text-align:center;
+font-size:14px;
+color:var(--muted);
+}
+
+.auth-switch span{
+color:var(--violet);
+cursor:pointer;
+font-weight:600;
+}
+
+.close-btn{
+margin-top:20px;
+background:none;
+border:none;
+color:#94a3b8;
+cursor:pointer;
+width:100%;
+}
+
+@keyframes modalPop{
+from{
+transform:scale(.8);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+@keyframes fadeIn{
+from{opacity:0}
+to{opacity:1}
+}
+  
 .auth-btn{
 width:100%;
 padding:14px;
@@ -1451,17 +1547,11 @@ crossorigin="anonymous"></script>
 <div id="notifBell" onclick="toggleNotifications()">
 🔔 <span id="notifCount">0</span>
 </div>
+</div>
 
-<div class="auth-actions" id="authGuest">
-<button class="btn btn-outline" id="loginBtn">Connexion</button>
-<button class="btn btn-primary" id="registerBtn">Inscription</button>
-</div>
-<div class="auth-actions" id="authUser" style="display:none">
-<span id="welcomeText"></span>
-<img id="userPhoto" src="https://via.placeholder.com/40" alt="Avatar">
-<button class="btn btn-outline" id="logoutBtn">Déconnexion</button>
-</div>
-</div>
+<button onclick="openLogin()" class="btn btn-outline">Connexion</button>
+
+<button onclick="openRegister()" class="btn btn-primary">Inscription</button>
 </header>
 
 <main>
@@ -1811,33 +1901,82 @@ basées sur l'intelligence artificielle et l'automatisation.
   <div id="heatmap" class="heatmap-grid"></div>
 </div>
 
-<!-- MODALE AUTH -->
-<div class="modal-bg" id="authModal">
+<!-- MODALE CONNEXION -->
+
+<div class="modal-bg" id="loginModal">
+
 <div class="modal">
+
 <h2>Connexion</h2>
-<p>Choisis un moyen pour continuer</p>
-<hr style="margin:16px 0;opacity:.2">
+<p>Accédez à votre espace personnel</p>
 
-<input id="emailInput" type="email" placeholder="Email"
-style="width:100%;padding:12px;margin-top:10px;border-radius:10px;border:none">
+<div class="input-group">
+<input type="email" placeholder="Adresse email">
+</div>
 
-<input id="passwordInput" type="password" placeholder="Mot de passe"
-style="width:100%;padding:12px;margin-top:10px;border-radius:10px;border:none">
+<div class="input-group">
+<input type="password" placeholder="Mot de passe">
+</div>
 
-<button class="auth-btn" id="emailLogin">
-Se connecter avec Email
+<button class="auth-submit">Se connecter</button>
+
+<button class="auth-btn google">
+<i class="fab fa-google"></i> Continuer avec Google
 </button>
 
-<button class="auth-btn" id="emailRegister">
-Créer un compte
+<button class="auth-btn facebook">
+<i class="fab fa-facebook"></i> Continuer avec Facebook
 </button>
-<button class="auth-btn google" id="googleLogin"><i class="fab fa-google"></i> Google</button>
-<button class="auth-btn facebook" id="facebookLogin"><i class="fab fa-facebook"></i> Facebook</button>
-<button class="auth-btn github" id="githubLogin"><i class="fab fa-github"></i> GitHub</button>
-<button class="close-btn" id="closeModal">Fermer</button>
+
+<button class="auth-btn github">
+<i class="fab fa-github"></i> Continuer avec Github
+</button>
+
+<div class="auth-switch">
+Pas de compte ? <span onclick="openRegister()">Créer un compte</span>
+</div>
+
+<button class="close-btn" onclick="closeLogin()">Fermer</button>
+
 </div>
 </div>
 
+<!-- MODALE INSCRIPTION -->
+
+<div class="modal-bg" id="registerModal">
+
+<div class="modal">
+
+<h2>Créer un compte</h2>
+<p>Rejoignez la plateforme Harry Undersand</p>
+
+<div class="input-group">
+<input type="text" placeholder="Nom complet">
+</div>
+
+<div class="input-group">
+<input type="email" placeholder="Adresse email">
+</div>
+
+<div class="input-group">
+<input type="password" placeholder="Mot de passe">
+</div>
+
+<div class="input-group">
+<input type="password" placeholder="Confirmer le mot de passe">
+</div>
+
+<button class="auth-submit">Créer mon compte</button>
+
+<div class="auth-switch">
+Déjà un compte ? <span onclick="openLogin()">Se connecter</span>
+</div>
+
+<button class="close-btn" onclick="closeRegister()">Fermer</button>
+
+</div>
+</div>
+  
 <section id="comments">
 
   <h2>Avis clients</h2>
@@ -3126,6 +3265,27 @@ function closeMarket() {
 }
 </script>
 
+<script>
+
+function openLogin(){
+document.getElementById("loginModal").style.display="flex"
+}
+
+function closeLogin(){
+document.getElementById("loginModal").style.display="none"
+}
+
+function openRegister(){
+document.getElementById("loginModal").style.display="none"
+document.getElementById("registerModal").style.display="flex"
+}
+
+function closeRegister(){
+document.getElementById("registerModal").style.display="none"
+}
+
+</script>
+  
 <script>
 const observer = new IntersectionObserver(entries=>{
 entries.forEach(entry=>{

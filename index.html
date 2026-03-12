@@ -2829,8 +2829,8 @@ const commentInput = document.getElementById("comment");
 const loadMoreBtn = document.getElementById("loadMoreComments");
 
 let commentsLimit = 10;
-let lastVisible = null;
 let selectedRating = 0;
+let totalComments = 0;
 
 /* Gestion étoiles */
 document.querySelectorAll(".stars span").forEach(star => {
@@ -2918,6 +2918,14 @@ loadMoreBtn.addEventListener("click", () => {
   loadComments();
 });
 
+async function getTotalComments() {
+  const q = query(collection(db, "comments"));
+  const snap = await getDocs(q);
+  totalComments = snap.size;
+  ratingCount.textContent = totalComments;
+}
+
+getTotalComments();
 loadComments();
 
 document.addEventListener("click", async e => {

@@ -1491,6 +1491,54 @@ transition:.3s;
 transform:scale(1.05);
 box-shadow:0 10px 25px rgba(139,92,246,.4);
 }
+
+.platform-card::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(
+120deg,
+transparent,
+rgba(139,92,246,.2),
+transparent
+);
+transition:.6s;
+}
+
+.platform-card:hover::before{
+left:100%;
+}
+
+.icon i{
+font-size:38px;
+color:var(--violet);
+transition:.4s;
+}
+
+.platform-card:hover .icon i{
+transform:scale(1.2) rotate(5deg);
+color:#a78bfa;
+}
+
+.platform-btn{
+display:inline-block;
+margin-top:18px;
+padding:10px 20px;
+border-radius:12px;
+background:linear-gradient(135deg,var(--violet),#a78bfa);
+color:white;
+text-decoration:none;
+font-weight:600;
+transition:.3s;
+}
+
+.platform-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 25px rgba(139,92,246,.5);
+}
 </style>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4304218039779695"
@@ -1594,7 +1642,6 @@ crossorigin="anonymous"></script>
   <a href="iptv.html" style="--i:16">🖥️ IPTV 🖥️</a>
   <a href="mycanal.html" class="drawer-cta" style="--i:17">📡 MyCanal 📡</a>
   <a href="anonymous/index.html" style="--i:18">📬 Message Anonyme 📵</a>
-  <a href="anniversaire.html" class="drawer-cta" style="--i:17">🥳 Anniversaire 🥳</a>
 
 <div style="border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px;">
       <a href="https://undersand-market.vercel.app" target="_blank" style="color: var(--violet);">🛍️ Undersand Market shop 🛒</a>
@@ -1641,13 +1688,16 @@ en ligne.
 <button class="platform-btn">Découvrir</button>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-comments"></i>
+</div>
 <h3>💬 Chat en ligne</h3>
 <p>
 Un système de messagerie permettant aux utilisateurs de discuter,
 collaborer et échanger en temps réel directement sur la plateforme.
 </p>
-<a href="chat.html" class="btn btn-ontline">Accéder au chat</a>
+<a href="chat.html" class="platform-btn">Accéder au chat</a>
 </div>
 
 <div class="platform-card">
@@ -1659,16 +1709,19 @@ collaborer et échanger en temps réel directement sur la plateforme.
 Solutions d'hébergement modernes pour sites web, applications et
 services numériques avec performance et sécurité.
 </p>
-<button href="hosting.html" class="btn btn ontline">Voir l'hébergement</button>
+<a href="hosting.html" class="platform-btn">Voir l'hébergement</a>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-video"></i>
+</div>
 <h3>🎬 Streaming Premium</h3>
 <p>
 Accès à différents services de streaming et packs premium
 pour profiter de contenus exclusifs.
 </p>
-<a href="streaming.html">Voir les offres</a>
+<a href="streaming.html" class="platform-btn">Voir les offres</a>
 </div>
 
 <div class="platform-card">
@@ -1699,51 +1752,65 @@ grâce à des outils intelligents.
 
 </section>
 
+
 <section class="container">
 
 <h2>Outils disponibles sur la plateforme</h2>
 
 <div class="grid">
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-chart-line"></i>
+</div>
 <h3>📊 Dashboard utilisateur</h3>
 <p>
 Chaque utilisateur dispose d'un tableau de bord personnel
 permettant de gérer ses services, ses commandes et ses paramètres.
 </p>
-<a href="dashboard.html">Voir le dashboard</a>
+<a href="dashboard.html" class="platform-btn">Voir le dashboard</a>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-envelope"></i>
+</div>
 <h3>📩 Messages anonymes</h3>
 <p>
 Un système permettant aux utilisateurs de recevoir
 des messages anonymes et d'interagir avec leur communauté.
 </p>
-<a href="anonymous/index.html">Essayer</a>
+<a href="anonymous/index.html" class="platform-btn">Essayer</a>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-shopping-cart"></i>
+</div>
 <h3>🛒 Commandes en ligne</h3>
 <p>
 Un système simple permettant de commander
 des services et produits directement sur la plateforme.
 </p>
-<a href="commande.html">Commander</a>
+<a href="commande.html" class="platform-btn">Commander</a>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-user"></i>
+</div>
 <h3>👤 Gestion de compte</h3>
 <p>
 Les utilisateurs peuvent créer un compte, se connecter,
 gérer leurs données et accéder à leurs services premium.
 </p>
-<a href="login.html">Connexion</a>
+<a href="login.html" class="platform-btn">Connexion</a>
 </div>
 
 </div>
 
 </section>
+
 
 <section class="container">
 
@@ -1751,7 +1818,10 @@ gérer leurs données et accéder à leurs services premium.
 
 <div class="grid">
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-bolt"></i>
+</div>
 <h3>⚡ Performance</h3>
 <p>
 Infrastructure optimisée pour offrir rapidité,
@@ -1759,7 +1829,10 @@ fiabilité et stabilité aux utilisateurs.
 </p>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-shield-alt"></i>
+</div>
 <h3>🔐 Sécurité</h3>
 <p>
 Protection des données, authentification sécurisée
@@ -1767,7 +1840,10 @@ et respect de la confidentialité.
 </p>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-globe"></i>
+</div>
 <h3>🌍 Accessibilité mondiale</h3>
 <p>
 Nos services sont accessibles partout dans le monde
@@ -1775,7 +1851,10 @@ avec une disponibilité permanente.
 </p>
 </div>
 
-<div class="card">
+<div class="platform-card">
+<div class="icon">
+<i class="fas fa-rocket"></i>
+</div>
 <h3>🚀 Innovation</h3>
 <p>
 Nous développons constamment de nouvelles solutions

@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joyeux Anniversaire - 12 Mars 🎂</title>
 
+    <meta property="og:title" content="Une surprise pour vous... 🎁">
+    <meta property="og:description" content="En ce jour du 12 Mars, j'ai créé quelque chose de spécial pour ma Maman et ma Sœur.">
+    <meta property="og:image" content="https://files.catbox.moe/bsnyom.png">
+    <meta property="og:url" content="https://harry-undersand.vercel.app/anniversaire.html">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🥳</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -27,206 +34,245 @@
             background: var(--bg);
             color: var(--text);
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
         }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
 
-        /* --- Header --- */
-        .hero { text-align: center; padding: 60px 0; }
-        .hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; }
-        .text-gradient { background: linear-gradient(135deg, var(--violet), var(--pink), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .hero { text-align: center; padding: 60px 0; animation: fadeIn 1.5s ease; }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; margin-bottom: 10px; }
         .special-font { font-family: 'Dancing Script', cursive; color: var(--violet); font-size: 1.5em; }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--violet), var(--pink), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         /* --- Galerie Photos --- */
-        .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 40px 0; }
-        .photo-card { 
-            position: relative; border-radius: 15px; overflow: hidden; cursor: pointer; 
-            border: 1px solid var(--border); transition: 0.3s;
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
         }
-        .photo-card:hover { transform: translateY(-5px); border-color: var(--violet); }
-        .photo-card img { width: 100%; height: 280px; object-fit: cover; }
-        
-        /* Lightbox (Zoom photo) */
-        .lightbox {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none;
-            align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+        .photo-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .lightbox img { max-width: 90%; max-height: 80%; border-radius: 10px; box-shadow: 0 0 30px var(--violet); }
-        .close-zoom { position: absolute; top: 20px; right: 20px; font-size: 2rem; color: white; cursor: pointer; }
+        .photo-card:hover { transform: scale(1.05) rotate(1deg); border-color: var(--violet); z-index: 10; }
+        .photo-card img { width: 100%; height: 320px; object-fit: cover; display: block; }
+        .photo-caption { padding: 15px; text-align: center; font-weight: 600; font-size: 0.9rem; background: var(--surface); }
 
         /* --- Vidéos --- */
-        .video-container { 
-            background: var(--surface); padding: 15px; border-radius: 20px; 
-            border: 1px solid var(--border); margin-bottom: 20px;
+        .video-card {
+            background: var(--surface);
+            padding: 12px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
         }
-        video { width: 100%; border-radius: 12px; aspect-ratio: 16/9; background: #000; }
-        .video-controls-custom { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
-        .btn-vid { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border); 
-            color: white; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem;
+        .video-card:hover { border-color: var(--pink); }
+        video { width: 100%; border-radius: 16px; display: block; background: #000; }
+
+        /* --- Lettres --- */
+        .letter-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 60px 0; }
+        .letter {
+            background: var(--surface);
+            padding: 35px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .letter h3 { margin-bottom: 15px; color: var(--gold); display: flex; align-items: center; gap: 10px; }
+        .letter p { color: var(--text); line-height: 1.8; font-style: italic; opacity: 0.9; }
+
+        /* --- Cadeau --- */
+        .gift-section {
+            text-align: center;
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.1), rgba(17, 24, 39, 0.5));
+            padding: 60px 20px;
+            border-radius: 40px;
+            border: 2px dashed var(--border);
+            margin-top: 40px;
+        }
+        .btn-gift {
+            background: var(--violet);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        .btn-gift:hover { transform: translateY(-5px) scale(1.02); background: var(--pink); }
+
+        #secretMessage {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.4);
+            color: var(--gold);
+            font-weight: 700;
+            line-height: 1.6;
+            animation: fadeIn 0.8s ease;
         }
 
         /* --- Audio Player --- */
         .audio-player {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: var(--surface); border: 1px solid var(--violet);
-            padding: 12px 25px; border-radius: 50px; display: flex; align-items: center; gap: 15px;
-            backdrop-filter: blur(15px); z-index: 1000; width: fit-content;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: fixed; bottom: 25px; right: 25px;
+            background: var(--violet);
+            padding: 12px 24px; border-radius: 50px;
+            display: flex; align-items: center; gap: 12px;
+            z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
         }
+        .audio-player i { font-size: 1.2rem; }
 
-        /* --- Lettres & Cadeau --- */
-        .letter-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 50px 0; }
-        .letter { background: var(--surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
-        .gift-section { text-align: center; padding: 50px; border-radius: 30px; border: 2px dashed var(--violet); }
-        .btn-gift { background: var(--violet); color: white; border: none; padding: 15px 35px; border-radius: 50px; cursor: pointer; font-weight: 800; }
-        
-        #secretMessage { display: none; margin-top: 20px; color: var(--gold); animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        footer { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
-    <div class="lightbox" id="lightbox" onclick="this.style.display='none'">
-        <span class="close-zoom">&times;</span>
-        <img id="lightboxImg" src="" alt="Zoom">
-    </div>
-
-    <div class="audio-player">
-        <i class="fa-solid fa-compact-disc fa-spin" id="discIcon" style="color: var(--violet); display: none;"></i>
-        <button onclick="toggleMusic()" id="musicBtn" style="background:none; border:none; color:white; cursor:pointer; font-weight:700;">
-            ACTIVER LA MUSIQUE 🎵
-        </button>
-        <audio id="bgMusic">
+    <div class="audio-player" id="playerContainer">
+        <i class="fa-solid fa-music"></i>
+        <button onclick="toggleMusic()" id="musicBtn" style="background:none; border:none; color:white; font-weight:800; cursor:pointer; font-family: inherit;">CLIQUEZ POUR LA MUSIQUE 🎵</button>
+        <audio id="bgMusic" loop>
             <source src="https://files.catbox.moe/t61aa7.mp3" type="audio/mpeg">
         </audio>
     </div>
 
     <div class="container">
         <header class="hero">
-            <span class="special-font">Une surprise attendue...</span>
+            <span class="special-font">Une journée inoubliable...</span>
             <h1 class="text-gradient">Joyeux Anniversaire !</h1>
-            <p style="color: var(--muted);">Maman, Ma Sœur & Erica</p>
+            <p style="color: var(--muted); font-size: 1.1rem;">Pour les femmes qui illuminent ma vie :<br><strong>Maman, Ma Sœur & Erica</strong></p>
         </header>
 
-        <section>
-            <h2 style="text-align:center; margin-bottom:20px;">🖼️ Galerie (Cliquez pour agrandir)</h2>
+        <section class="photo-section">
+            <h2 style="text-align: center; margin-bottom: 40px;"><i class="fa-solid fa-camera-retro"></i> Galerie de Bonheur</h2>
             <div class="photo-grid">
-                <div class="photo-card" onclick="openZoom(this)"><img src="https://files.catbox.moe/jl49lo.jpg" alt="Maman"></div>
-                <div class="photo-card" onclick="openZoom(this)"><img src="https://files.catbox.moe/bazmei.jpg" alt="Soeur"></div>
-                <div class="photo-card" onclick="openZoom(this)"><img src="https://files.catbox.moe/ywmf65.jpg" alt="Erica"></div>
-                <div class="photo-card" onclick="openZoom(this)"><img src="https://files.catbox.moe/rvc5r5.png" alt="Famille"></div>
+                <div class="photo-card">
+                    <img src="https://files.catbox.moe/jl49lo.jpg" alt="Maman">
+                    <div class="photo-caption">Ma Reine 👑</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://files.catbox.moe/bazmei.jpg" alt="Soeur">
+                    <div class="photo-caption">Ma Complice ❤️</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://files.catbox.moe/ywmf65.jpg" alt="Erica">
+                    <div class="photo-caption">Mon futur 👪</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://files.catbox.moe/rvc5r5.png" alt="Mes Femmes">
+                    <div class="photo-caption">Mes femmes 🫶</div>
+                </div>
             </div>
         </section>
 
-        <section>
-            <h2 style="text-align:center; margin: 40px 0 20px;">🎥 Messages Vidéos</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
-                
-                <div class="video-container">
-                    <video id="vid1" onplay="pauseMusic()" onpause="resumeMusic()" onended="resumeMusic()">
+        <section class="video-section">
+            <h2 style="text-align: center; margin: 60px 0 30px;"><i class="fa-solid fa-film"></i> Messages Spéciaux</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                <div class="video-card">
+                    <video controls preload="metadata">
                         <source src="https://files.catbox.moe/afaejt.mp4" type="video/mp4">
                     </video>
-                    <div class="video-controls-custom">
-                        <button class="btn-vid" onclick="document.getElementById('vid1').requestFullscreen()">Plein Écran</button>
-                        <button class="btn-vid" onclick="toggleMute('vid1')">Muter/Son</button>
-                    </div>
+                    <p style="padding: 15px; text-align: center; font-weight: 700;">Un petit mot pour vous... 🗣️</p>
                 </div>
-
-                <div class="video-container">
-                    <video id="vid2" onplay="pauseMusic()" onpause="resumeMusic()" onended="resumeMusic()">
+                <div class="video-card">
+                    <video controls preload="metadata">
                         <source src="https://files.catbox.moe/ghjxti.mp4" type="video/mp4">
                     </video>
-                    <div class="video-controls-custom">
-                        <button class="btn-vid" onclick="document.getElementById('vid2').requestFullscreen()">Plein Écran</button>
-                        <button class="btn-vid" onclick="toggleMute('vid2')">Muter/Son</button>
-                    </div>
+                    <p style="padding: 15px; text-align: center; font-weight: 700;">Nos meilleurs moments ✨</p>
                 </div>
-
             </div>
         </section>
 
         <section class="letter-section">
             <div class="letter">
-                <h3>Pour Maman 👑</h3>
-                <p>"Ton amour est mon plus beau cadeau. Joyeux anniversaire à la meilleure des mères."</p>
+                <h3><i class="fa-solid fa-heart"></i> Pour Maman</h3>
+                <p>"Maman, tu es mon premier amour et ma force tranquille. Ton courage a tracé mon chemin. Que ce 12 mars te rende au centuple toute la douceur que tu nous donnes chaque jour. Je t'aime infiniment."</p>
             </div>
             <div class="letter">
-                <h3>Pour ma Sœur ❤️</h3>
-                <p>"Ma complice de toujours, brille aujourd'hui plus que jamais !"</p>
+                <h3><i class="fa-solid fa-star"></i> Pour ma Sœurette</h3>
+                <p>"À ma complice de toujours, ma sœur. Brille toujours aussi fort. Que cette nouvelle année t'apporte autant de rires que nous en avons partagé. Je serai toujours là, à tes côtés."</p>
             </div>
         </section>
 
         <section class="gift-section">
-            <h2>Une dernière surprise ?</h2>
-            <button class="btn-gift" onclick="revealGift()">DÉCOUVRIR 🎁</button>
+            <i class="fa-solid fa-gift" style="font-size: 3.5rem; color: var(--gold); margin-bottom: 25px; display: block;"></i>
+            <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Une petite surprise ?</h2>
+            <p style="color: var(--muted); margin-bottom: 30px;">Parce que vous méritez le meilleur...</p>
+            <button class="btn-gift" onclick="revealGift()">DÉCOUVRIR LE CADEAU 🎁</button>
+
             <div id="secretMessage">
-                <p>Mon portefeuille est vide (0%) 😖 mais mon cœur est plein (1000%) ! 🤲</p>
+                <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; margin-bottom: 15px;"></i><br>
+                ALERTE : Portefeuille en maintenance (0%...) 😖<br>
+                Mais mon AMOUR pour vous est à 1.000.000% ! 🤲<br><br>
+                <span style="font-size: 1rem; color: var(--text); opacity: 0.8;">Je prépare un rattrapage légendaire, promis ! 😉</span>
             </div>
         </section>
+
+        <footer>
+            <p>Codé avec ❤️ par Harry Undersand</p>
+            <p style="margin-top: 10px; opacity: 0.5;">© 2026 — 12 Mars</p>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        const music = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
-        const discIcon = document.getElementById('discIcon');
-        let isMusicPlaying = false; 
+        // Confettis auto au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#8b5cf6', '#ec4899', '#facc15'] });
+            }, 500);
+        });
 
-        // Gestion de la Musique
         function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            const container = document.getElementById('playerContainer');
+            
             if (music.paused) {
                 music.play();
-                isMusicPlaying = true;
-                updateMusicUI(true);
+                btn.innerText = "MUSIQUE EN COURS... ⏸";
+                container.style.animation = "none"; // Stop pulse
             } else {
                 music.pause();
-                isMusicPlaying = false;
-                updateMusicUI(false);
+                btn.innerText = "MUSIQUE EN PAUSE ▶️";
             }
         }
 
-        function updateMusicUI(playing) {
-            musicBtn.innerText = playing ? "MUSIQUE ACTIVÉE ⏸" : "MUSIQUE EN PAUSE ▶️";
-            discIcon.style.display = playing ? "inline-block" : "none";
-        }
-
-        // --- INTELLIGENCE AUDIO ---
-        // Met la musique en pause quand on lance une vidéo
-        function pauseMusic() {
-            if (isMusicPlaying) {
-                music.pause();
-                updateMusicUI(false);
-            }
-        }
-
-        // Relance la musique quand la vidéo s'arrête (si elle était activée)
-        function resumeMusic() {
-            if (isMusicPlaying) {
-                music.play();
-                updateMusicUI(true);
-            }
-        }
-
-        // Muter/Activer son d'une vidéo
-        function toggleMute(id) {
-            const v = document.getElementById(id);
-            v.muted = !v.muted;
-        }
-
-        // Zoom Photo
-        function openZoom(card) {
-            const imgUrl = card.querySelector('img').src;
-            document.getElementById('lightboxImg').src = imgUrl;
-            document.getElementById('lightbox').style.display = 'flex';
-        }
-
-        // Cadeau
         function revealGift() {
-            document.getElementById('secretMessage').style.display = 'block';
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            const msg = document.getElementById('secretMessage');
+            msg.style.display = 'block';
+            
+            // Explosion de confettis
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#facc15', '#ec4899'] });
+              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#facc15', '#8b5cf6'] });
+              if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
     </script>
 </body>

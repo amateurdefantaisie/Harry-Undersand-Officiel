@@ -88,12 +88,6 @@ padding:20px;
 border-radius:16px;
 }
 
-.stat i{
-font-size:1.5rem;
-color:#8b5cf6;
-margin-bottom:10px;
-}
-
 /* CARDS */
 
 .grid{
@@ -107,12 +101,6 @@ background:linear-gradient(145deg,#141421,#1b1b2f);
 border:1px solid rgba(139,92,246,.3);
 border-radius:18px;
 padding:24px;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-box-shadow:0 10px 30px rgba(139,92,246,.2);
 }
 
 .card i{
@@ -120,23 +108,25 @@ font-size:2rem;
 color:#8b5cf6;
 }
 
-.card p{
-color:#9ca3af;
-margin-top:6px;
+.orders{
+margin-top:10px;
+font-size:.9rem;
 }
 
-.btn{
-display:inline-block;
-margin-top:14px;
-padding:10px 18px;
-border-radius:24px;
-background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+.notification{
+padding:8px;
+border-bottom:1px solid #222;
+font-size:.9rem;
+}
+
+.badge{
+background:red;
 color:white;
-text-decoration:none;
-font-weight:600;
+font-size:.7rem;
+padding:3px 6px;
+border-radius:50%;
+margin-left:6px;
 }
-
-/* USER */
 
 .user{
 display:flex;
@@ -151,18 +141,10 @@ height:50px;
 border-radius:50%;
 }
 
-.orders{
-margin-top:10px;
-font-size:.9rem;
-color:#cfcfcf;
-}
-
 </style>
 </head>
 
 <body>
-
-<!-- SIDEBAR -->
 
 <div class="sidebar">
 
@@ -171,22 +153,15 @@ color:#cfcfcf;
 <div class="menu">
 
 <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
-
 <a href="commande.html"><i class="fas fa-box"></i> Commandes</a>
-
 <a href="streaming.html"><i class="fas fa-tv"></i> Streaming</a>
-
 <a href="chatbot.html"><i class="fas fa-robot"></i> Chatbots</a>
-
 <a href="contact.html"><i class="fas fa-headset"></i> Support</a>
-
 <a id="logoutBtn"><i class="fas fa-sign-out"></i> Déconnexion</a>
 
 </div>
 
 </div>
-
-<!-- MAIN -->
 
 <div class="main">
 
@@ -203,8 +178,6 @@ color:#cfcfcf;
 <h1 class="title">📊 Tableau de bord</h1>
 <p class="subtitle">Gérez vos services et abonnements</p>
 
-<!-- STATS -->
-
 <div class="stats">
 
 <div class="stat">
@@ -214,20 +187,14 @@ color:#cfcfcf;
 </div>
 
 <div class="stat">
-<i class="fas fa-crown"></i>
-<h3>Premium</h3>
-<p>Abonnement</p>
-</div>
-
-<div class="stat">
-<i class="fas fa-user"></i>
-<h3>Actif</h3>
-<p>Compte</p>
+<i class="fas fa-bell"></i>
+<h3>
+Notifications
+<span id="notifCount" class="badge">0</span>
+</h3>
 </div>
 
 </div>
-
-<!-- SERVICES -->
 
 <div class="grid">
 
@@ -235,21 +202,18 @@ color:#cfcfcf;
 <i class="fas fa-box"></i>
 <h3>Mes commandes</h3>
 <div id="orders" class="orders">Chargement...</div>
-<a href="commande.html" class="btn">Nouvelle commande</a>
 </div>
 
 <div class="card">
-<i class="fas fa-robot"></i>
-<h3>Chatbots & IA</h3>
-<p>Automatisation WhatsApp, Web & Instagram</p>
-<a href="chatbot.html" class="btn">Découvrir</a>
+<i class="fas fa-bell"></i>
+<h3>Notifications</h3>
+<div id="notifications"></div>
 </div>
 
 <div class="card">
 <i class="fas fa-tv"></i>
 <h3>Streaming</h3>
 <p>Netflix, Prime Video, Crunchyroll</p>
-<a href="streaming.html" class="btn">Voir</a>
 </div>
 
 </div>
@@ -259,18 +223,36 @@ color:#cfcfcf;
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand"
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+query,
+where,
+getDocs,
+onSnapshot,
+orderBy
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+authDomain:"harry-undersand.firebaseapp.com",
+projectId:"harry-undersand"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-const profile = document.getElementById("user-profile");
+let currentUser=null;
+
+const profile=document.getElementById("user-profile");
 
 onAuthStateChanged(auth,user=>{
 
@@ -279,38 +261,86 @@ window.location="/";
 return;
 }
 
+currentUser=user;
+
 profile.style.display="flex";
 
 userPhoto.src=user.photoURL || "https://i.imgur.com/6VBx3io.png";
 userName.textContent=user.displayName || "Client";
 userEmail.textContent=user.email;
 
-loadOrders()
+loadOrders();
+listenNotifications();
 
-})
+});
 
 async function loadOrders(){
 
-try{
+const q=query(
+collection(db,"orders"),
+where("userId","==",currentUser.uid)
+);
 
-const res=await fetch("/API/orders.json")
-const orders=await res.json()
+const snapshot=await getDocs(q);
 
-if(!orders.length){
-orders.innerHTML="Aucune commande"
-return
+let html="";
+
+snapshot.forEach(doc=>{
+
+const o=doc.data();
+
+html+=`
+<div class="notification">
+📦 ${o.service} — ${o.status}
+</div>
+`;
+
+});
+
+if(snapshot.empty){
+html="Aucune commande";
 }
 
-document.getElementById("orders").innerHTML=
-orders.map(o=>`📦 ${o.service} — ${o.status}`).join("<br>")
-
-document.getElementById("statOrders").textContent=orders.length
-
-}catch{
-
-document.getElementById("orders").innerHTML="Erreur chargement"
+document.getElementById("orders").innerHTML=html;
+document.getElementById("statOrders").textContent=snapshot.size;
 
 }
+
+function listenNotifications(){
+
+const q=query(
+collection(db,"notifications"),
+where("userId","==",currentUser.uid),
+orderBy("date","desc")
+);
+
+onSnapshot(q,(snapshot)=>{
+
+let html="";
+let count=0;
+
+snapshot.forEach(doc=>{
+
+const n=doc.data();
+
+html+=`
+<div class="notification">
+🔔 ${n.message}
+</div>
+`;
+
+count++;
+
+});
+
+if(snapshot.empty){
+html="Aucune notification";
+}
+
+document.getElementById("notifications").innerHTML=html;
+document.getElementById("notifCount").textContent=count;
+
+});
 
 }
 

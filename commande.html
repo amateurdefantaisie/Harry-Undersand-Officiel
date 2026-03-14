@@ -321,74 +321,144 @@ document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
 
 <!-- FIREBASE AUTH -->
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+
 import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  onAuthStateChanged 
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
+import {
+getFirestore,
+collection,
+addDoc
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain: "harry-undersand.firebaseapp.com",
-  projectId: "harry-undersand"
+apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+authDomain: "harry-undersand.firebaseapp.com",
+projectId: "harry-undersand"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+
 const provider = new GoogleAuthProvider();
 
 const modal = document.getElementById("loginModal");
 
-// Vérifie l'état utilisateur
+let currentUser = null;
+
+
+// -----------------------------
+// AUTH STATE
+// -----------------------------
+
 onAuthStateChanged(auth, user => {
-  if (!user) {
-    modal.classList.remove("hidden");
-  } else {
-    modal.classList.add("hidden");
-    console.log("✅ Connecté :", user.email);
-  }
+
+if (!user) {
+
+if(modal){
+modal.classList.remove("hidden");
+}
+
+sessionStorage.setItem(
+"redirectAfterLogin",
+window.location.pathname
+);
+
+return;
+
+}
+
+currentUser = user;
+
+if(modal){
+modal.classList.add("hidden");
+}
+
+console.log("✅ Connecté :", user.email);
+
 });
 
-// Connexion Google
+
+// -----------------------------
+// LOGIN GOOGLE
+// -----------------------------
+
 window.loginGoogle = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (e) {
-    alert("Connexion annulée");
-  }
-};
-</script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+try {
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain: "harry-undersand.firebaseapp.com",
-  projectId: "harry-undersand"
+await signInWithPopup(auth, provider);
+
+} catch (e) {
+
+alert("Connexion annulée");
+
+}
+
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
-onAuthStateChanged(auth, user => {
+// -----------------------------
+// CREER COMMANDE
+// -----------------------------
 
-  if (!user) {
+window.envoyerCommande = async function(service, plan){
 
-    // On mémorise la page actuelle
-    sessionStorage.setItem(
-      "redirectAfterLogin",
-      window.location.pathname
-    );
+if(!currentUser){
 
-    // Redirection vers accueil
-    window.location.href = "/?loginRequired=true";
-  }
+alert("Vous devez être connecté");
+return;
+
+}
+
+const nom = document.getElementById("nom")?.value || "";
+const email = document.getElementById("email")?.value || currentUser.email;
+const message = document.getElementById("message")?.value || "";
+
+try{
+
+// Enregistrer commande
+await addDoc(collection(db,"orders"),{
+
+userId:currentUser.uid,
+email:email,
+nom:nom,
+service:service,
+plan:plan,
+message:message,
+status:"En attente",
+date:Date.now()
 
 });
+
+// Notification client
+await addDoc(collection(db,"notifications"),{
+
+userId:currentUser.uid,
+message:`Commande reçue : ${service} (${plan})`,
+read:false,
+date:Date.now()
+
+});
+
+alert("✅ Commande envoyée avec succès");
+
+}catch(e){
+
+console.error(e);
+alert("Erreur lors de la commande");
+
+}
+
+};
+
 </script>
 
 <!-- 🍪 Bandeau Cookies -->

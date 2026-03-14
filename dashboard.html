@@ -2,153 +2,324 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard Client — Amateur De Fantaisie</title>
+<title>Dashboard Client</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N696WFVZ8G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-N696WFVZ8G');
-</script>
-
-<link rel="icon" type="image/svg+xml"
-href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⛩️</text></svg>">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="cookies.css">
-  
 <style>
+
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter;background:#0a0a0f;color:#fff}
 
-header{border-bottom:1px solid rgba(139,92,246,.3);padding:18px 24px}
-.logo{color:#8b5cf6;font-weight:800;text-decoration:none}
+body{
+font-family:Inter;
+background:#0a0a0f;
+color:white;
+display:flex;
+min-height:100vh;
+}
 
-.container{max-width:1200px;margin:auto;padding:40px 20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+/* SIDEBAR */
 
-.card{background:#141421;border:1px solid rgba(139,92,246,.3);border-radius:18px;padding:24px}
-.card i{font-size:2rem;color:#8b5cf6}
+.sidebar{
+width:240px;
+background:#111118;
+border-right:1px solid rgba(139,92,246,.25);
+padding:30px 20px;
+}
 
-.btn{display:inline-block;margin-top:14px;padding:10px 18px;border-radius:24px;
-background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;text-decoration:none;font-weight:600}
+.logo{
+color:#8b5cf6;
+font-weight:800;
+font-size:1.2rem;
+margin-bottom:40px;
+display:block;
+text-decoration:none;
+}
 
-#user-profile{text-align:center;display:none;margin-bottom:30px}
-#user-profile img{width:80px;height:80px;border-radius:50%}
-footer{text-align:center;padding:30px;color:#6b7280}
+.menu a{
+display:block;
+color:#b4b4b4;
+text-decoration:none;
+padding:12px;
+border-radius:10px;
+margin-bottom:6px;
+transition:.2s;
+}
+
+.menu a:hover{
+background:#1b1b2f;
+color:white;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:40px;
+max-width:1200px;
+margin:auto;
+}
+
+.title{
+font-size:2rem;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#9ca3af;
+margin-bottom:30px;
+}
+
+/* STATS */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.stat{
+background:#141421;
+border:1px solid rgba(139,92,246,.3);
+padding:20px;
+border-radius:16px;
+}
+
+.stat i{
+font-size:1.5rem;
+color:#8b5cf6;
+margin-bottom:10px;
+}
+
+/* CARDS */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:24px;
+}
+
+.card{
+background:linear-gradient(145deg,#141421,#1b1b2f);
+border:1px solid rgba(139,92,246,.3);
+border-radius:18px;
+padding:24px;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 30px rgba(139,92,246,.2);
+}
+
+.card i{
+font-size:2rem;
+color:#8b5cf6;
+}
+
+.card p{
+color:#9ca3af;
+margin-top:6px;
+}
+
+.btn{
+display:inline-block;
+margin-top:14px;
+padding:10px 18px;
+border-radius:24px;
+background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+color:white;
+text-decoration:none;
+font-weight:600;
+}
+
+/* USER */
+
+.user{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:30px;
+}
+
+.user img{
+width:50px;
+height:50px;
+border-radius:50%;
+}
+
+.orders{
+margin-top:10px;
+font-size:.9rem;
+color:#cfcfcf;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-  <a class="logo" href="/">彡『 Amateur De Fantaisie 』彡</a>
-</header>
+<!-- SIDEBAR -->
 
-<div class="container">
+<div class="sidebar">
 
-  <!-- USER PROFILE -->
-  <div id="user-profile">
-    <img id="userPhoto" alt="Photo utilisateur">
-    <h3 id="userName"></h3>
-    <p id="userEmail" style="color:#8696a0"></p>
-    <p id="userProvider" style="font-size:.85rem"></p>
-    <button id="logoutBtn" class="btn">Se déconnecter</button>
-  </div>
+<a class="logo">Amateur De Fantaisie</a>
 
-  <h1>📊 Tableau de bord</h1>
-  <p style="color:#b4b4b4;margin-bottom:30px">
-    Gérez vos services et abonnements
-  </p>
+<div class="menu">
 
-  <div class="grid">
+<a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
 
-    <div class="card">
-      <i class="fas fa-box"></i>
-      <h3>Mes commandes</h3>
-      <div id="orders">Chargement...</div>
-      <a href="commande.html" class="btn">Nouvelle commande</a>
-    </div>
+<a href="commande.html"><i class="fas fa-box"></i> Commandes</a>
 
-    <div class="card">
-      <i class="fas fa-robot"></i>
-      <h3>Chatbots & IA</h3>
-      <p>Automatisation WhatsApp, Web & Instagram</p>
-      <a href="chatbot.html" class="btn">Découvrir</a>
-    </div>
+<a href="streaming.html"><i class="fas fa-tv"></i> Streaming</a>
 
-    <div class="card">
-      <i class="fas fa-tv"></i>
-      <h3>Streaming</h3>
-      <p>Netflix, Prime Video, Crunchyroll</p>
-      <a href="streaming.html" class="btn">Voir</a>
-    </div>
+<a href="chatbot.html"><i class="fas fa-robot"></i> Chatbots</a>
 
-  </div>
+<a href="contact.html"><i class="fas fa-headset"></i> Support</a>
+
+<a id="logoutBtn"><i class="fas fa-sign-out"></i> Déconnexion</a>
+
 </div>
 
-<footer>
-© 2026 Amateur De Fantaisie — Harry Undersand
-</footer>
+</div>
 
-<!-- FIREBASE AUTH -->
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="user" id="user-profile" style="display:none">
+
+<img id="userPhoto">
+<div>
+<strong id="userName"></strong>
+<div style="font-size:.8rem;color:#9ca3af" id="userEmail"></div>
+</div>
+
+</div>
+
+<h1 class="title">📊 Tableau de bord</h1>
+<p class="subtitle">Gérez vos services et abonnements</p>
+
+<!-- STATS -->
+
+<div class="stats">
+
+<div class="stat">
+<i class="fas fa-box"></i>
+<h3 id="statOrders">0</h3>
+<p>Commandes</p>
+</div>
+
+<div class="stat">
+<i class="fas fa-crown"></i>
+<h3>Premium</h3>
+<p>Abonnement</p>
+</div>
+
+<div class="stat">
+<i class="fas fa-user"></i>
+<h3>Actif</h3>
+<p>Compte</p>
+</div>
+
+</div>
+
+<!-- SERVICES -->
+
+<div class="grid">
+
+<div class="card">
+<i class="fas fa-box"></i>
+<h3>Mes commandes</h3>
+<div id="orders" class="orders">Chargement...</div>
+<a href="commande.html" class="btn">Nouvelle commande</a>
+</div>
+
+<div class="card">
+<i class="fas fa-robot"></i>
+<h3>Chatbots & IA</h3>
+<p>Automatisation WhatsApp, Web & Instagram</p>
+<a href="chatbot.html" class="btn">Découvrir</a>
+</div>
+
+<div class="card">
+<i class="fas fa-tv"></i>
+<h3>Streaming</h3>
+<p>Netflix, Prime Video, Crunchyroll</p>
+<a href="streaming.html" class="btn">Voir</a>
+</div>
+
+</div>
+
+</div>
+
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-  authDomain: "harry-undersand.firebaseapp.com",
-  projectId: "harry-undersand"
+apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+authDomain: "harry-undersand.firebaseapp.com",
+projectId: "harry-undersand"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const profile = document.getElementById("user-profile");
-const logoutBtn = document.getElementById("logoutBtn");
 
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    window.location.replace("/");
-    return;
-  }
+onAuthStateChanged(auth,user=>{
 
-  profile.style.display = "block";
-  document.getElementById("userName").textContent = user.displayName || "Client";
-  document.getElementById("userEmail").textContent = user.email;
-  document.getElementById("userPhoto").src = user.photoURL || "https://i.imgur.com/6VBx3io.png";
-  document.getElementById("userProvider").textContent =
-    `Connexion via ${user.providerData[0].providerId}`;
-});
+if(!user){
+window.location="/";
+return;
+}
 
-logoutBtn.addEventListener("click", async () => {
-  await signOut(auth);
-  window.location.href = "/";
-});
+profile.style.display="flex";
+
+userPhoto.src=user.photoURL || "https://i.imgur.com/6VBx3io.png";
+userName.textContent=user.displayName || "Client";
+userEmail.textContent=user.email;
+
+loadOrders()
+
+})
+
+async function loadOrders(){
+
+try{
+
+const res=await fetch("/API/orders.json")
+const orders=await res.json()
+
+if(!orders.length){
+orders.innerHTML="Aucune commande"
+return
+}
+
+document.getElementById("orders").innerHTML=
+orders.map(o=>`📦 ${o.service} — ${o.status}`).join("<br>")
+
+document.getElementById("statOrders").textContent=orders.length
+
+}catch{
+
+document.getElementById("orders").innerHTML="Erreur chargement"
+
+}
+
+}
+
+logoutBtn.onclick=async()=>{
+await signOut(auth)
+window.location="/"
+}
+
 </script>
-
-<!-- 🍪 Bandeau Cookies -->
-<div id="cookie-banner" class="cookie-banner">
-  <div class="cookie-content">
-    <p>
-      🍪 Ce site utilise des cookies pour améliorer votre expérience.
-      En continuant, vous acceptez notre utilisation des cookies.
-    </p>
-    <div class="cookie-buttons">
-      <button id="accept-cookies">Accepter</button>
-      <button id="reject-cookies">Refuser</button>
-    </div>
-  </div>
-</div>
-
-<script src="cookies.js"></script>
 
 </body>
 </html>

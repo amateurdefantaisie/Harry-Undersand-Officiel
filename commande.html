@@ -421,21 +421,39 @@ return;
 const nom = document.getElementById("nom")?.value || "";
 const email = document.getElementById("email")?.value || currentUser.email;
 const message = document.getElementById("message")?.value || "";
-
+const orderId = Date.now().toString();
+  
 try{
-
+  
 // Enregistrer commande
 await addDoc(collection(db,"orders"),{
 
-userId:currentUser.uid,
-email:email,
-nom:nom,
-service:service,
-plan:plan,
-message:message,
-status:"En attente",
-date:Date.now()
+// 1. Créer paiement PawaPay
+const paiement = await fetch("/api/create-payment", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+  phone: "242" + prompt("Entrez votre numéro"),
+  amount: 1000,
+  orderId: orderId
+})
 
+const data = await paiement.json();
+
+console.log("Paiement lancé :", data);
+
+await addDoc(collection(db,"orders"),{
+  orderId: orderId,
+  userId:currentUser.uid,
+  email:email,
+  nom:nom,
+  service:service,
+  plan:plan,
+  message:message,
+  status:"Paiement en cours",
+  date:Date.now()
 });
 
 // Notification client

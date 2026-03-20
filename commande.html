@@ -395,143 +395,89 @@ const db = getFirestore(app);
 
 const provider = new GoogleAuthProvider();
 
-const modal = document.getElementById("loginModal");
-
 let currentUser = null;
 
-
-// -----------------------------
+// ============================
 // AUTH STATE
-// -----------------------------
+// ============================
 
 onAuthStateChanged(auth, user => {
 
 if (!user) {
-
-if(modal){
-modal.classList.remove("hidden");
-}
-
-sessionStorage.setItem(
-"redirectAfterLogin",
-window.location.pathname
-);
-
-return;
-
+  alert("Vous devez être connecté");
+  return;
 }
 
 currentUser = user;
-
-if(modal){
-modal.classList.add("hidden");
-}
-
 console.log("✅ Connecté :", user.email);
 
 });
 
-
-// -----------------------------
+// ============================
 // LOGIN GOOGLE
-// -----------------------------
+// ============================
 
 window.loginGoogle = async () => {
-
 try {
-
-await signInWithPopup(auth, provider);
-
+  await signInWithPopup(auth, provider);
 } catch (e) {
-
-alert("Connexion annulée");
-
+  alert("Connexion annulée");
 }
-
 };
 
-window.closePaymentModal = function(){
-  document.getElementById("paymentModal").classList.add("hidden");
-};
+// ============================
+// VARIABLES PAIEMENT
+// ============================
 
-window.confirmPayment = async function(){
-
-  const phone = document.getElementById("phoneInput").value;
-
-  if(!phone){
-    alert("Numéro requis");
-    return;
-  }
-
-  const orderId = Date.now().toString();
-
-  try{
-
-    const paiement = await fetch("/api/create-payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        phone: "242" + phone,
-        amount: selectedPrice,
-        orderId: orderId
-      })
-    });
-
-    const data = await paiement.json();
-
-    console.log("Paiement :", data);
-
-    await addDoc(collection(db,"orders"),{
-      orderId,
-      userId:currentUser.uid,
-      service:selectedService,
-      plan:selectedPlan,
-      status:"Paiement en cours",
-      date:Date.now()
-    });
-
-    alert("📲 Vérifiez votre téléphone !");
-    closePaymentModal();
-
-  }catch(e){
-    console.error(e);
-    alert("Erreur paiement (backend)");
-  }
-
-};
-  
-// Enregistrer commande
-const nom = document.getElementById("nom")?.value || "";
-const email = document.getElementById("email")?.value || currentUser.email;
-const message = document.getElementById("message")?.value || "";
-
-// 🔥 ID unique
-const orderId = Date.now().toString();
-
-try{
-
-// 📲 1. Demander numéro
 let selectedService = "";
 let selectedPlan = "";
 let selectedPrice = 0;
 
+// ============================
+// OUVRIR MODAL
+// ============================
+
 window.envoyerCommande = function(service, plan, price){
 
-  if(!currentUser){
-    alert("Vous devez être connecté");
-    return;
-  }
+if(!currentUser){
+  alert("Vous devez être connecté");
+  return;
+}
 
-  selectedService = service;
-  selectedPlan = plan;
-  selectedPrice = price;
+selectedService = service;
+selectedPlan = plan;
+selectedPrice = price;
 
-  document.getElementById("paymentModal").classList.remove("hidden");
+document.getElementById("paymentModal").classList.remove("hidden");
+
 };
 
-// 💳 2. Lancer paiement PawaPay
+// ============================
+// FERMER MODAL
+// ============================
+
+window.closePaymentModal = function(){
+document.getElementById("paymentModal").classList.add("hidden");
+};
+
+// ============================
+// CONFIRMER PAIEMENT
+// ============================
+
+window.confirmPayment = async function(){
+
+const phone = document.getElementById("phoneInput").value;
+
+if(!phone){
+  alert("Numéro requis");
+  return;
+}
+
+const orderId = Date.now().toString();
+
+try{
+
+// 💳 APPEL API
 const paiement = await fetch("/api/create-payment", {
   method: "POST",
   headers: {
@@ -539,44 +485,54 @@ const paiement = await fetch("/api/create-payment", {
   },
   body: JSON.stringify({
     phone: "242" + phone,
-    amount: price,
+    amount: selectedPrice,
     orderId: orderId
   })
 });
 
 const data = await paiement.json();
 
-console.log("Paiement lancé :", data);
+console.log("Paiement :", data);
 
-// 💾 3. Enregistrer commande (UNE SEULE FOIS)
+// ❌ si erreur API
+if(!paiement.ok){
+  alert("Erreur API paiement");
+  return;
+}
+
+// 💾 FIREBASE
 await addDoc(collection(db,"orders"),{
-  orderId: orderId,
-  userId:currentUser.uid,
-  email:email,
-  nom:nom,
-  service:service,
-  plan:plan,
-  message:message,
+  orderId,
+  userId: currentUser.uid,
+  email: currentUser.email,
+  service: selectedService,
+  plan: selectedPlan,
+  amount: selectedPrice,
   status:"Paiement en cours",
-  date:Date.now()
+  date: Date.now()
 });
 
-// 🔔 4. Notification
+// 🔔 notification
 await addDoc(collection(db,"notifications"),{
-  userId:currentUser.uid,
-  message:`Commande reçue : ${service} (${plan})`,
+  userId: currentUser.uid,
+  message:`Commande : ${selectedService} (${selectedPlan})`,
   read:false,
-  date:Date.now()
+  date: Date.now()
 });
 
-window.location.href = "/success.html?orderId=" + orderId;
+alert("📲 Vérifiez votre téléphone !");
+closePaymentModal();
+
+// 👉 optionnel redirect
+// window.location.href = "/success.html?orderId=" + orderId;
 
 }catch(e){
-  console.error(e);
-  alert("Erreur lors du paiement");
+console.error(e);
+alert("Erreur paiement (backend ou API)");
 }
 
 };
+
 </script>
 
 <!-- 🍪 Bandeau Cookies -->

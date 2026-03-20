@@ -200,6 +200,17 @@ footer{text-align:center;padding:3rem;color:#777}
 .modal-actions button{
   flex:1;
 }
+
+#paymentModal{
+  opacity:1;
+  transition:0.3s;
+}
+
+#paymentModal.hidden{
+  opacity:0;
+  pointer-events:none;
+  display:none;
+}
 </style>
 </head>
 
@@ -404,7 +415,7 @@ let currentUser = null;
 onAuthStateChanged(auth, user => {
 
 if (!user) {
-  alert("Vous devez être connecté");
+  console.log("Non connecté");
   return;
 }
 
@@ -533,6 +544,17 @@ alert("Erreur paiement (backend ou API)");
 
 };
 
+// ============================
+// CLICK OVERLAY = FERMER MODAL
+// ============================
+
+setTimeout(() => {
+  const overlay = document.querySelector(".modal-overlay");
+  
+  if(overlay){
+    overlay.addEventListener("click", closePaymentModal);
+  }
+}, 100);
 </script>
 
 <!-- 🍪 Bandeau Cookies -->

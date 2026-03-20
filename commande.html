@@ -174,6 +174,32 @@ footer{text-align:center;padding:3rem;color:#777}
   transform:scale(1.05);
   box-shadow:0 10px 25px rgba(139,92,246,0.4);
 }
+
+#paymentModal{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.modal-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(6px);
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.modal-actions button{
+  flex:1;
+}
 </style>
 </head>
 
@@ -288,6 +314,27 @@ Notre approche repose sur la transparence, la performance, la sécurité
 et un support humain constant avant, pendant et après la livraison.
 </p>
 
+<!-- 💳 MODAL PAIEMENT -->
+<div id="paymentModal" class="hidden">
+  <div class="modal-overlay"></div>
+
+  <div class="modal-box">
+    <h3>💳 Paiement Mobile Money</h3>
+    <p>Entrez votre numéro pour recevoir la demande</p>
+
+    <input id="phoneInput" placeholder="Ex: 066123456" />
+
+    <div class="modal-actions">
+      <button onclick="closePaymentModal()" class="btn-outline">
+        Annuler
+      </button>
+      <button onclick="confirmPayment()" class="btn">
+        Payer maintenant
+      </button>
+    </div>
+  </div>
+</div>
+  
 <script src="js/sheets.js"></script>
 
 <footer>© 2026 Amateur De Fantaisie — Harry Undersand</footer>
@@ -402,15 +449,60 @@ alert("Connexion annulée");
 }
 
 };
+
+window.closePaymentModal = function(){
+  document.getElementById("paymentModal").classList.add("hidden");
+};
+
+window.confirmPayment = async function(){
+
+  const phone = document.getElementById("phoneInput").value;
+
+  if(!phone){
+    alert("Numéro requis");
+    return;
+  }
+
+  const orderId = Date.now().toString();
+
+  try{
+
+    const paiement = await fetch("/api/create-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        phone: "242" + phone,
+        amount: selectedPrice,
+        orderId: orderId
+      })
+    });
+
+    const data = await paiement.json();
+
+    console.log("Paiement :", data);
+
+    await addDoc(collection(db,"orders"),{
+      orderId,
+      userId:currentUser.uid,
+      service:selectedService,
+      plan:selectedPlan,
+      status:"Paiement en cours",
+      date:Date.now()
+    });
+
+    alert("📲 Vérifiez votre téléphone !");
+    closePaymentModal();
+
+  }catch(e){
+    console.error(e);
+    alert("Erreur paiement (backend)");
+  }
+
+};
   
 // Enregistrer commande
-window.envoyerCommande = async function(service, plan, price){
-  
-if(!currentUser){
-  alert("Vous devez être connecté");
-  return;
-}
-
 const nom = document.getElementById("nom")?.value || "";
 const email = document.getElementById("email")?.value || currentUser.email;
 const message = document.getElementById("message")?.value || "";
@@ -421,12 +513,23 @@ const orderId = Date.now().toString();
 try{
 
 // 📲 1. Demander numéro
-const phone = prompt("Entrez votre numéro (ex: 066...)");
+let selectedService = "";
+let selectedPlan = "";
+let selectedPrice = 0;
 
-if(!phone){
-  alert("Numéro requis");
-  return;
-}
+window.envoyerCommande = function(service, plan, price){
+
+  if(!currentUser){
+    alert("Vous devez être connecté");
+    return;
+  }
+
+  selectedService = service;
+  selectedPlan = plan;
+  selectedPrice = price;
+
+  document.getElementById("paymentModal").classList.remove("hidden");
+};
 
 // 💳 2. Lancer paiement PawaPay
 const paiement = await fetch("/api/create-payment", {

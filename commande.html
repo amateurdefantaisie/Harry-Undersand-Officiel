@@ -466,7 +466,7 @@ await addDoc(collection(db,"notifications"),{
   date:Date.now()
 });
 
-alert("📲 Vérifiez votre téléphone pour valider le paiement");
+window.location.href = "/success.html?orderId=" + orderId;
 
 }catch(e){
   console.error(e);

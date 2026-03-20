@@ -8,15 +8,22 @@ export default async function handler(req, res) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      amount,
-      currency: "XAF",
-      correspondent: "MTN_MOMO_CG",
-      payer: {
-        type: "MSISDN",
-        address: { value: phone }
-      }
-    })
-  });
+  amount,
+  currency: "XAF",
+  correspondent: "MTN_MOMO_CG",
+  customerTimestamp: new Date().toISOString(),
+
+  statementDescription: "Commande site",
+
+  payer: {
+    type: "MSISDN",
+    address: { value: phone }
+  },
+
+  metadata: {
+    orderId: orderId
+  }
+})
 
   const data = await response.json();
   res.status(200).json(data);

@@ -157,6 +157,23 @@ footer{text-align:center;padding:3rem;color:#777}
 
 /* HIDE */
 .hidden{display:none}
+
+.btn{
+  display:inline-block;
+  padding:14px 26px;
+  border-radius:30px;
+  background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+  color:#fff;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 10px 25px rgba(139,92,246,0.4);
+}
 </style>
 </head>
 
@@ -175,36 +192,44 @@ footer{text-align:center;padding:3rem;color:#777}
 <!-- COMMANDE RAPIDE -->
 <section class="container">
 <h2>🚀 Commande rapide — Streaming & Premium</h2>
-<p>Cliquez sur un service pour commander immédiatement via WhatsApp.</p>
-
+<p>Cliquez sur un service pour payer directement via Mobile Money.</p>
+  
 <div class="grid">
 
 <div class="card">
 <i class="fas fa-film"></i>
 <h3>Netflix</h3>
 <p>Abonnements HD, Full HD, 4K, multi-écrans.</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20Netflix." target="_blank">Commander</a>
+<button class="btn" onclick="envoyerCommande('Netflix','Premium',3000)">
+Payer maintenant
+</button>
 </div>
 
 <div class="card">
 <i class="fas fa-tv"></i>
 <h3>Prime Video</h3>
 <p>Films, séries et contenus exclusifs Amazon.</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20Prime%20Video." target="_blank">Commander</a>
+<button class="btn" onclick="envoyerCommande('Prime Video','Standard',3000)">
+Payer maintenant
+</button>
 </div>
 
 <div class="card">
 <i class="fas fa-dragon"></i>
 <h3>Crunchyroll / Wakanim</h3>
 <p>Animes premium, HD, accès complet.</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20Anime%20(Crunchyroll/Wakanim)." target="_blank">Commander</a>
+<button class="btn" onclick="envoyerCommande('Crunchyroll','Standard',2500)">
+Payer maintenant
+</button>
 </div>
 
 <div class="card">
 <i class="fas fa-video"></i>
 <h3>MyCanal</h3>
 <p>Canal+ Afrique, sport, films et séries.</p>
-<a class="btn" href="https://wa.me/242066973413?text=Bonjour%20!%20Je%20souhaite%20commander%20un%20abonnement%20MyCanal." target="_blank">Commander</a>
+<button class="btn" onclick="envoyerCommande('MyCanal','Premium',2500)">
+Payer maintenant
+</button>
 </div>
 
 </div>
@@ -379,8 +404,8 @@ alert("Connexion annulée");
 };
   
 // Enregistrer commande
-window.envoyerCommande = async function(service, plan){
-
+window.envoyerCommande = async function(service, plan, price){
+  
 if(!currentUser){
   alert("Vous devez être connecté");
   return;
@@ -411,7 +436,7 @@ const paiement = await fetch("/api/create-payment", {
   },
   body: JSON.stringify({
     phone: "242" + phone,
-    amount: 1000,
+    amount: price,
     orderId: orderId
   })
 });

@@ -262,32 +262,6 @@ grâce à des solutions fiables, sécurisées et évolutives.
 Notre approche repose sur la transparence, la performance, la sécurité
 et un support humain constant avant, pendant et après la livraison.
 </p>
-</section>
-
-<h2>Passer une commande</h2>
-
-<input id="nom" placeholder="Votre nom">
-<input id="email" placeholder="Votre email">
-<textarea id="message" placeholder="Détails supplémentaires"></textarea>
-
-<h3>Streaming</h3>
-<button onclick="envoyerCommande('Netflix','Premium')">
-Netflix Premium
-</button>
-
-<button onclick="envoyerCommande('Crunchyroll','Standard')">
-Crunchyroll
-</button>
-
-<h3>Chatbot</h3>
-<button onclick="envoyerCommande('Chatbot WhatsApp','Business')">
-Chatbot WhatsApp
-</button>
-
-<h3>Hébergement</h3>
-<button onclick="envoyerCommande('Hébergement','Starter')">
-Starter
-</button>
 
 <script src="js/sheets.js"></script>
 
@@ -403,47 +377,50 @@ alert("Connexion annulée");
 }
 
 };
-
-
-// -----------------------------
-// CREER COMMANDE
-// -----------------------------
-
+  
+// Enregistrer commande
 window.envoyerCommande = async function(service, plan){
 
 if(!currentUser){
-
-alert("Vous devez être connecté");
-return;
-
+  alert("Vous devez être connecté");
+  return;
 }
 
 const nom = document.getElementById("nom")?.value || "";
 const email = document.getElementById("email")?.value || currentUser.email;
 const message = document.getElementById("message")?.value || "";
-const orderId = Date.now().toString();
-  
-try{
-  
-// Enregistrer commande
-await addDoc(collection(db,"orders"),{
 
-// 1. Créer paiement PawaPay
+// 🔥 ID unique
+const orderId = Date.now().toString();
+
+try{
+
+// 📲 1. Demander numéro
+const phone = prompt("Entrez votre numéro (ex: 066...)");
+
+if(!phone){
+  alert("Numéro requis");
+  return;
+}
+
+// 💳 2. Lancer paiement PawaPay
 const paiement = await fetch("/api/create-payment", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
-  phone: "242" + prompt("Entrez votre numéro"),
-  amount: 1000,
-  orderId: orderId
-})
+    phone: "242" + phone,
+    amount: 1000,
+    orderId: orderId
+  })
+});
 
 const data = await paiement.json();
 
 console.log("Paiement lancé :", data);
 
+// 💾 3. Enregistrer commande (UNE SEULE FOIS)
 await addDoc(collection(db,"orders"),{
   orderId: orderId,
   userId:currentUser.uid,
@@ -456,27 +433,22 @@ await addDoc(collection(db,"orders"),{
   date:Date.now()
 });
 
-// Notification client
+// 🔔 4. Notification
 await addDoc(collection(db,"notifications"),{
-
-userId:currentUser.uid,
-message:`Commande reçue : ${service} (${plan})`,
-read:false,
-date:Date.now()
-
+  userId:currentUser.uid,
+  message:`Commande reçue : ${service} (${plan})`,
+  read:false,
+  date:Date.now()
 });
 
-alert("✅ Commande envoyée avec succès");
+alert("📲 Vérifiez votre téléphone pour valider le paiement");
 
 }catch(e){
-
-console.error(e);
-alert("Erreur lors de la commande");
-
+  console.error(e);
+  alert("Erreur lors du paiement");
 }
 
 };
-
 </script>
 
 <!-- 🍪 Bandeau Cookies -->

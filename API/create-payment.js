@@ -1,30 +1,107 @@
 export default async function handler(req, res) {
-  const { phone, amount } = req.body;
 
-  const response = await fetch("https://api.sandbox.pawapay.io/v1/deposits", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${process.env.eyJraWQiOiIxIiwiYWxnIjoiRVMyNTYifQ.eyJ0dCI6IkFBVCIsInN1YiI6IjE4MjcxIiwibWF2IjoiMSIsImV4cCI6MjA4OTgwNTQ3MCwiaWF0IjoxNzc0MTg2MjcwLCJwbSI6IkRBRixQQUYiLCJqdGkiOiJmMjc2ZjBiMS1lZWEyLTQxN2MtYTNlNC05YjUxZTJhNGJlM2IifQ.sdfLrXMARwGt1KH_cJ7FwXEz4At02G1QNNZ4VQeorY0zz_AjBnkyUG33nmEkYM-CsEYeoJYZY-4NPyJ_c9QKhg}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-  amount,
-  currency: "XAF",
-  correspondent: "MTN_MOMO_CG",
-  customerTimestamp: new Date().toISOString(),
+  // ============================
+  // METHOD CHECK
+  // ============================
 
-  statementDescription: "Commande site",
-
-  payer: {
-    type: "MSISDN",
-    address: { value: phone }
-  },
-
-  metadata: {
-    orderId: orderId
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Méthode non autorisée" });
   }
-})
 
-  const data = await response.json();
-  res.status(200).json(data);
+  try {
+
+    // ============================
+    // DATA
+    // ============================
+
+    const { phone, amount, orderId } = req.body;
+
+    // ============================
+    // VALIDATION
+    // ============================
+
+    if (!phone || !amount || !orderId) {
+      return res.status(400).json({ error: "Champs manquants" });
+    }
+
+    if (typeof amount !== "number" || amount <= 0) {
+      return res.status(400).json({ error: "Montant invalide" });
+    }
+
+    if (!phone.startsWith("242")) {
+      return res.status(400).json({ error: "Numéro invalide (Congo requis)" });
+    }
+
+    // ============================
+    // CONFIG API
+    // ============================
+
+    const PAWAPAY_TOKEN = process.env.PAWAPAY_TOKEN;
+
+    if (!PAWAPAY_TOKEN) {
+      return res.status(500).json({ error: "Token PawaPay manquant" });
+    }
+
+    // ============================
+    // REQUEST PAWAPAY
+    // ============================
+
+    const response = await fetch("https://api.sandbox.pawapay.io/v1/deposits", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${PAWAPAY_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        amount,
+        currency: "XAF",
+        correspondent: "MTN_MOMO_CG",
+        customerTimestamp: new Date().toISOString(),
+        statementDescription: "Commande Amateur De Fantaisie",
+        payer: {
+          type: "MSISDN",
+          address: { value: phone }
+        },
+        metadata: {
+          orderId
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    // ============================
+    // ERROR PAWAPAY
+    // ============================
+
+    if (!response.ok) {
+      console.error("❌ PawaPay erreur :", data);
+
+      return res.status(500).json({
+        error: "Erreur paiement",
+        details: data
+      });
+    }
+
+    // ============================
+    // SUCCESS
+    // ============================
+
+    console.log("✅ Paiement initié :", orderId);
+
+    return res.status(200).json({
+      success: true,
+      depositId: data.depositId,
+      status: data.status || "PENDING"
+    });
+
+  } catch (error) {
+
+    console.error("❌ Erreur serveur :", error);
+
+    return res.status(500).json({
+      error: "Erreur serveur",
+      message: error.message
+    });
+  }
 }

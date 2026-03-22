@@ -559,6 +559,8 @@ window.confirmPayment = async function(){
     alert("📲 Vérifiez votre téléphone !");
     closePaymentModal();
 
+    window.location.href = "/success.html?orderId=" + orderId;
+
   } catch(e){
     console.error(e);
     alert("Erreur paiement. Réessayez.");

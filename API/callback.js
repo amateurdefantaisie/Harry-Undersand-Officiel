@@ -1,15 +1,22 @@
 import admin from "firebase-admin";
 
-// Initialisation Firebase (sécurisé)
+// ============================
+// INIT FIREBASE (SECURE)
+// ============================
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(
-      JSON.parse(process.env.AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8)
+      JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
     )
   });
 }
 
 const db = admin.firestore();
+
+// ============================
+// HANDLER
+// ============================
 
 export default async function handler(req, res) {
 
@@ -21,63 +28,88 @@ export default async function handler(req, res) {
 
     const data = req.body;
 
-    console.log("📩 Callback PawaPay reçu :", data);
+    console.log("📩 Callback reçu :", data);
 
-    // Récupération des infos
+    // ============================
+    // VALIDATION DONNÉES
+    // ============================
+
     const status = data.status;
     const amount = data.amount;
     const depositId = data.depositId;
-
-    // 🔥 IMPORTANT : récupérer orderId
     const orderId = data.metadata?.orderId;
 
-    if (!orderId) {
-      console.log("❌ Aucun orderId trouvé");
-      return res.status(400).json({ error: "orderId manquant" });
+    if (!status || !depositId || !orderId) {
+      return res.status(400).json({ error: "Données invalides" });
     }
 
-    // 🔎 Trouver la commande
+    // ============================
+    // TROUVER COMMANDE
+    // ============================
+
     const snapshot = await db
       .collection("orders")
       .where("orderId", "==", orderId)
       .get();
 
     if (snapshot.empty) {
-      console.log("❌ Commande introuvable");
+      console.log("❌ Commande introuvable :", orderId);
       return res.status(404).json({ error: "Commande non trouvée" });
     }
 
-    // 🔁 Mise à jour de la commande
     const doc = snapshot.docs[0];
+    const order = doc.data();
+
+    // ============================
+    // ANTI FRAUDE
+    // ============================
+
+    if (order.amount !== amount) {
+      console.log("❌ Montant incohérent !");
+      return res.status(400).json({ error: "Montant invalide" });
+    }
+
+    // ============================
+    // ANTI DOUBLE TRAITEMENT
+    // ============================
+
+    if (order.status === "Payé") {
+      console.log("⚠️ Déjà payé, ignoré");
+      return res.status(200).json({ success: true });
+    }
+
+    // ============================
+    // MAPPING STATUS
+    // ============================
 
     let newStatus = "Échec";
 
-    if (status === "SUCCESSFUL") {
-      newStatus = "Payé";
-    } else if (status === "FAILED") {
-      newStatus = "Échoué";
-    } else if (status === "PENDING") {
-      newStatus = "En attente";
-    }
+    if (status === "SUCCESSFUL") newStatus = "Payé";
+    if (status === "FAILED") newStatus = "Échoué";
+    if (status === "PENDING") newStatus = "En attente";
+
+    // ============================
+    // UPDATE FIRESTORE
+    // ============================
 
     await doc.ref.update({
       status: newStatus,
-      depositId: depositId,
-      amount: amount,
+      depositId,
       updatedAt: Date.now()
     });
 
-    // 🔔 Notification utilisateur
-    const orderData = doc.data();
+    // ============================
+    // NOTIFICATION USER
+    // ============================
 
     await db.collection("notifications").add({
-      userId: orderData.userId,
+      userId: order.userId,
       message:
         newStatus === "Payé"
           ? "✅ Paiement validé ! Votre commande est en cours."
           : "❌ Paiement échoué. Veuillez réessayer.",
       read: false,
-      date: Date.now()
+      createdAt: Date.now()
     });
 
     console.log("✅ Commande mise à jour :", newStatus);
@@ -90,7 +122,7 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       error: "Erreur serveur",
-      details: error.message
+      message: error.message
     });
   }
 }

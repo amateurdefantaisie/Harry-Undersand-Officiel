@@ -380,30 +380,32 @@ document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-
 import { 
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-onAuthStateChanged
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 import {
-getFirestore,
-collection,
-addDoc
+  getFirestore,
+  collection,
+  addDoc
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
+// ============================
+// CONFIG FIREBASE
+// ============================
+
 const firebaseConfig = {
-apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
-authDomain: "harry-undersand.firebaseapp.com",
-projectId: "harry-undersand"
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 const provider = new GoogleAuthProvider();
 
 let currentUser = null;
@@ -413,15 +415,13 @@ let currentUser = null;
 // ============================
 
 onAuthStateChanged(auth, user => {
+  if (!user) {
+    console.log("❌ Non connecté");
+    return;
+  }
 
-if (!user) {
-  console.log("Non connecté");
-  return;
-}
-
-currentUser = user;
-console.log("✅ Connecté :", user.email);
-
+  currentUser = user;
+  console.log("✅ Connecté :", user.email);
 });
 
 // ============================
@@ -429,11 +429,11 @@ console.log("✅ Connecté :", user.email);
 // ============================
 
 window.loginGoogle = async () => {
-try {
-  await signInWithPopup(auth, provider);
-} catch (e) {
-  alert("Connexion annulée");
-}
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (e) {
+    alert("Connexion annulée");
+  }
 };
 
 // ============================
@@ -450,17 +450,16 @@ let selectedPrice = 0;
 
 window.envoyerCommande = function(service, plan, price){
 
-if(!currentUser){
-  alert("Vous devez être connecté");
-  return;
-}
+  if(!currentUser){
+    alert("Vous devez être connecté");
+    return;
+  }
 
-selectedService = service;
-selectedPlan = plan;
-selectedPrice = price;
+  selectedService = service;
+  selectedPlan = plan;
+  selectedPrice = price;
 
-document.getElementById("paymentModal").classList.remove("hidden");
-
+  document.getElementById("paymentModal").classList.remove("hidden");
 };
 
 // ============================
@@ -468,8 +467,22 @@ document.getElementById("paymentModal").classList.remove("hidden");
 // ============================
 
 window.closePaymentModal = function(){
-document.getElementById("paymentModal").classList.add("hidden");
+  document.getElementById("paymentModal").classList.add("hidden");
+  document.getElementById("phoneInput").value = "";
 };
+
+// ============================
+// FORMAT NUMERO
+// ============================
+
+function formatPhone(phone){
+  phone = phone.replace(/\D/g, "");
+
+  if(phone.startsWith("242")) return phone;
+  if(phone.startsWith("0")) return "242" + phone.slice(1);
+
+  return "242" + phone;
+}
 
 // ============================
 // CONFIRMER PAIEMENT
@@ -477,86 +490,98 @@ document.getElementById("paymentModal").classList.add("hidden");
 
 window.confirmPayment = async function(){
 
-const phone = document.getElementById("phoneInput").value;
+  const btn = event.target;
+  const phoneInput = document.getElementById("phoneInput");
 
-if(!phone){
-  alert("Numéro requis");
-  return;
-}
+  let phone = phoneInput.value.trim();
 
-const orderId = Date.now().toString();
+  if(!phone){
+    alert("Numéro requis");
+    return;
+  }
 
-try{
+  phone = formatPhone(phone);
 
-// 💳 APPEL API
-const paiement = await fetch("/api/create-payment", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    phone: "242" + phone,
-    amount: selectedPrice,
-    orderId: orderId
-  })
-});
+  if(phone.length < 11){
+    alert("Numéro invalide");
+    return;
+  }
 
-const data = await paiement.json();
+  btn.innerText = "Paiement...";
+  btn.disabled = true;
 
-console.log("Paiement :", data);
+  const orderId = "CMD-" + Date.now();
 
-// ❌ si erreur API
-if(!paiement.ok){
-  alert("Erreur API paiement");
-  return;
-}
+  try{
 
-// 💾 FIREBASE
-await addDoc(collection(db,"orders"),{
-  orderId,
-  userId: currentUser.uid,
-  email: currentUser.email,
-  service: selectedService,
-  plan: selectedPlan,
-  amount: selectedPrice,
-  status:"Paiement en cours",
-  date: Date.now()
-});
+    // 💳 API paiement
+    const paiement = await fetch("/api/create-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        phone,
+        amount: selectedPrice,
+        orderId
+      })
+    });
 
-// 🔔 notification
-await addDoc(collection(db,"notifications"),{
-  userId: currentUser.uid,
-  message:`Commande : ${selectedService} (${selectedPlan})`,
-  read:false,
-  date: Date.now()
-});
+    const data = await paiement.json();
 
-alert("📲 Vérifiez votre téléphone !");
-closePaymentModal();
+    if(!paiement.ok){
+      console.error(data);
+      throw new Error("Erreur API");
+    }
 
-// 👉 optionnel redirect
-// window.location.href = "/success.html?orderId=" + orderId;
+    console.log("✅ Paiement OK :", data);
 
-}catch(e){
-console.error(e);
-alert("Erreur paiement (backend ou API)");
-}
+    // 💾 FIRESTORE
+    await addDoc(collection(db,"orders"),{
+      orderId,
+      userId: currentUser.uid,
+      email: currentUser.email,
+      service: selectedService,
+      plan: selectedPlan,
+      amount: selectedPrice,
+      status:"En attente",
+      createdAt: Date.now()
+    });
 
+    // 🔔 Notification
+    await addDoc(collection(db,"notifications"),{
+      userId: currentUser.uid,
+      message:`Commande ${selectedService} (${selectedPlan})`,
+      read:false,
+      createdAt: Date.now()
+    });
+
+    alert("📲 Vérifiez votre téléphone !");
+    closePaymentModal();
+
+  } catch(e){
+    console.error(e);
+    alert("Erreur paiement. Réessayez.");
+  }
+
+  btn.innerText = "Payer maintenant";
+  btn.disabled = false;
 };
 
 // ============================
-// CLICK OVERLAY = FERMER MODAL
+// CLICK OVERLAY = FERMER
 // ============================
 
-setTimeout(() => {
+document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.querySelector(".modal-overlay");
-  
+
   if(overlay){
     overlay.addEventListener("click", closePaymentModal);
   }
-}, 100);
-</script>
+});
 
+</script>
+  
 <!-- 🍪 Bandeau Cookies -->
 <div id="cookie-banner" class="cookie-banner">
   <div class="cookie-content">

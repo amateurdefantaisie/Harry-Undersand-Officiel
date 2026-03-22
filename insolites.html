@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Insolites Moments | Amateur De Fantaisie</title>
+
+<meta name="description" content="Découvrez Insolites Moments : vidéos étranges, troublantes et inattendues venues du monde entier.">
+<meta name="author" content="Harry Undersand">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Insolites Moments">
+<meta property="og:description" content="Le canal des moments les plus étranges du monde">
+<meta property="og:image" content="ton-image.jpg">
+<meta property="og:type" content="website">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* NAVBAR */
+nav {
+    position: fixed;
+    width: 100%;
+    padding: 15px 30px;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    z-index: 1000;
+}
+
+nav h1 {
+    color: red;
+    font-family: 'Orbitron', sans-serif;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+/* HERO */
+.hero {
+    height: 100vh;
+    background: url('ton-image.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    color: red;
+    text-shadow: 0 0 20px red;
+}
+
+.hero p {
+    margin: 20px 0;
+    opacity: 0.8;
+}
+
+.btn {
+    padding: 12px 25px;
+    background: red;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: darkred;
+}
+
+/* SECTION */
+.section {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.section h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: red;
+}
+
+/* GRID VIDEOS */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #111;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card video {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* STATS */
+.stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.stat {
+    margin: 20px;
+}
+
+.stat h4 {
+    font-size: 2rem;
+    color: red;
+}
+
+/* FOOTER */
+footer {
+    padding: 30px;
+    background: #000;
+    text-align: center;
+}
+
+footer p {
+    opacity: 0.6;
+}
+</style>
+
+</head>
+<body>
+
+<nav>
+    <h1>INSOLITES</h1>
+    <div>
+        <a href="/">Accueil</a>
+        <a href="#videos">Vidéos</a>
+        <a href="#stats">Stats</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>INsolites Moments</h2>
+        <p>Explore les moments les plus étranges, inattendus et troublants du monde</p>
+        <a href="https://t.me/insolitesmoments" class="btn">Rejoindre le canal</a>
+    </div>
+</section>
+
+<section class="section">
+    <h3>À propos</h3>
+    <p>
+        Insolites Moments est un projet unique qui met en lumière des scènes réelles
+        capturées aux quatre coins du monde. Entre mystère, tension et imprévisible,
+        chaque vidéo vous plonge dans une réalité qui dépasse l’imagination.
+    </p>
+</section>
+
+<section class="section" id="videos">
+    <h3>Vidéos récentes</h3>
+
+    <div class="grid">
+        <div class="card">
+            <video src="video1.mp4" controls></video>
+        </div>
+        <div class="card">
+            <video src="video2.mp4" controls></video>
+        </div>
+        <div class="card">
+            <video src="video3.mp4" controls></video>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="stats">
+    <h3>Statistiques</h3>
+
+    <div class="stats">
+        <div class="stat">
+            <h4 id="subs">0</h4>
+            <p>Abonnés</p>
+        </div>
+        <div class="stat">
+            <h4 id="videosCount">0</h4>
+            <p>Vidéos</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© Amateur De Fantaisie — Créé par Harry Undersand</p>
+</footer>
+
+<script>
+// Animation chiffres
+function animateValue(id, start, end, duration) {
+    let obj = document.getElementById(id);
+    let range = end - start;
+    let current = start;
+    let increment = end > start ? 1 : -1;
+    let stepTime = Math.abs(Math.floor(duration / range));
+
+    let timer = setInterval(function() {
+        current += increment;
+        obj.textContent = current;
+
+        if (current == end) {
+            clearInterval(timer);
+        }
+    }, stepTime);
+}
+
+animateValue("subs", 0, 1250, 2000);
+animateValue("videosCount", 0, 87, 2000);
+</script>
+
+</body>
+</html>

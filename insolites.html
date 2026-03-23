@@ -133,12 +133,6 @@ nav a {
 }
 
 /* GRID VIDEOS */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
-}
-
 /* CARD PRO */
 .card {
     background: #111;
@@ -152,7 +146,44 @@ nav a {
 .card:hover {
     transform: translateY(-5px);
 }
+  
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1300px;
+    margin: auto;
+}
 
+/* CARD PRO */
+.card {
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+/* ACTIONS PRO */
+.video-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    font-size: 14px;
+}
+
+/* COMMENTAIRES */
+.comment-box {
+    padding: 8px;
+}
+
+.comment-box input {
+    width: 100%;
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: none;
+}
+  
 /* VIDÉO UNIFORME */
 .card video {
     width: 100%;
@@ -237,34 +268,13 @@ footer p {
 }
 
 /* TIKTOK STYLE */
-.feed {
-    height: 100vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-}
-
-.video-container {
-    height: 100vh;
-    scroll-snap-align: start;
-    position: relative;
-}
-
-video {
+.video {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
 /* ACTIONS */
-.actions {
-    position: absolute;
-    right: 10px;
-    bottom: 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .actions button {
     background: rgba(0,0,0,0.5);
     border: none;
@@ -275,16 +285,6 @@ video {
 }
 
 /* COMMENTAIRES */
-.comments {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.8);
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-}
-
 .comment-box button {
     margin-top: 5px;
     width: 100%;
@@ -302,44 +302,9 @@ input {
     border: none;
 }
 
-/* UPLOAD */
-/* UPLOAD PRO */
-.upload-container {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.file-label {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.file-label:hover {
-    background: #222;
-}
-
-.publish-btn {
-    background: linear-gradient(45deg, red, darkred);
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.publish-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px red;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255,0,0,0.2);
 }
 </style>
 
@@ -373,6 +338,12 @@ input {
     </p>
 </section>
 
+<div class="comment-box">
+   <input id="input-${doc.id}" placeholder="Commenter...">
+   <button onclick="sendComment('${doc.id}')">Envoyer</button>
+   <div id="c-${doc.id}"></div>
+</div>
+
 <section class="section" id="videos">
     <h3>Vidéos récentes</h3>
 
@@ -389,17 +360,6 @@ input {
         </button>
     </div>
 </section>
-  
-<div class="upload-container">
-    <label for="uploadVideo" class="file-label">
-        <i class="fa-solid fa-upload"></i> Choisir une vidéo
-    </label>
-    <input type="file" id="uploadVideo" hidden>
-
-    <button class="publish-btn" onclick="upload()">
-        <i class="fa-solid fa-paper-plane"></i> Publier la vidéo
-    </button>
-</div>
   
 <section class="section" id="stats">
     <h3>Statistiques</h3>
@@ -422,8 +382,6 @@ input {
 </footer>
 
 <button class="switch" onclick="toggleMode()">🌙</button>
-  
-<div class="feed" id="feed"></div>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>

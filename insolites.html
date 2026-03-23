@@ -258,10 +258,43 @@ input {
 }
 
 /* UPLOAD */
-.upload {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
+/* UPLOAD PRO */
+.upload-container {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.file-label {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.file-label:hover {
+    background: #222;
+}
+
+.publish-btn {
+    background: linear-gradient(45deg, red, darkred);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.publish-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px red;
 }
 </style>
 
@@ -347,11 +380,17 @@ input {
 
 <button class="switch" onclick="toggleMode()">🌙</button>
 
-<div class="upload">
-    <input type="file" id="uploadVideo">
-    <button onclick="upload()">Publier</button>
-</div>
+<div class="upload-container">
+    <label for="uploadVideo" class="file-label">
+        <i class="fa-solid fa-upload"></i> Choisir une vidéo
+    </label>
+    <input type="file" id="uploadVideo" hidden>
 
+    <button class="publish-btn" onclick="upload()">
+        <i class="fa-solid fa-paper-plane"></i> Publier la vidéo
+    </button>
+</div>
+  
 <div class="feed" id="feed"></div>
 
 <!-- Firebase -->

@@ -535,28 +535,31 @@ async function upload(){
 /* LOAD VIDEOS */
 db.collection("videos").orderBy("created","desc")
 .onSnapshot(snap => {
-    const feed = document.getElementById("feed");
-    feed.innerHTML = "";
+    const grid = document.querySelector(".grid");
+    grid.innerHTML = "";
 
     snap.forEach(doc => {
         const data = doc.data();
 
         const div = document.createElement("div");
-        div.className = "video-container";
+        div.className = "card";
 
         div.innerHTML = `
-        <video src="${data.url}" autoplay loop muted></video>
+    <video src="${data.url}" controls></video>
 
-        <div class="actions">
-            <button onclick="like('${doc.id}')">❤️ ${data.likes || 0}</button>
-        </div>
+    <div class="video-actions">
+       <button class="like-btn" onclick="like('${doc.id}')">
+           ❤️ ${data.likes || 0}
+       </button>
+       <span id="count-${doc.id}">💬 0</span>
+    </div>
 
-        <div class="comments" id="c-${doc.id}">
-            <div></div>
-            <input placeholder="Commenter..." 
-            onkeydown="addComment(event,'${doc.id}')">
-        </div>
-        `;
+    <div class="comment-box">
+       <input placeholder="Ajouter un commentaire..."
+       onkeydown="addComment(event,'${doc.id}')">
+       <div id="c-${doc.id}"></div>
+    </div>
+    `;
 
         feed.appendChild(div);
 
@@ -597,7 +600,8 @@ function loadComments(id){
             html += `<p>${c.data().text}</p>`;
         });
 
-        box.children[0].innerHTML = html;
+        document.getElementById("c-"+id).innerHTML = html;
+        document.getElementById("count-"+id).innerText = "💬 " + snap.size;
     });
 }
 </script>

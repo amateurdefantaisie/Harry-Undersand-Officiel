@@ -353,6 +353,17 @@ input {
     </div>
 </section>
 
+<div class="upload-container">
+    <label for="uploadVideo" class="file-label">
+        <i class="fa-solid fa-upload"></i> Choisir une vidéo
+    </label>
+    <input type="file" id="uploadVideo" hidden>
+
+    <button class="publish-btn" onclick="upload()">
+        <i class="fa-solid fa-paper-plane"></i> Publier la vidéo
+    </button>
+</div>
+  
 <section class="section" id="stats">
     <h3>Statistiques</h3>
 
@@ -373,17 +384,6 @@ input {
 </footer>
 
 <button class="switch" onclick="toggleMode()">🌙</button>
-
-<div class="upload-container">
-    <label for="uploadVideo" class="file-label">
-        <i class="fa-solid fa-upload"></i> Choisir une vidéo
-    </label>
-    <input type="file" id="uploadVideo" hidden>
-
-    <button class="publish-btn" onclick="upload()">
-        <i class="fa-solid fa-paper-plane"></i> Publier la vidéo
-    </button>
-</div>
   
 <div class="feed" id="feed"></div>
 

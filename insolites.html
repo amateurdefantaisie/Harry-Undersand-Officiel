@@ -377,119 +377,19 @@ input {
     <h3>Vidéos récentes</h3>
 
     <div class="grid"></div>
-            <video src="https://files.catbox.moe/j0b0ok.mp4" controls></video>
-     
-        <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
-          
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div> 
-       </div>
-        <div class="grid"></div>
-            <video src="https://files.catbox.moe/xr9ele.mp4" controls></video>
-          
-        <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
-          
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div>
-      </div>
-        <div class="grid"></div>
-            <video src="https://files.catbox.moe/jto02j.mp4" controls></video>
 
-          <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
+    <div class="upload-container">
+        <label for="uploadVideo" class="file-label">
+            <i class="fa-solid fa-upload"></i> Choisir une vidéo
+        </label>
+        <input type="file" id="uploadVideo" hidden>
 
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div>
-        </div>
-        <div class="grid"></div>
-            <video src="https://files.catbox.moe/7t9wvi.mp4" controls></video>
-
-          <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
-
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div>
-        </div>
-        <div class="grid"></div>
-            <video src="https://files.catbox.moe/n2kd8u.mp4" controls></video>
-
-          <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
-
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div>
-        </div>
-        <div class="grid"></div>
-            <video src="https://files.catbox.moe/7ceppl.mp4" controls></video>
-
-          <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
-
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div>
-        </div>
-        <div class="grid"></div>
-            <video src="https://files.catbox.moe/1y63xt.mp4" controls></video>
-
-          <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
-
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div>
-        </div>
-        <div class="grid"></div>
-            <video src="https://files.catbox.moe/0j6uki.mp4" controls></video>
-
-          <div class="video-actions">
-        <button class="like-btn">❤️ 0</button>
-        <span>💬 0</span>
-    </div>
-
-    <div class="comment-box">
-        <input id="input-${doc.id}" placeholder="Ajouter un commentaire...">
-        <button onclick="sendComment('${doc.id}')">Envoyer</button>
-        <div id="c-${doc.id}"></div>
-    </div>
+        <button class="publish-btn" onclick="upload()">
+            <i class="fa-solid fa-paper-plane"></i> Publier
+        </button>
     </div>
 </section>
-
+  
 <div class="upload-container">
     <label for="uploadVideo" class="file-label">
         <i class="fa-solid fa-upload"></i> Choisir une vidéo

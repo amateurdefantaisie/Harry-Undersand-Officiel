@@ -183,15 +183,16 @@ onSnapshot(collection(db, "videos"), (snap) => {
     card.className = "card";
 
     card.innerHTML = `
-      <video src="${data.url}" controls></video>
+      <video src="${data.url}" autoplay muted loop playsinline></video>
+
       <button onclick="like('${id}')">❤️ ${data.likes || 0}</button>
 
       <div class="comment-box">
         <input placeholder="Commenter..." id="c-${id}">
-        <button onclick="sendComment('${id}')">Envoyer</button>
-        <div id="comments-${id}"></div>
-      </div>
-    `;
+        <button onclick="sendComment('${id}')">➤</button>
+      <div id="comments-${id}"></div>
+    </div>
+   `;
 
     grid.appendChild(card);
 

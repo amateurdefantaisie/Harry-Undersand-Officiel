@@ -4,473 +4,221 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Insolites Moments | Amateur De Fantaisie</title>
+<title>Insolites Moments</title>
 
-<meta name="description" content="Découvrez Insolites Moments : vidéos étranges, troublantes et inattendues venues du monde entier.">
-<meta name="author" content="Harry Undersand">
-
-<!-- Open Graph -->
-<meta property="og:title" content="Insolites Moments">
-<meta property="og:description" content="Le canal des moments les plus étranges du monde">
-<meta property="og:image" content="https://files.catbox.moe/bqrien.jpg">
-<meta property="og:type" content="website">
-
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N696WFVZ8G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-N696WFVZ8G');
-</script>
-
-<link rel="stylesheet" href="cookies.css">
-
-<link rel="icon" type="image/svg+xml"
-href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🚷</text></svg>">
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-<style>  
+<style>
 body {
     margin:0;
-    font-family: Poppins;
+    font-family: 'Poppins', sans-serif;
     background: #0a0a0a;
     color: #fff;
-    font-family: 'Poppins', sans-serif;
-    transition: 0.3s;
 }
 
-:root {
-    --bg: #0a0a0a;
-    --text: #fff;
-}
-
-/* NAVBAR */
+/* NAV */
 nav {
     position: fixed;
     width: 100%;
     padding: 15px 30px;
     background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-between;
     z-index: 1000;
 }
-
-nav h1 {
-    color: red;
-    font-family: 'Orbitron', sans-serif;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-}
+nav h1 { color:red; font-family: Orbitron; }
 
 /* HERO */
 .hero {
-    height: 100vh;
-    background: url('ton-image.jpg') center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
 }
-
-.hero::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hero h2 {
-    font-size: 3rem;
-    color: red;
-    text-shadow: 0 0 20px red;
-}
-
-.hero p {
-    margin: 20px 0;
-    opacity: 0.8;
-}
-
-.btn {
-    padding: 12px 25px;
-    background: red;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: darkred;
-}
+.hero h2 { color:red; font-size:3rem; }
 
 /* SECTION */
 .section {
-    padding: 80px 20px;
-    text-align: center;
+    padding:80px 20px;
+    text-align:center;
 }
+.section h3 { color:red; }
 
-.section h3 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: red;
-}
-
-/* GRID VIDEOS */
-/* CARD PRO */
-.card {
-    background: #111;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-  
+/* GRID */
 .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    max-width: 1300px;
-    margin: auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:20px;
 }
 
-/* CARD PRO */
+/* CARD */
 .card {
-    background: #111;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: 0.3s;
+    background:#111;
+    padding:10px;
+    border-radius:10px;
 }
 
-/* ACTIONS PRO */
-.video-actions {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 10px;
-    font-size: 14px;
+/* VIDEO */
+video {
+    width:100%;
+    border-radius:10px;
 }
 
-/* COMMENTAIRES */
-.comment-box {
-    padding: 8px;
+/* BTN */
+button {
+    padding:10px;
+    border:none;
+    background:red;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+    margin-top:5px;
 }
 
+/* COMMENTS */
 .comment-box input {
-    width: 100%;
-    padding: 6px;
+    width:100%;
+    padding:5px;
+}
+
+.comment {
     font-size: 13px;
-    border-radius: 5px;
-    border: none;
-}
-  
-/* VIDÉO UNIFORME */
-.card video {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    background: black;
-}
-
-/* ACTIONS */
-.video-actions {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-}
-
-.like-btn {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
-}
-
-.like-btn:hover {
-    transform: scale(1.2);
-    color: red;
-}
-
-/* COMMENTAIRES */
-.comment-box {
-    padding: 10px;
-}
-
-.comment-box input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
     margin-top: 5px;
-}
-
-/* STATS */
-.stats {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
-.stat {
-    margin: 20px;
-}
-
-.stat h4 {
-    font-size: 2rem;
-    color: red;
-}
-
-/* FOOTER */
-footer {
-    padding: 30px;
-    background: #000;
-    text-align: center;
-}
-
-footer p {
-    opacity: 0.6;
-}
-
-.light {
-    --bg: #fff;
-    --text: #000;
+    background: #222;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 /* SWITCH */
 .switch {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-/* TIKTOK STYLE */
-.video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* ACTIONS */
-.actions button {
-    background: rgba(0,0,0,0.5);
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-/* COMMENTAIRES */
-.comment-box button {
-    margin-top: 5px;
-    width: 100%;
-    padding: 8px;
-    border: none;
-    background: red;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    border: none;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255,0,0,0.2);
+    position:fixed;
+    top:20px;
+    right:20px;
+    cursor:pointer;
 }
 </style>
 
 </head>
 
 <body>
-    
+
 <nav>
-    <h1>INSOLITES</h1>
-    <div>
-        <a href="/">Accueil</a>
-        <a href="#videos">Vidéos</a>
-        <a href="#stats">Stats</a>
-    </div>
+<h1>INSOLITES</h1>
 </nav>
 
 <section class="hero">
-    <div class="hero-content">
-        <h2>INsolites Moments</h2>
-        <p>Explore les moments les plus étranges, inattendus et troublants du monde</p>
-        <a href="https://t.me/insolitesmoments" class="btn">Rejoindre le canal</a>
-    </div>
+<h2>Insolites Moments</h2>
 </section>
 
 <section class="section">
-    <h3>À propos</h3>
-    <p>
-        Insolites Moments est un projet unique qui met en lumière des scènes réelles
-        capturées aux quatre coins du monde. Entre mystère, tension et imprévisible,
-        chaque vidéo vous plonge dans une réalité qui dépasse l’imagination.
-    </p>
+<h3>Vidéos</h3>
+<div class="grid" id="grid"></div>
 </section>
-
-<div class="comment-box">
-   <input id="input-${doc.id}" placeholder="Commenter...">
-   <button onclick="sendComment('${doc.id}')">Envoyer</button>
-   <div id="c-${doc.id}"></div>
-</div>
-
-<section class="section" id="videos">
-    <h3>Vidéos récentes</h3>
-
-    <div class="grid"></div>
-
-    <div class="upload-container">
-        <label for="uploadVideo" class="file-label">
-            <i class="fa-solid fa-upload"></i> Choisir une vidéo
-        </label>
-        <input type="file" id="uploadVideo" hidden>
-
-        <button class="publish-btn" onclick="upload()">
-            <i class="fa-solid fa-paper-plane"></i> Publier
-        </button>
-    </div>
-</section>
-  
-<section class="section" id="stats">
-    <h3>Statistiques</h3>
-
-    <div class="stats">
-        <div class="stat">
-            <h4 id="subs">0</h4>
-            <p>Abonnés</p>
-        </div>
-        <div class="stat">
-            <h4 id="videosCount">0</h4>
-            <p>Vidéos</p>
-        </div>
-      </div>
-    </div>
-</section>
-
-<footer>
-    <p>© Amateur De Fantaisie — Créé par Harry Undersand</p>
-</footer>
 
 <button class="switch" onclick="toggleMode()">🌙</button>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
-
-<script>
+<!-- FIREBASE + JS -->
 <script type="module">
-// 🔥 Import Firebase (version web CDN)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
-  getFirestore, 
-  collection, 
-  onSnapshot, 
-  doc, 
-  updateDoc, 
-  increment 
+  getFirestore, collection, onSnapshot, doc, updateDoc, increment, addDoc 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 🔐 TA CONFIG (corrigée)
+// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
   authDomain: "harry-undersand.firebaseapp.com",
   projectId: "harry-undersand",
-  storageBucket: "harry-undersand.firebasestorage.app",
+  storageBucket: "harry-undersand.appspot.com",
   messagingSenderId: "1008823909561",
   appId: "1:1008823909561:web:9a8b4b46cab592972f6f68"
 };
 
-// 🚀 Initialisation
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🎯 Récupérer le conteneur HTML
-const container = document.getElementById("videos");
+const grid = document.getElementById("grid");
 
-// 🔥 Affichage temps réel des vidéos Telegram
-onSnapshot(collection(db, "videos"), (snapshot) => {
-  container.innerHTML = "";
+// 🔥 LOAD VIDEOS
+onSnapshot(collection(db, "videos"), (snap) => {
+  grid.innerHTML = "";
 
-  snapshot.forEach(docSnap => {
+  snap.forEach(docSnap => {
     const data = docSnap.data();
     const id = docSnap.id;
 
-    // 🎥 VIDEO
-    const video = document.createElement("video");
-    video.src = data.url;
-    video.controls = true;
-    video.loop = true;
-    video.style.width = "300px";
-    video.style.borderRadius = "10px";
-
-    // ❤️ BOUTON LIKE
-    const likeBtn = document.createElement("button");
-    likeBtn.textContent = `❤️ ${data.likes || 0}`;
-    likeBtn.style.display = "block";
-    likeBtn.style.marginTop = "10px";
-
-    likeBtn.onclick = async () => {
-      await updateDoc(doc(db, "videos", id), {
-        likes: increment(1)
-      });
-    };
-
-    // 📦 CARD
     const card = document.createElement("div");
-    card.style.marginBottom = "25px";
+    card.className = "card";
 
-    card.appendChild(video);
-    card.appendChild(likeBtn);
+    card.innerHTML = `
+      <video src="${data.url}" controls></video>
+      <button onclick="like('${id}')">❤️ ${data.likes || 0}</button>
 
-    container.appendChild(card);
+      <div class="comment-box">
+        <input placeholder="Commenter..." id="c-${id}">
+        <button onclick="sendComment('${id}')">Envoyer</button>
+        <div id="comments-${id}"></div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+    loadComments(id);
   });
 });
+
+// ❤️ LIKE
+window.like = async (id) => {
+  await updateDoc(doc(db,"videos",id), {
+    likes: increment(1)
+  });
+};
+
+// 💬 AJOUT COMMENTAIRE (FIREBASE)
+window.sendComment = async (id) => {
+  const input = document.getElementById("c-"+id);
+  if(!input.value) return;
+
+  await addDoc(collection(db,"comments"), {
+    videoId: id,
+    text: input.value,
+    date: Date.now()
+  });
+
+  input.value = "";
+};
+
+// 🔄 LOAD COMMENTS TEMPS RÉEL
+function loadComments(videoId){
+  onSnapshot(collection(db,"comments"), (snap)=>{
+    const box = document.getElementById("comments-"+videoId);
+    box.innerHTML = "";
+
+    snap.forEach(doc=>{
+      const c = doc.data();
+      if(c.videoId === videoId){
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.textContent = "💬 " + c.text;
+        box.appendChild(div);
+      }
+    });
+  });
+}
+
 </script>
 
-<!-- 🍪 Bandeau Cookies -->
-<div id="cookie-banner" class="cookie-banner">
-  <div class="cookie-content">
-    <p>
-      🍪 Ce site utilise des cookies pour améliorer votre expérience.
-      En continuant, vous acceptez notre utilisation des cookies.
-    </p>
-    <div class="cookie-buttons">
-      <button id="accept-cookies">Accepter</button>
-      <button id="reject-cookies">Refuser</button>
-    </div>
-  </div>
-</div>
-    
+<script>
+// 🌙 MODE SOMBRE
+function toggleMode(){
+  document.body.style.background =
+    document.body.style.background === "white" ? "#0a0a0a" : "white";
+
+  document.body.style.color =
+    document.body.style.color === "black" ? "white" : "black";
+}
+</script>
+
 </body>
 </html>

@@ -371,6 +371,56 @@ button:hover::after{
   color: #666;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* HERO FIX */
+.hero-content{
+  max-width:700px;
+}
+
+.hero p{
+  margin-top:15px;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:15px;
+}
+
+/* THEME LIGHT */
+body.light{
+  --bg:#f5f5f5;
+  --card:#ffffff;
+  --text:#111;
+  --border:rgba(0,0,0,.1);
+}
+
+/* FOOTER THEME BUTTON */
+.theme-toggle{
+  margin-top:20px;
+  text-align:center;
+}
+
+.theme-btn{
+  font-size:13px;
+  color:#aaa;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.theme-btn:hover{
+  color:#8b5cf6;
+}
+
+.theme-options{
+  margin-top:10px;
+  display:none;
+  gap:10px;
+  justify-content:center;
+}
+
+.theme-options button{
+  width:auto;
+  padding:6px 12px;
+  font-size:12px;
+}
 </style>
 
 </head>
@@ -382,7 +432,16 @@ button:hover::after{
 </nav>
 
 <section class="hero">
-<h2>Insolites Moments</h2>
+  <div class="hero-content">
+    <h2>Insolites Moments</h2>
+    
+    <p>
+      Découvrez une collection unique de vidéos insolites venues du monde entier.
+      Des scènes étranges, drôles, troublantes et parfois inexplicables.
+      Explorez, aimez, commentez et plongez dans un univers de divertissement
+      captivant en temps réel.
+    </p>
+  </div>
 </section>
 
 <section class="section">
@@ -444,7 +503,16 @@ button:hover::after{
       </div>
 
     </div>
+    
+<div class="theme-toggle">
+  <div class="theme-btn" onclick="toggleThemeMenu()">Thème</div>
 
+  <div class="theme-options" id="themeOptions">
+    <button onclick="setTheme('dark')">🌙 Sombre</button>
+    <button onclick="setTheme('light')">☀️ Clair</button>
+  </div>
+</div>
+    
     <!-- BAS -->
     <div class="footer-bottom">
       © 2026 Amateur De Fantaisie — Tous droits réservés
@@ -452,8 +520,6 @@ button:hover::after{
 
   </div>
 </footer>
-  
-<button class="switch" onclick="toggleMode()">🌙</button>
 
 <!-- FIREBASE + JS -->
 <script type="module">
@@ -565,13 +631,25 @@ function loadComments(videoId){
 </script>
 
 <script>
-let dark = true;
+function toggleThemeMenu(){
+  const menu = document.getElementById("themeOptions");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
 
-function toggleMode(){
-  dark = !dark;
+function setTheme(mode){
+  document.body.classList.remove("light","dark");
 
-  document.body.style.background = dark ? "#0a0a0a" : "white";
-  document.body.style.color = dark ? "white" : "black";
+  if(mode === "light"){
+    document.body.classList.add("light");
+  }
+
+  localStorage.setItem("theme", mode);
+}
+
+/* LOAD THEME */
+const savedTheme = localStorage.getItem("theme");
+if(savedTheme){
+  setTheme(savedTheme);
 }
 </script>
 

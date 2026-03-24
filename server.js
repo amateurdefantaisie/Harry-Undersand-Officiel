@@ -150,3 +150,30 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur lancé sur le port ${PORT}`);
 });
+
+/* =========================
+   📥 GET VIDEOS (API)
+========================= */
+app.get("/videos", async (req, res) => {
+  try {
+    const snapshot = await db.collection("videos")
+      .orderBy("created", "desc")
+      .limit(20)
+      .get();
+
+    const videos = [];
+
+    snapshot.forEach(doc => {
+      videos.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+
+    res.json(videos);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur récupération vidéos" });
+  }
+});

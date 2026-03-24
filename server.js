@@ -5,15 +5,19 @@ const admin = require("firebase-admin");
 const app = express();
 app.use(express.json());
 
-// 🔐 CONFIG
-const TOKEN = "7626568863:AAHKZxxl8-lvO4eL-Wg4fQ8QasavbSrS_Ec";
-const CHANNEL = "@insolitesmoments";
+// 🔐 CONFIG (depuis Render)
+const TOKEN = process.env.TOKEN;
+const CHANNEL = process.env.CHANNEL;
 
-// 🔥 FIREBASE ADMIN (à configurer après)
-const serviceAccount = require("./serviceAccountKey.json");
+// 🔥 FIREBASE CONFIG VIA ENV
+const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
+
+// corrige les retours ligne de la clé privée
+serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://harry-undersand-default-rtdb.firebaseio.com"
 });
 
 const db = admin.firestore();
@@ -37,6 +41,7 @@ app.post("/webhook", async (req, res) => {
       source: "telegram"
     });
 
+    console.log("✅ Vidéo Telegram ajoutée");
   }
 
   res.sendStatus(200);
@@ -49,23 +54,31 @@ app.post("/send-to-telegram", async (req, res) => {
 
   const { video } = req.body;
 
-  const url = `https://api.telegram.org/bot${TOKEN}/sendVideo`;
+  try {
+    const url = `https://api.telegram.org/bot${TOKEN}/sendVideo`;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      chat_id: CHANNEL,
-      video: video,
-      caption: "🔥 Nouvelle vidéo"
-    })
-  });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        chat_id: CHANNEL,
+        video: video,
+        caption: "🔥 Nouvelle vidéo"
+      })
+    });
 
-  const data = await response.json();
-  res.send(data);
+    const data = await response.json();
+
+    console.log("✅ Envoyé sur Telegram");
+    res.send(data);
+
+  } catch (err) {
+    console.error("❌ Erreur Telegram :", err);
+    res.sendStatus(500);
+  }
 });
 
 /* ========================= */
 app.listen(process.env.PORT || 3000, () => {
-  console.log("Serveur lancé");
+  console.log("🚀 Serveur lancé");
 });

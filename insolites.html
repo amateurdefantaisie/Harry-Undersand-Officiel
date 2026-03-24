@@ -481,25 +481,47 @@ db.collection("videos").orderBy("created","desc")
 });
 
 /* LIKE */
-function like(id){
+async function like(id){
+
     const ref = db.collection("videos").doc(id);
+    const doc = await ref.get();
+
+    const data = doc.data();
+
     ref.update({
         likes: firebase.firestore.FieldValue.increment(1)
     });
+
+    // Si la vidéo vient de Telegram → on met aussi à jour Telegram
+    if(data.telegram_post_id){
+        fetch("https://ton-serveur.com/like-telegram",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({
+                post: data.telegram_post_id
+            })
+        });
+    }
 }
 
 /* COMMENTAIRES */
 function addComment(e, id){
-    if(e.key === "Enter"){
-        db.collection("videos")
-        .doc(id)
-        .collection("comments")
-        .add({
-            text: e.target.value
-        });
-        e.target.value = "";
-    }
-}
+    const text = e.target.value;
+
+db.collection("videos")
+.doc(id)
+.collection("comments")
+.add({
+    text: text
+});
+
+fetch("https://ton-serveur.com/comment-telegram",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+        message: text
+    })
+});
 
 function sendComment(id){
     const input = document.getElementById("input-"+id);

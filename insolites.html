@@ -427,6 +427,8 @@ body.light{
 
 <body>
 
+<div class="grid" id="grid"></div>
+  
 <nav>
 <h1>INSOLITES</h1>
 </nav>
@@ -571,6 +573,7 @@ onSnapshot(collection(db, "videos"), (snap) => {
    `;
 
     grid.appendChild(card);
+    observer.observe(card); // 🔥 SINON INVISIBLE
 
     loadComments(id);
   });

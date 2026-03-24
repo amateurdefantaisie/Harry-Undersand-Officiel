@@ -8,22 +8,37 @@ app.use(express.json());
 // 🔐 CONFIG (depuis Render)
 const TOKEN = process.env.TOKEN;
 const CHANNEL = process.env.CHANNEL;
+const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
 // 🔥 FIREBASE CONFIG VIA ENV
 const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
-
-// corrige les retours ligne de la clé privée
 serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://harry-undersand-default-rtdb.firebaseio.com"
+  credential: admin.credential.cert(serviceAccount)
 });
 
 const db = admin.firestore();
 
 /* =========================
-   WEBHOOK TELEGRAM
+   🔗 SET WEBHOOK (IMPORTANT)
+========================= */
+app.get("/set-webhook", async (req, res) => {
+  try {
+    const url = `https://api.telegram.org/bot${TOKEN}/setWebhook?url=${WEBHOOK_URL}/webhook`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    res.send(data);
+  } catch (err) {
+    console.error(err);
+    res.send("Erreur webhook");
+  }
+});
+
+/* =========================
+   📥 WEBHOOK TELEGRAM
 ========================= */
 app.post("/webhook", async (req, res) => {
 
@@ -31,24 +46,41 @@ app.post("/webhook", async (req, res) => {
 
   if (!message) return res.sendStatus(200);
 
-  if (message.video) {
+  try {
 
-    await db.collection("videos").add({
-      url: message.video.file_id,
-      likes: 0,
-      telegram_post_id: message.message_id,
-      created: Date.now(),
-      source: "telegram"
-    });
+    if (message.video) {
 
-    console.log("✅ Vidéo Telegram ajoutée");
+      const fileId = message.video.file_id;
+
+      // 🔥 récupérer chemin fichier
+      const fileRes = await fetch(`https://api.telegram.org/bot${TOKEN}/getFile?file_id=${fileId}`);
+      const fileData = await fileRes.json();
+
+      const filePath = fileData.result.file_path;
+
+      // 🔗 URL DIRECTE
+      const fileUrl = `https://api.telegram.org/file/bot${TOKEN}/${filePath}`;
+
+      await db.collection("videos").add({
+        url: fileUrl,
+        likes: 0,
+        telegram_post_id: message.message_id,
+        created: Date.now(),
+        source: "telegram"
+      });
+
+      console.log("✅ Vidéo Telegram ajoutée avec URL");
+    }
+
+  } catch (err) {
+    console.error("❌ Erreur webhook :", err);
   }
 
   res.sendStatus(200);
 });
 
 /* =========================
-   ENVOI VERS TELEGRAM
+   📤 ENVOI VERS TELEGRAM
 ========================= */
 app.post("/send-to-telegram", async (req, res) => {
 
@@ -76,6 +108,13 @@ app.post("/send-to-telegram", async (req, res) => {
     console.error("❌ Erreur Telegram :", err);
     res.sendStatus(500);
   }
+});
+
+/* =========================
+   🧪 ROUTE TEST
+========================= */
+app.get("/", (req, res) => {
+  res.send("✅ Serveur + Bot OK");
 });
 
 /* ========================= */

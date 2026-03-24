@@ -404,7 +404,7 @@ onSnapshot(collection(db, "videos"), (snap) => {
 
     card.innerHTML = `
       <div class="video-container">
-        <video src="${data.url}" autoplay muted loop playsinline></video>
+        <video src="${data.url}" controls preload="metadata"></video>
       </div>
 
       <div class="card-actions">
@@ -476,7 +476,7 @@ function loadComments(videoId){
   const q = query(
     collection(db,"comments"),
     where("videoId","==",videoId),
-    orderBy("date","desc"),
+    orderBy("date"),
     limit(10) // 🔥 évite surcharge
   );
 

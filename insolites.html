@@ -142,8 +142,6 @@ button {
 <h3>Vidéos</h3>
 <div class="grid" id="grid"></div>
 </section>
-
-<div id="videos"></div>
   
 <button class="switch" onclick="toggleMode()">🌙</button>
 
@@ -254,7 +252,18 @@ function loadComments(videoId){
 }
 
 </script>
-  
+
+<script>
+let dark = true;
+
+function toggleMode(){
+  dark = !dark;
+
+  document.body.style.background = dark ? "#0a0a0a" : "white";
+  document.body.style.color = dark ? "white" : "black";
+}
+</script>
+
 <!-- 🍪 Bandeau Cookies -->
 <div id="cookie-banner" class="cookie-banner">
   <div class="cookie-content">

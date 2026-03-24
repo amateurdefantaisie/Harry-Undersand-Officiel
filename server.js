@@ -5,14 +5,24 @@ const admin = require("firebase-admin");
 const app = express();
 app.use(express.json());
 
-// 🔐 CONFIG (depuis Render)
+/* =========================
+   🔐 CONFIG (depuis Render)
+========================= */
 const TOKEN = process.env.TOKEN;
 const CHANNEL = process.env.CHANNEL;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
-// 🔥 FIREBASE CONFIG VIA ENV
+/* =========================
+   🔥 FIREBASE CONFIG VIA ENV
+========================= */
+if (!process.env.FIREBASE_KEY) {
+  throw new Error("FIREBASE_KEY manquant dans les variables d'environnement");
+}
+
 const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
-serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+
+// Corrige le problème des \n dans Render
+serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -30,10 +40,12 @@ app.get("/set-webhook", async (req, res) => {
     const response = await fetch(url);
     const data = await response.json();
 
-    res.send(data);
+    console.log("Webhook set:", data);
+    res.json(data);
+
   } catch (err) {
-    console.error(err);
-    res.send("Erreur webhook");
+    console.error("❌ Erreur webhook :", err);
+    res.status(500).send("Erreur webhook");
   }
 });
 
@@ -42,11 +54,10 @@ app.get("/set-webhook", async (req, res) => {
 ========================= */
 app.post("/webhook", async (req, res) => {
 
-  const message = req.body.channel_post;
-
-  if (!message) return res.sendStatus(200);
-
   try {
+    const message = req.body.channel_post;
+
+    if (!message) return res.sendStatus(200);
 
     if (message.video) {
 
@@ -55,6 +66,11 @@ app.post("/webhook", async (req, res) => {
       // 🔥 récupérer chemin fichier
       const fileRes = await fetch(`https://api.telegram.org/bot${TOKEN}/getFile?file_id=${fileId}`);
       const fileData = await fileRes.json();
+
+      if (!fileData.ok) {
+        console.error("❌ getFile error:", fileData);
+        return res.sendStatus(200);
+      }
 
       const filePath = fileData.result.file_path;
 
@@ -69,7 +85,7 @@ app.post("/webhook", async (req, res) => {
         source: "telegram"
       });
 
-      console.log("✅ Vidéo Telegram ajoutée avec URL");
+      console.log("✅ Vidéo Telegram ajoutée :", fileUrl);
     }
 
   } catch (err) {
@@ -84,14 +100,18 @@ app.post("/webhook", async (req, res) => {
 ========================= */
 app.post("/send-to-telegram", async (req, res) => {
 
-  const { video } = req.body;
-
   try {
+    const { video } = req.body;
+
+    if (!video) {
+      return res.status(400).json({ error: "video manquante" });
+    }
+
     const url = `https://api.telegram.org/bot${TOKEN}/sendVideo`;
 
     const response = await fetch(url, {
       method: "POST",
-      headers: {"Content-Type":"application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: CHANNEL,
         video: video,
@@ -101,8 +121,13 @@ app.post("/send-to-telegram", async (req, res) => {
 
     const data = await response.json();
 
+    if (!data.ok) {
+      console.error("❌ Telegram error:", data);
+      return res.status(500).json(data);
+    }
+
     console.log("✅ Envoyé sur Telegram");
-    res.send(data);
+    res.json(data);
 
   } catch (err) {
     console.error("❌ Erreur Telegram :", err);
@@ -117,7 +142,11 @@ app.get("/", (req, res) => {
   res.send("✅ Serveur + Bot OK");
 });
 
-/* ========================= */
-app.listen(process.env.PORT || 3000, () => {
-  console.log("🚀 Serveur lancé");
+/* =========================
+   🚀 START SERVER
+========================= */
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Serveur lancé sur le port ${PORT}`);
 });

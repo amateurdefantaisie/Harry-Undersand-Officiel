@@ -426,48 +426,178 @@ body.light{
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ================= MENU BUTTON ================= */
+.menu-btn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  font-size:22px;
+  cursor:pointer;
+  z-index:1100;
+  color:var(--violet);
+}
+
+/* ================= DRAWER ================= */
+.drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:300px;
+  height:100%;
+  background:var(--card);
+  border-right:1px solid var(--border);
+  padding:20px;
+  transition:0.4s ease;
+  z-index:1200;
+  display:flex;
+  flex-direction:column;
+}
+
+.drawer.open{
+  left:0;
+}
+
+/* ================= HEADER ================= */
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  font-weight:600;
+  color:var(--text);
+}
+
+.drawer-header button{
+  background:none;
+  border:none;
+  color:var(--text);
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* ================= SEARCH ================= */
+.drawer-search input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  margin-bottom:20px;
+}
+
+.drawer-search input:focus{
+  border-color:var(--violet);
+  outline:none;
+}
+
+/* ================= LINKS ================= */
+.drawer-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  overflow-y:auto;
+}
+
+/* LIENS */
+.drawer-links a{
+  text-decoration:none;
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:10px;
+  transition:0.3s;
+  font-size:14px;
+
+  opacity:0;
+  transform:translateX(-20px);
+  animation:fadeSlide 0.4s forwards;
+  animation-delay:calc(var(--i) * 0.05s);
+}
+
+/* HOVER */
+.drawer-links a:hover{
+  background:rgba(139,92,246,0.15);
+  transform:translateX(5px);
+}
+
+/* CTA (liens importants) */
+.drawer-cta{
+  background:linear-gradient(135deg,var(--violet),var(--violet-dark));
+  color:white !important;
+}
+
+/* ================= BAS ================= */
+.drawer-bottom{
+  margin-top:15px;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.drawer-bottom a{
+  color:var(--violet);
+  font-size:13px;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fadeSlide{
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
 </style>
 
 </head>
 
 <body>
- 
-<h1>INSOLITES</h1>
-  
+
+<h1 class="logo">INSOLITES</h1>
+
+<!-- BOUTON MENU -->
+<div class="menu-btn" onclick="openDrawer()">☰</div>
+
+<!-- DRAWER -->
 <aside class="drawer" id="drawerMenu">
+
   <div class="drawer-header">
     <span>Menu Principal</span>
-    <button onclick="closeDrawer()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
+    <button onclick="closeDrawer()">✕</button>
   </div>
 
   <div class="drawer-search">
-    <input type="text" id="drawerSearch" placeholder="Rechercher un service..." style="width:100%; padding:10px; border-radius:8px; background:var(--bg); border:1px solid var(--border); color:white; margin-bottom:15px;">
+    <input type="text" id="drawerSearch" placeholder="Rechercher un service...">
   </div>
 
-<nav class="drawer-links">
-  <a href="harry-undersand.html" class="drawer-cta" style="--i:1">👤 Harry Undersand</a>
-  <a href="chatbot.html" style="--i:2">🤖 Chatbots IA</a>
-  <a href="streaming.html" class="drawer-cta" style="--i:3">🎬 Streaming</a>
-  <a href="hosting.html" style="--i:4">☁️ Hébergement</a>
-  <a href="premium.html" class="drawer-cta" style="--i:5">💎 Premium</a>
-  <a href="services.html" style="--i:6">🧩 Services</a>
-  <a href="pack-streaming.html" class="drawer-cta" style="--i:7">🎁 Pack Streaming</a>
-  <a href="about.html" style="--i:8">💡 A Propos</a>
-  <a href="alice.html" class="drawer-cta" style="--i:9">🗣️ Alice</a>
-  <a href="chat.html" style="--i:10">🚀 Méssagerie</a>
-  <a href="commande.html" class="drawer-cta" style="--i:11">🛒 Commander 🛍️</a>
-  <a href="contact.html" style="--i:12">📞 Contact ☎️</a>
-  <a href="amateurbox.html" class="drawer-cta" style="--i:13">💰 Amateur Box 💳</a>
-  <a href="jeunetransitaire.html" style="--i:14">📢 Publicités 📊</a>
-  <a href="netflix.html" class="drawer-cta" style="--i:15">🎭 Netflix 🎭</a>
-  <a href="iptv.html" style="--i:16">🖥️ IPTV 🖥️</a>
-  <a href="mycanal.html" class="drawer-cta" style="--i:17">📡 MyCanal 📡</a>
-  <a href="anonymous/index.html" style="--i:18">📬 Message Anonyme 📵</a>
+  <nav class="drawer-links">
 
-<div style="border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px;">
-      <a href="https://undersand-market.vercel.app" target="_blank" style="color: var(--violet);">🛍️ Undersand Market shop 🛒</a>
-      <a href="https://jeunetransitaire.vercel.app" target="_blank" style="color: var(--violet);">⚖️ Jeune Transitaire Officiel ⚓</a>
+    <a href="harry-undersand.html" class="drawer-cta" style="--i:1">👤 Harry Undersand</a>
+    <a href="chatbot.html" style="--i:2">🤖 Chatbots IA</a>
+    <a href="streaming.html" class="drawer-cta" style="--i:3">🎬 Streaming</a>
+    <a href="hosting.html" style="--i:4">☁️ Hébergement</a>
+    <a href="premium.html" class="drawer-cta" style="--i:5">💎 Premium</a>
+    <a href="services.html" style="--i:6">🧩 Services</a>
+    <a href="pack-streaming.html" class="drawer-cta" style="--i:7">🎁 Pack Streaming</a>
+    <a href="about.html" style="--i:8">💡 A Propos</a>
+    <a href="alice.html" class="drawer-cta" style="--i:9">🗣️ Alice</a>
+    <a href="chat.html" style="--i:10">🚀 Méssagerie</a>
+    <a href="commande.html" class="drawer-cta" style="--i:11">🛒 Commander 🛍️</a>
+    <a href="contact.html" style="--i:12">📞 Contact ☎️</a>
+    <a href="amateurbox.html" class="drawer-cta" style="--i:13">💰 Amateur Box 💳</a>
+    <a href="jeunetransitaire.html" style="--i:14">📢 Publicités 📊</a>
+    <a href="netflix.html" class="drawer-cta" style="--i:15">🎭 Netflix 🎭</a>
+    <a href="iptv.html" style="--i:16">🖥️ IPTV 🖥️</a>
+    <a href="mycanal.html" class="drawer-cta" style="--i:17">📡 MyCanal 📡</a>
+    <a href="anonymous/index.html" style="--i:18">📬 Message Anonyme 📵</a>
+
+    <div class="drawer-bottom">
+      <a href="https://undersand-market.vercel.app" target="_blank">🛍️ Undersand Market</a>
+      <a href="https://jeunetransitaire.vercel.app" target="_blank">⚖️ Jeune Transitaire</a>
     </div>
+
   </nav>
 </aside>
 
@@ -776,6 +906,16 @@ footer.style.transform = "translateY(40px)";
 footer.style.transition = "0.8s ease";
 
 observerFooter.observe(footer);
+</script>
+
+<script>
+function openDrawer(){
+  document.getElementById("drawerMenu").classList.add("open");
+}
+
+function closeDrawer(){
+  document.getElementById("drawerMenu").classList.remove("open");
+}
 </script>
   
 <!-- 🍪 Bandeau Cookies -->

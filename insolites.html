@@ -389,193 +389,73 @@ input {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
 
 <script>
+<script type="module">
+// 🔥 Import Firebase (version web CDN)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  onSnapshot, 
+  doc, 
+  updateDoc, 
+  increment 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 🔐 TA CONFIG (corrigée)
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
   authDomain: "harry-undersand.firebaseapp.com",
   projectId: "harry-undersand",
-  storageBucket: "harry-undersand.appspot.com"
+  storageBucket: "harry-undersand.firebasestorage.app",
+  messagingSenderId: "1008823909561",
+  appId: "1:1008823909561:web:9a8b4b46cab592972f6f68"
 };
 
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const storage = firebase.storage();
+// 🚀 Initialisation
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-/* MODE SOMBRE */
-function toggleMode(){
-    document.body.classList.toggle("light");
-}
+// 🎯 Récupérer le conteneur HTML
+const container = document.getElementById("videos");
 
-/* UPLOAD VIDEO */
-async function upload(){
-    const file = document.getElementById("uploadVideo").files[0];
-    if(!file) return alert("Choisis une vidéo");
+// 🔥 Affichage temps réel des vidéos Telegram
+onSnapshot(collection(db, "videos"), (snapshot) => {
+  container.innerHTML = "";
 
-    const ref = storage.ref("videos/" + file.name);
-    await ref.put(file);
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    const id = docSnap.id;
 
-    const url = await ref.getDownloadURL();
+    // 🎥 VIDEO
+    const video = document.createElement("video");
+    video.src = data.url;
+    video.controls = true;
+    video.loop = true;
+    video.style.width = "300px";
+    video.style.borderRadius = "10px";
 
-    async function upload(){
-    const file = document.getElementById("uploadVideo").files[0];
-    if(!file) return alert("Choisis une vidéo");
+    // ❤️ BOUTON LIKE
+    const likeBtn = document.createElement("button");
+    likeBtn.textContent = `❤️ ${data.likes || 0}`;
+    likeBtn.style.display = "block";
+    likeBtn.style.marginTop = "10px";
 
-    const ref = storage.ref("videos/" + file.name);
-    await ref.put(file);
+    likeBtn.onclick = async () => {
+      await updateDoc(doc(db, "videos", id), {
+        likes: increment(1)
+      });
+    };
 
-    const url = await ref.getDownloadURL();
+    // 📦 CARD
+    const card = document.createElement("div");
+    card.style.marginBottom = "25px";
 
-    // 1. Sauvegarde sur le site
-    const doc = await db.collection("videos").add({
-        url: url,
-        likes: 0,
-        telegram_post_id: null,
-        created: Date.now(),
-        source: "website"
-    });
+    card.appendChild(video);
+    card.appendChild(likeBtn);
 
-    // 2. Envoi automatique vers Telegram
-    await fetch("https://ton-serveur.com/send-to-telegram", {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({
-            video: url,
-            id: doc.id
-        })
-    });
-}
-}
-
-/* LOAD VIDEOS */
-db.collection("videos").orderBy("created","desc")
-.onSnapshot(snap => {
-    const grid = document.querySelector(".grid");
-    grid.innerHTML = "";
-
-    snap.forEach(doc => {
-        const data = doc.data();
-
-        const div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-    <video src="${data.url}" controls></video>
-
-    <div class="video-actions">
-       <button class="like-btn" onclick="like('${doc.id}')">
-           ❤️ ${data.likes || 0}
-       </button>
-       <span id="count-${doc.id}">💬 0</span>
-    </div>
-
-    <div class="comment-box">
-       <input placeholder="Ajouter un commentaire..."
-       onkeydown="addComment(event,'${doc.id}')">
-       <div id="c-${doc.id}"></div>
-    </div>
-    `;
-
-        grid.appendChild(div);
-
-        loadComments(doc.id);
-    });
+    container.appendChild(card);
+  });
 });
-
-/* LIKE */
-async function like(id){
-
-    const ref = db.collection("videos").doc(id);
-    const doc = await ref.get();
-
-    const data = doc.data();
-
-    ref.update({
-        likes: firebase.firestore.FieldValue.increment(1)
-    });
-
-    // Si la vidéo vient de Telegram → on met aussi à jour Telegram
-    if(data.telegram_post_id){
-        fetch("https://ton-serveur.com/like-telegram",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-                post: data.telegram_post_id
-            })
-        });
-    }
-}
-
-/* COMMENTAIRES */
-function addComment(e, id){
-    const text = e.target.value;
-
-db.collection("videos")
-.doc(id)
-.collection("comments")
-.add({
-    text: text
-});
-
-fetch("https://ton-serveur.com/comment-telegram",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({
-        message: text
-    })
-});
-
-function sendComment(id){
-    const input = document.getElementById("input-"+id);
-    if(!input.value) return;
-
-    db.collection("videos")
-    .doc(id)
-    .collection("comments")
-    .add({
-        text: input.value
-    });
-
-    input.value = "";
-}
-  
-function loadComments(id){
-    db.collection("videos")
-    .doc(id)
-    .collection("comments")
-    .onSnapshot(snap => {
-        const box = document.getElementById("c-"+id);
-        let html = "";
-
-        snap.forEach(c => {
-            html += `<p>${c.data().text}</p>`;
-        });
-
-        document.getElementById("c-"+id).innerHTML = html;
-        document.getElementById("count-"+id).innerText = "💬 " + snap.size;
-    });
-}
-</script>
-
-<script>
-// Animation chiffres
-function animateValue(id, start, end, duration) {
-    let obj = document.getElementById(id);
-    let range = end - start;
-    let current = start;
-    let increment = end > start ? 1 : -1;
-    let stepTime = Math.abs(Math.floor(duration / range));
-
-    let timer = setInterval(function() {
-        current += increment;
-        obj.textContent = current;
-
-        if (current == end) {
-            clearInterval(timer);
-        }
-    }, stepTime);
-}
-
-animateValue("subs", 0, 1250, 2000);
-animateValue("videosCount", 0, 87, 2000);
 </script>
 
 <!-- 🍪 Bandeau Cookies -->

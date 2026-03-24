@@ -415,11 +415,34 @@ async function upload(){
 
     const url = await ref.getDownloadURL();
 
-    await db.collection("videos").add({
+    async function upload(){
+    const file = document.getElementById("uploadVideo").files[0];
+    if(!file) return alert("Choisis une vidéo");
+
+    const ref = storage.ref("videos/" + file.name);
+    await ref.put(file);
+
+    const url = await ref.getDownloadURL();
+
+    // 1. Sauvegarde sur le site
+    const doc = await db.collection("videos").add({
         url: url,
         likes: 0,
-        created: Date.now()
+        telegram_post_id: null,
+        created: Date.now(),
+        source: "website"
     });
+
+    // 2. Envoi automatique vers Telegram
+    await fetch("https://ton-serveur.com/send-to-telegram", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+            video: url,
+            id: doc.id
+        })
+    });
+}
 }
 
 /* LOAD VIDEOS */

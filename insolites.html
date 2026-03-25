@@ -482,10 +482,11 @@ header{
 
 /* ================= DRAWER ================= */
 .drawer{
-  position:absolute;
+  position:fixed;
   top:70px;
   right:20px;
   width:300px;
+  z-index:1001;
 
   background:rgba(17,27,33,0.75);
   backdrop-filter:blur(25px);
@@ -632,8 +633,8 @@ header{
 <div class="menu-btn" onclick="openDrawer()">☰</div>
 </header>
 
-<div class="overlay" id="overlay"></div>
-
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+  
 <!-- DRAWER -->
 <aside class="drawer" id="drawerMenu">
 
@@ -990,11 +991,13 @@ const searchInput = document.getElementById("drawerSearch");
 function openDrawer(){
   drawer.classList.add("open");
   overlay.classList.add("active");
+  document.body.style.overflow = "hidden";
 }
 
 function closeDrawer(){
   drawer.classList.remove("open");
   overlay.classList.remove("active");
+  document.body.style.overflow = "";
 }
 
 /* 🔍 RECHERCHE LIVE */

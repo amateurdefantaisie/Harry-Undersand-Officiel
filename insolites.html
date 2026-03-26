@@ -283,21 +283,16 @@ body.light{
 /* GRID */
 .footer-grid {
   display: flex;
-  gap: 50px;
-
-  flex-wrap: nowrap; /* 🔥 empêche retour à la ligne */
-
-  scrollbar-width: none;
-}
-
-.footer-grid::-webkit-scrollbar {
-  display: none;
+  gap: 40px;
+  flex-wrap: wrap; /* 🔥 adaptation automatique */
+  justify-content: space-between;
 }
 
 /* CHAQUE COLONNE */
 .footer-grid > div {
-  min-width: 220px;
-  flex: 0 0 auto;
+  flex: 1 1 220px;
+  max-width: 260px; /* 🔥 évite que ça s'étire trop */
+  min-width: 200px;
 }
 
 /* TITRES */

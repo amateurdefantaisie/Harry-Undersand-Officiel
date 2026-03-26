@@ -277,13 +277,28 @@ body.light{
   margin: auto;
   position: relative;
   z-index: 1;
+  overflow: hidden; /* 🔥 empêche débordement visuel */
 }
 
 /* GRID */
 .footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: flex;
   gap: 50px;
+
+  overflow-x: auto; /* 🔥 scroll horizontal */
+  flex-wrap: nowrap; /* 🔥 empêche retour à la ligne */
+
+  scrollbar-width: none;
+}
+
+.footer-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* CHAQUE COLONNE */
+.footer-grid > div {
+  min-width: 220px;
+  flex: 0 0 auto;
 }
 
 /* TITRES */
@@ -761,7 +776,7 @@ header{
           <li><a href="hosting.html">Hébergement</a></li>
           <li><a href="streaming.html">Streaming</a></li>
           <li><a href="pack-streaming.html">Packs premium</a></li>
-          <li><a href="insolites.html">Insolites Moments</li>
+          <li><a href="insolites.html">Insolites Moments</a></li>
         </ul>
       </div>
 

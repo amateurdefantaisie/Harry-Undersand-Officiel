@@ -637,6 +637,26 @@ header{
     transform:translateX(0);
   }
 }
+
+.global-social {
+  display: flex;
+  justify-content: center; /* 🔥 centre horizontal */
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  margin-top: 40px;
+  padding-top: 20px;
+
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* BONUS : centrage parfait même si peu d’icônes */
+.global-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
 
 </head>
@@ -729,28 +749,6 @@ header{
           logistique et transport, et plein d'autres.
         </p>
 
-        <div class="footer-social">
-          <a href="https://wa.me/242064687352" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Admin" title="WhatsApp Admin"><i class="fab fa-whatsapp"></i></a>
-          <a href="https://wa.me/message/MEKLQKZMEJ6EF1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Équipe" title="WhatsApp Équipe"><i class="fab fa-whatsapp"></i></a>
-          
-          <a href="https://t.me/aliceiaofficiel" target="_blank" rel="noopener noreferrer" aria-label="Telegram" title="Telegram"><i class="fab fa-telegram"></i></a>
-          <a href="mailto:amateurdefantaisie@gmail.com" aria-label="Email" title="Nous envoyer un email"><i class="fas fa-envelope"></i></a>
-          
-          <a href="https://www.facebook.com/profile.php?id=61585121305403" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Notre Profil"><i class="fab fa-facebook"></i></a>
-          <a href="https://www.instagram.com/amateurdefantaisietech" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Profil Équipe"><i class="fab fa-instagram"></i></a>
-          <a href="https://x.com/amateurdefantaisietech" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-          
-          <a href="https://www.twitch.tv/amateurdefantaisie" target="_blank" rel="noopener noreferrer" aria-label="Twitch"><i class="fab fa-twitch"></i></a>
-          <a href="https://www.snapchat.com/@harryundersand?sender_web_id=9c038349-5871-49c4-9dd2-da8b8b69b8fb&device_type=desktop&is_copy_url=true" target="_blank" rel="noopener noreferrer" aria-label="Snapchat"><i class="fab fa-snapchat"></i></a>
-          
-          <a href="https://discord.gg/6raY3cPpGm" target="_blank" rel="noopener noreferrer" aria-label="Discord"><i class="fab fa-discord"></i></a>
-          <a href="https://github.com/amateurdefantaisie" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="https://cg.linkedin.com/in/harry-undersand-1854192a9" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-          
-          <a href="https://fr.pinterest.com/amateurdefantaisie" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
-        </div>
-      </div>
-
       <!-- COLONNE 2 -->
       <div>
         <h4>Navigation</h4>
@@ -784,8 +782,29 @@ header{
           <li><a href="anonymous/index.html">Messages anonymes</a></li>
         </ul>
       </div>
+      </div>
 
-    </div>
+      <div class="footer-social global-social">
+          <a href="https://wa.me/242064687352" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Admin" title="WhatsApp Admin"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://wa.me/message/MEKLQKZMEJ6EF1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Équipe" title="WhatsApp Équipe"><i class="fab fa-whatsapp"></i></a>
+          
+          <a href="https://t.me/aliceiaofficiel" target="_blank" rel="noopener noreferrer" aria-label="Telegram" title="Telegram"><i class="fab fa-telegram"></i></a>
+          <a href="mailto:amateurdefantaisie@gmail.com" aria-label="Email" title="Nous envoyer un email"><i class="fas fa-envelope"></i></a>
+          
+          <a href="https://www.facebook.com/profile.php?id=61585121305403" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Notre Profil"><i class="fab fa-facebook"></i></a>
+          <a href="https://www.instagram.com/amateurdefantaisietech" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Profil Équipe"><i class="fab fa-instagram"></i></a>
+          <a href="https://x.com/amateurdefantaisietech" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+          
+          <a href="https://www.twitch.tv/amateurdefantaisie" target="_blank" rel="noopener noreferrer" aria-label="Twitch"><i class="fab fa-twitch"></i></a>
+          <a href="https://www.snapchat.com/@harryundersand?sender_web_id=9c038349-5871-49c4-9dd2-da8b8b69b8fb&device_type=desktop&is_copy_url=true" target="_blank" rel="noopener noreferrer" aria-label="Snapchat"><i class="fab fa-snapchat"></i></a>
+          
+          <a href="https://discord.gg/6raY3cPpGm" target="_blank" rel="noopener noreferrer" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="https://github.com/amateurdefantaisie" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://cg.linkedin.com/in/harry-undersand-1854192a9" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          
+          <a href="https://fr.pinterest.com/amateurdefantaisie" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
     
 <div class="theme-toggle">
   <div class="theme-btn" onclick="toggleThemeMenu()">Thème</div>

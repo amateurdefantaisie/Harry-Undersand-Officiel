@@ -121,19 +121,34 @@
 
     /* FOOTER */
 .footer-pro {
-  background: linear-gradient(135deg, #0d6efd, #4a00e0);
-  color: white;
-  padding: 20px 10px 10px;
-  font-size: 14px;
+  background: #ffffff;
+  color: #555;
+  padding: 12px 10px;
+  font-size: 13px;
+  border-top: 1px solid #e6e6e6;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
+}
+    
+.footer-bottom {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  letter-spacing: 0.3px;
 }
 
 .footer-bottom a {
-  color: #ffd700;
+  color: #3276ea;
   text-decoration: none;
+  transition: 0.3s;
 }
 
 .footer-bottom a:hover {
-  text-decoration: underline;
+  color: #000;
+}
+
+.footer-pro:hover {
+  background: #fafafa;
+  transition: 0.3s;
 }
 
     /* Animation */
@@ -178,7 +193,7 @@
   <!-- FOOTER -->
 <footer class="footer-pro">
  <!-- BAS DU FOOTER -->
-  <div class="footer-bottom">
+  <div class="footer-bottom" style="max-width:900px;margin:auto;">
     © 2026 Amateur De Fantaisie — Créé par 
     <a href="https://harry-undersand.vercel.app" target="_blank">Harry Undersand</a>
   </div>

@@ -264,6 +264,21 @@ button.btn-premium{
     border:none;
     cursor:pointer;
 }
+
+.ads{
+  margin:40px auto;
+  max-width:900px;
+}
+
+.ads img{
+  width:100%;
+  border-radius:20px;
+  transition:0.5s;
+}
+
+.ads img:hover{
+  transform:scale(1.03);
+}
 </style>
 </head>
 
@@ -276,6 +291,8 @@ button.btn-premium{
 <a href="https://wa.me/242066973413" class="btn btn-whatsapp">Commander via WhatsApp</a>
 </header>
 
+<div class="ads ad-top"></div>
+  
 <section style="text-align:center;padding:40px 20px;">
 <h2 style="color:#ffcc00;">🔥 Promotion Limitée -10%</h2>
 <p>Offre valable jusqu'à :</p>
@@ -414,6 +431,8 @@ S'abonner
 <a href="https://wa.me/242066973413" class="btn btn-whatsapp">Commander Maintenant</a>
 </section>
 
+<div class="ads ad-middle"></div>
+
 <script>
 const cards = document.querySelectorAll('.card');
 
@@ -477,7 +496,7 @@ function payNow(planName, planPrice){
     payment_options: "card, mobilemoney, mobilemoneyfr, ussd",
 
     customer: {
-      email: "client@email.com",
+      email: "amateurdefantaisieclient@email.com",
       phone_number: "+242000000000",
       name: "Client MyCanal",
     },
@@ -520,6 +539,7 @@ function payNow(planName, planPrice){
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
@@ -529,22 +549,90 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
+// 🔐 AUTH (TON CODE INTACT)
 onAuthStateChanged(auth, user => {
 
   if (!user) {
 
-    // On mémorise la page actuelle
     sessionStorage.setItem(
       "redirectAfterLogin",
       window.location.pathname
     );
 
-    // Redirection vers accueil
     window.location.href = "/?loginRequired=true";
   }
 
 });
+
+// =======================
+// 🔥 SYSTEME DE PUB
+// =======================
+
+// récupérer la page actuelle
+const currentPage = window.location.pathname;
+
+// stock des pubs
+let adsList = [];
+
+// charger les pubs depuis Firebase
+async function loadAds(){
+  try {
+    const snapshot = await getDocs(collection(db, "ads"));
+
+    adsList = [];
+
+    snapshot.forEach(doc => {
+      const ad = doc.data();
+
+      // filtrer par page
+      if(ad.page === currentPage){
+        adsList.push(ad);
+      }
+    });
+
+    startAdsRotation();
+
+  } catch(e){
+    console.error("Erreur chargement pubs :", e);
+  }
+}
+
+// afficher une pub aléatoire
+function showAd(selector){
+  const container = document.querySelector(selector);
+
+  if(!container || adsList.length === 0) return;
+
+  const randomAd = adsList[Math.floor(Math.random() * adsList.length)];
+
+  container.innerHTML = `
+    <a href="${randomAd.link}" target="_blank">
+      <img src="${randomAd.image}" style="width:100%;border-radius:20px;">
+    </a>
+  `;
+}
+
+// rotation automatique
+function startAdsRotation(){
+
+  // affichage initial
+  showAd(".ad-top");
+  showAd(".ad-middle");
+  showAd(".ad-bottom");
+
+  // rotation toutes les 10 secondes
+  setInterval(() => {
+    showAd(".ad-top");
+    showAd(".ad-middle");
+    showAd(".ad-bottom");
+  }, 10000);
+}
+
+// lancer
+loadAds();
+
 </script>
 
 <!-- 🍪 Bandeau Cookies -->
@@ -562,6 +650,8 @@ onAuthStateChanged(auth, user => {
 </div>
 
 <script src="cookies.js"></script>
+
+<div class="ads ad-bottom"></div>
 
 <footer>
 <p>© 2026 Abonnements MyCanal - Service indépendant</p>

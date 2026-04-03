@@ -94,6 +94,12 @@ h2, h3{
 <input id="image" placeholder="URL image">
 <input id="link" placeholder="Lien">
 
+<select id="page">
+  <option value="/mycanal.html">Page MyCanal</option>
+  <option value="/insolites.html">Page Insolites</option>
+  <option value="/index.html">Accueil</option>
+</select>
+
 <select id="plan">
   <option value="standard">Standard</option>
   <option value="pro">Pro</option>
@@ -136,6 +142,7 @@ window.addAd = async function(){
     title: document.getElementById("title").value,
     image: document.getElementById("image").value,
     link: document.getElementById("link").value,
+    page: document.getElementById("page").value,
     plan: document.getElementById("plan").value,
     views: 0,
     maxViews: 10000,

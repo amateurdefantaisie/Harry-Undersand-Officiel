@@ -561,7 +561,9 @@ onAuthStateChanged(auth, user => {
       window.location.pathname
     );
 
-    window.location.href = "/?loginRequired=true";
+    setTimeout(() => {
+      window.location.href = "/?loginRequired=true";
+    }, 1500); // laisse 1.5s pour charger pubs
   }
 
 });
@@ -587,7 +589,7 @@ async function loadAds(){
       const ad = doc.data();
 
       // filtrer par page
-      if(ad.page === currentPage){
+      if(currentPage.includes(ad.page)){
         adsList.push(ad);
       }
     });
@@ -631,7 +633,9 @@ function startAdsRotation(){
 }
 
 // lancer
-loadAds();
+window.addEventListener("DOMContentLoaded", () => {
+  loadAds();
+});
 
 </script>
 

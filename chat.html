@@ -1,195 +1,485 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat temps réel (type WhatsApp)</title>
+<meta charset="UTF-8">
+<title>Dashboard Client</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="cookies.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-N696WFVZ8G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<style>
 
-  gtag('config', 'G-N696WFVZ8G');
-</script>
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-  <style>
-    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
-    body {
-      margin: 0;
-      background: #0b141a;
-      height: 100vh;
-      display: flex;
-    }
+/* BODY */
+body{
+  display:flex;
+  height:100vh;
+  background:#0b141a;
+  color:white;
+}
 
-    /* ===== SIDEBAR ===== */
-    .sidebar {
-      width: 30%;
-      background: #111b21;
-      color: white;
-      border-right: 1px solid #2a3942;
-    }
+/* SIDEBAR */
+.sidebar{
+  width:30%;
+  background:#111b21;
+  border-right:1px solid #2a3942;
+  display:flex;
+  flex-direction:column;
+}
 
-    .sidebar-header {
-      padding: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      border-bottom: 1px solid #2a3942;
-    }
+.sidebar-header{
+  padding:15px;
+  font-size:18px;
+  font-weight:bold;
+  border-bottom:1px solid #2a3942;
+}
 
-    .chat-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+/* LISTE CHATS */
+.chat-list{
+  flex:1;
+  overflow-y:auto;
+}
 
-    .chat-list li {
-      padding: 12px;
-      border-bottom: 1px solid #2a3942;
-      cursor: pointer;
-    }
+.chat-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  border-bottom:1px solid #2a3942;
+  cursor:pointer;
+  transition:.2s;
+}
 
-    .chat-list li:hover {
-      background: #202c33;
-    }
+.chat-item:hover{
+  background:#202c33;
+}
 
-    /* ===== CHAT AREA ===== */
-    .chat-area {
-      width: 70%;
-      display: flex;
-      flex-direction: column;
-    }
+.chat-avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  object-fit:cover;
+}
 
-    .chat-header {
-      background: #202c33;
-      color: white;
-      padding: 15px;
-      border-bottom: 1px solid #2a3942;
-    }
+.chat-info{
+  flex:1;
+}
 
-    .messages {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-      background: #0b141a;
-    }
+.chat-name{
+  font-weight:600;
+}
 
-    .message {
-      max-width: 60%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      font-size: 14px;
-    }
+.chat-last{
+  font-size:12px;
+  color:#9ca3af;
+}
 
-    .me {
-      background: #005c4b;
-      margin-left: auto;
-      color: white;
-    }
+/* CHAT AREA */
+.chat-area{
+  width:70%;
+  display:flex;
+  flex-direction:column;
+}
 
-    .other {
-      background: #202c33;
-      color: white;
-    }
+/* HEADER */
+.chat-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:15px;
+  background:#202c33;
+  border-bottom:1px solid #2a3942;
+}
 
-    .chat-input {
-      display: flex;
-      padding: 10px;
-      background: #202c33;
-    }
+.chat-header img{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+}
 
-    .chat-input input {
-      flex: 1;
-      padding: 10px;
-      border-radius: 20px;
-      border: none;
-      outline: none;
-    }
+.chat-header .info{
+  flex:1;
+}
 
-    .chat-input button {
-      margin-left: 10px;
-      padding: 0 20px;
-      border: none;
-      border-radius: 20px;
-      background: #00a884;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
-</head>
+.chat-header .name{
+  font-weight:600;
+}
+
+.chat-header .status{
+  font-size:12px;
+  color:#9ca3af;
+}
+
+/* MESSAGES */
+.messages{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+
+/* MESSAGE */
+.message{
+  max-width:60%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:10px;
+  font-size:14px;
+  position:relative;
+  word-wrap:break-word;
+}
+
+/* MOI */
+.me{
+  background:#005c4b;
+  margin-left:auto;
+}
+
+/* AUTRE */
+.other{
+  background:#202c33;
+}
+
+/* IMAGE MESSAGE */
+.message img{
+  max-width:200px;
+  border-radius:10px;
+  margin-top:5px;
+}
+
+/* HEURE */
+.time{
+  font-size:10px;
+  opacity:.6;
+  margin-top:4px;
+  text-align:right;
+}
+
+/* INPUT */
+.chat-input{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  background:#202c33;
+}
+
+/* INPUT TEXT */
+.chat-input input[type="text"]{
+  flex:1;
+  padding:10px;
+  border-radius:20px;
+  border:none;
+  outline:none;
+}
+
+/* FILE */
+.chat-input input[type="file"]{
+  color:white;
+}
+
+/* BUTTON */
+.chat-input button{
+  padding:10px 15px;
+  border:none;
+  border-radius:20px;
+  background:#00a884;
+  color:white;
+  cursor:pointer;
+}
+
+/* SCROLL */
+::-webkit-scrollbar{
+  width:5px;
+}
+::-webkit-scrollbar-thumb{
+  background:#2a3942;
+}
+
+/* RESPONSIVE */
+@media(max-width:800px){
+  .sidebar{
+    width:40%;
+  }
+  .chat-area{
+    width:60%;
+  }
+}
+
+@media(max-width:600px){
+  .sidebar{
+    display:none;
+  }
+  .chat-area{
+    width:100%;
+  }
+}
+</style>
+
 <body>
 
-  <div class="sidebar">
-    <div class="sidebar-header">WhatsApp Web (clone)</div>
-    <ul class="chat-list">
-      <li onclick="openChat('Jean')">Jean</li>
-      <li onclick="openChat('Marie')">Marie</li>
-      <li onclick="openChat('Groupe Test')">Groupe Test</li>
-    </ul>
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <div class="sidebar-header">
+    💬 Messagerie
   </div>
 
-  <div class="chat-area">
-    <div class="chat-header" id="chatName">Sélectionnez une discussion</div>
-    <div class="messages" id="messages"></div>
-    <div class="chat-input">
-      <input type="text" id="input" placeholder="Écrire un message..." />
-      <button onclick="sendMessage()">Envoyer</button>
-    </div>
+  <!-- LISTE DES CONVERSATIONS -->
+  <div id="chatList" class="chat-list">
+    <!-- Les chats seront injectés ici -->
   </div>
 
-  <script>
-    let currentChat = null;
-    const messagesDiv = document.getElementById('messages');
-    const chatName = document.getElementById('chatName');
-
-    function openChat(name) {
-      currentChat = name;
-      chatName.textContent = name;
-      messagesDiv.innerHTML = '';
-    }
-
-    function sendMessage() {
-      const input = document.getElementById('input');
-      if (!input.value || !currentChat) return;
-
-      addMessage(input.value, 'me');
-      input.value = '';
-
-      // Simulation réponse autre utilisateur
-      setTimeout(() => {
-        addMessage('Réponse de ' + currentChat, 'other');
-      }, 1000);
-    }
-
-    function addMessage(text, type) {
-      const div = document.createElement('div');
-      div.className = 'message ' + type;
-      div.textContent = text;
-      messagesDiv.appendChild(div);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-  </script>
-
-<!-- 🍪 Bandeau Cookies -->
-<div id="cookie-banner" class="cookie-banner">
-  <div class="cookie-content">
-    <p>
-      🍪 Ce site utilise des cookies pour améliorer votre expérience.
-      En continuant, vous acceptez notre utilisation des cookies.
-    </p>
-    <div class="cookie-buttons">
-      <button id="accept-cookies">Accepter</button>
-      <button id="reject-cookies">Refuser</button>
-    </div>
-  </div>
 </div>
 
-<script src="cookies.js"></script>
+
+<!-- CHAT AREA -->
+<div class="chat-area">
+
+  <!-- HEADER -->
+  <div class="chat-header" id="chatHeader" style="display:none">
+
+    <img id="chatAvatar" src="https://i.imgur.com/6VBx3io.png">
+
+    <div class="info">
+      <div class="name" id="chatName">Nom</div>
+      <div class="status" id="chatStatus">Hors ligne</div>
+    </div>
+
+  </div>
+
+  <!-- MESSAGES -->
+  <div id="messages" class="messages">
+    <!-- Messages injectés ici -->
+  </div>
+
+  <!-- INPUT -->
+  <div class="chat-input">
+
+    <!-- INPUT TEXTE -->
+    <input 
+      type="text" 
+      id="messageInput" 
+      placeholder="Écrire un message..."
+    >
+
+    <!-- IMAGE -->
+    <input 
+      type="file" 
+      id="imageInput" 
+      accept="image/*"
+    >
+
+    <!-- BOUTON -->
+    <button id="sendBtn">
+      Envoyer
+    </button>
+
+  </div>
+
+</div>
+
+<script type="module">
+
+/* 🔥 IMPORT FIREBASE */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  onSnapshot,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-storage.js";
+
+
+/* 🔥 CONFIG FIREBASE */
+const app = initializeApp({
+  apiKey: "AIzaSyBdo7NO1PnAa90PhEhuzpllkB1ESGZu3J8",
+  authDomain: "harry-undersand.firebaseapp.com",
+  projectId: "harry-undersand"
+});
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+
+/* 🔥 VARIABLES */
+let currentUser;
+let currentChatId;
+
+
+/* 🔒 AUTH CHECK */
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = user;
+  loadChats();
+});
+
+
+/* 💬 CHARGER LES CONVERSATIONS */
+function loadChats() {
+
+  const q = query(
+    collection(db, "chats"),
+    where("participants", "array-contains", currentUser.uid)
+  );
+
+  onSnapshot(q, snapshot => {
+
+    const list = document.getElementById("chatList");
+    list.innerHTML = "";
+
+    snapshot.forEach(docSnap => {
+
+      const chat = docSnap.data();
+
+      const div = document.createElement("div");
+      div.className = "chat-item";
+
+      div.innerHTML = `
+        <img class="chat-avatar" src="https://i.imgur.com/6VBx3io.png">
+        <div class="chat-info">
+          <div class="chat-name">${chat.name || "Discussion"}</div>
+          <div class="chat-last">${chat.lastMessage || ""}</div>
+        </div>
+      `;
+
+      div.onclick = () => openChat(docSnap.id, chat);
+
+      list.appendChild(div);
+
+    });
+
+  });
+
+}
+
+
+/* 📂 OUVRIR UN CHAT */
+function openChat(chatId, chatData) {
+
+  currentChatId = chatId;
+
+  document.getElementById("chatHeader").style.display = "flex";
+  document.getElementById("chatName").textContent = chatData.name || "Discussion";
+
+  loadMessages(chatId);
+
+}
+
+
+/* 📩 CHARGER MESSAGES */
+function loadMessages(chatId) {
+
+  const q = query(
+    collection(db, "messages"),
+    where("chatId", "==", chatId),
+    orderBy("timestamp")
+  );
+
+  onSnapshot(q, snapshot => {
+
+    const box = document.getElementById("messages");
+    box.innerHTML = "";
+
+    snapshot.forEach(doc => {
+
+      const msg = doc.data();
+
+      const div = document.createElement("div");
+      div.className = "message " + (msg.senderId === currentUser.uid ? "me" : "other");
+
+      let content = "";
+
+      if (msg.text) content += msg.text;
+
+      if (msg.imageUrl) {
+        content += `<br><img src="${msg.imageUrl}">`;
+      }
+
+      content += `<div class="time">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+
+      div.innerHTML = content;
+
+      box.appendChild(div);
+
+    });
+
+    box.scrollTop = box.scrollHeight;
+
+  });
+
+}
+
+
+/* 🚀 ENVOYER MESSAGE */
+document.getElementById("sendBtn").onclick = sendMessage;
+
+async function sendMessage() {
+
+  if (!currentChatId) return;
+
+  const textInput = document.getElementById("messageInput");
+  const fileInput = document.getElementById("imageInput");
+
+  const text = textInput.value;
+  const file = fileInput.files[0];
+
+  let imageUrl = "";
+
+  /* 📸 UPLOAD IMAGE */
+  if (file) {
+    const storageRef = ref(storage, "images/" + Date.now());
+    await uploadBytes(storageRef, file);
+    imageUrl = await getDownloadURL(storageRef);
+  }
+
+  if (!text && !imageUrl) return;
+
+  /* 💾 SAVE MESSAGE */
+  await addDoc(collection(db, "messages"), {
+    chatId: currentChatId,
+    senderId: currentUser.uid,
+    text: text,
+    imageUrl: imageUrl,
+    timestamp: Date.now()
+  });
+
+  textInput.value = "";
+  fileInput.value = "";
+
+}
+
+</script>
 
 </body>
 </html>

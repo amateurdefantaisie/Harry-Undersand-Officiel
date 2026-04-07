@@ -305,7 +305,10 @@ import {
   query,
   where,
   onSnapshot,
-  orderBy
+  orderBy,
+  doc,
+  updateDoc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 import {
@@ -333,17 +336,21 @@ let currentUser;
 let currentChatId;
 
 
-/* 🔒 AUTH CHECK */
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   if (!user) {
     window.location.href = "login.html";
     return;
   }
 
   currentUser = user;
+
+  // 🟢 utilisateur en ligne
+  await updateDoc(doc(db, "users", user.uid), {
+    online: true
+  });
+
   loadChats();
 });
-
 
 /* 💬 CHARGER LES CONVERSATIONS */
 function loadChats() {
@@ -385,17 +392,41 @@ function loadChats() {
 
 
 /* 📂 OUVRIR UN CHAT */
-function openChat(chatId, chatData) {
+async function openChat(chatId, chatData) {
 
   currentChatId = chatId;
 
   document.getElementById("chatHeader").style.display = "flex";
   document.getElementById("chatName").textContent = chatData.name || "Discussion";
 
+  // 🔥 récupérer l'autre utilisateur
+  const otherUserId = chatData.participants.find(id => id !== currentUser.uid);
+
+  onSnapshot(doc(db, "chats", chatId), docSnap => {
+  const data = docSnap.data();
+
+  if (!data) return;
+
+  if (data.typing && data.typing !== currentUser.uid) {
+    document.getElementById("chatStatus").textContent = "✍️ En train d'écrire...";
+  }
+
+  if (otherUserId) {
+    const userDoc = await getDoc(doc(db, "users", otherUserId));
+    const userData = userDoc.data();
+
+    if (userData) {
+      document.getElementById("chatAvatar").src = userData.photo;
+
+      document.getElementById("chatStatus").textContent =
+        userData.online ? "🟢 En ligne" : "Hors ligne";
+    }
+  }
+
   loadMessages(chatId);
-
-}
-
+  
+  }
+});
 
 /* 📩 CHARGER MESSAGES */
 function loadMessages(chatId) {
@@ -415,6 +446,13 @@ function loadMessages(chatId) {
 
       const msg = doc.data();
 
+      // ✔ vu
+      if (msg.senderId !== currentUser.uid) {
+        updateDoc(doc.ref, {
+          seenBy: [...(msg.seenBy || []), currentUser.uid]
+        });
+      }
+
       const div = document.createElement("div");
       div.className = "message " + (msg.senderId === currentUser.uid ? "me" : "other");
 
@@ -426,7 +464,16 @@ function loadMessages(chatId) {
         content += `<br><img src="${msg.imageUrl}">`;
       }
 
-      content += `<div class="time">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+      if (msg.senderId === currentUser.uid) {
+        content += `<div class="time">
+          ${new Date(msg.timestamp).toLocaleTimeString()}
+          ${msg.seenBy?.length > 1 ? "✔✔" : "✔"}
+        </div>`;
+      } else {
+        content += `<div class="time">
+          ${new Date(msg.timestamp).toLocaleTimeString()}
+        </div>`;
+      }
 
       div.innerHTML = content;
 
@@ -467,18 +514,48 @@ async function sendMessage() {
 
   /* 💾 SAVE MESSAGE */
   await addDoc(collection(db, "messages"), {
-    chatId: currentChatId,
-    senderId: currentUser.uid,
-    text: text,
-    imageUrl: imageUrl,
-    timestamp: Date.now()
-  });
+  chatId: currentChatId,
+  senderId: currentUser.uid,
+  text: text,
+  imageUrl: imageUrl,
+  timestamp: Date.now(),
+  seenBy: [currentUser.uid]
+});
 
   textInput.value = "";
   fileInput.value = "";
 
 }
 
+let typingTimeout;
+
+document.getElementById("messageInput").addEventListener("input", async () => {
+
+  if (!currentChatId) return;
+
+  await updateDoc(doc(db, "chats", currentChatId), {
+    typing: currentUser.uid
+  });
+
+  clearTimeout(typingTimeout);
+
+  typingTimeout = setTimeout(async () => {
+    await updateDoc(doc(db, "chats", currentChatId), {
+      typing: null
+    });
+  }, 2000);
+
+});
+  
+window.addEventListener("beforeunload", async () => {
+  if (currentUser) {
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      online: false,
+      lastSeen: Date.now()
+    });
+  }
+});
+  
 </script>
 
 </body>
